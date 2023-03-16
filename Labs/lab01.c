@@ -2,7 +2,7 @@
  * 
  * Entrada:
  * Linha contendo um inteiro N 1<=N<=40 (Pressão desejada)
- * Li+ nha contendo um inteiro M 1<=M<=40 (Pressão atual)
+ * Linha contendo um inteiro M 1<=M<=40 (Pressão atual)
  * 
  * Saída:
  * Linha contendo a diferença entre a pressão desejada e atual
