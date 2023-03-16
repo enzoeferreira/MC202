@@ -14,12 +14,12 @@ int main()
     short int pressaoAtual, pressaoDesejada, pressaoDelta;
 
     // Recebe as pressões desejadas e atual, respectivamente
-    scanf("%d", &pressaoDesejada);
-    scanf("%d", &pressaoAtual);
+    scanf("%hd", &pressaoDesejada);
+    scanf("%hd", &pressaoAtual);
 
     // Calcula a diferença entre as pressões
     pressaoDelta = pressaoDesejada - pressaoAtual;
-    printf("%d", pressaoDelta); // Printa a diferença
+    printf("%hd\n", pressaoDelta); // Printa a diferença
 
     return 0;
 }
