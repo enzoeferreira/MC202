@@ -1,3 +1,22 @@
+/* Street Fighter
+ *
+ * Entrada: 
+ * Linha contendo a vida inicial do Ryu
+ * Linha contendo a vida inicial do Ken
+ * N linhas de dano (+ para Ryu e - para Ken)
+ * 
+ * Saída:
+ * (Para cada golpe)
+ * Linha dizendo quem aplicou o golpe
+ * Linha com HP restante do Ryu
+ * Linha com HP restante do Ken
+ * 
+ * (Quando um dos dois morrer)
+ * Linha com o lutador vencedor
+ * Linha com a qnt de golpes do Ryu
+ * Linha com a qnt de golpes do Ken
+ */
+
 #include <stdio.h>
 
 int main()
