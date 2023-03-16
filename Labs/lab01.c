@@ -1,8 +1,17 @@
+/* Bomba de Combustível
+ * 
+ * Entrada:
+ * Linha contendo um inteiro N 1<=N<=40 (Pressão desejada)
+ * Li+ nha contendo um inteiro M 1<=M<=40 (Pressão atual)
+ * 
+ * Saída:
+ * Linha contendo a diferença entre a pressão desejada e atual
+ */
 #include <stdio.h>
 
 int main()
 {
-    int pressaoAtual, pressaoDesejada, pressaoDelta;
+    short int pressaoAtual, pressaoDesejada, pressaoDelta;
 
     // Recebe as pressões desejadas e atual, respectivamente
     scanf("%d", &pressaoDesejada);
