@@ -13,7 +13,7 @@ int main()
     int registrados;
     int relacionamentos[POPULACAOMAX][POPULACAOMAX];
 
-    int i, j, flag1, flag2, indexNome1, indexNome2;
+    int i, j, score, flagCeleb, flag1, flag2, indexNome1, indexNome2;
 
     while(*(pString = gets(rawIn)) != NULL) // Não foi apenas '\n'
     {
@@ -75,7 +75,6 @@ int main()
             strcpy(populacao[i], nome2);
             registrados++;
         }
-
         /**
          * Manipulação da matriz
          */
@@ -88,5 +87,26 @@ int main()
         relacionamentos[indexNome1][indexNome2] = 1; // nome1 conhece nome2
     }
 
+    /**
+     * Busca de celebridade
+     */
     
+    score = 0;
+    flagCeleb = 1;
+    i = 0;
+    j = 0;
+    while(j < registrados && flagCeleb == 1)
+    {
+        while(i < registrados && flagCeleb == 1)
+        {
+            if(relacionamentos[i][j] == 1)
+                score += 1;
+            else
+                flagCeleb = 0;
+            i++;
+        }
+        if(flagCeleb == 1)
+            printf("%s e' celebridade", populacao[j]);
+        j++;
+    }
 }
