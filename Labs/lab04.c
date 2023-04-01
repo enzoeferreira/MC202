@@ -13,7 +13,7 @@ int main()
     int registrados = 0;
     int relacionamentos[POPULACAOMAX][2]; // [Conhecido, Conhece]
 
-    int i, j, score, flagCeleb, flag1, flag2, indexNome1, indexNome2;
+    int i, flagCeleb, flag1, flag2, indexNome1, indexNome2;
 
     while(*(pString = fgets(rawIn, 111, stdin)) != '\n') // Não foi apenas '\n'
     {
@@ -87,7 +87,6 @@ int main()
      * Busca de celebridade
      */
     
-    score = 0;
     flagCeleb = 1;
     i = 0;
     while(i < registrados)
