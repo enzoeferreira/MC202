@@ -10,8 +10,8 @@ int main()
     char *pString, *pNome;
 
     char populacao[POPULACAOMAX][NOMEMAX];
-    int registrados;
-    int relacionamentos[POPULACAOMAX][POPULACAOMAX];
+    int registrados = 0;
+    int relacionamentos[POPULACAOMAX][2]; // [Conhecido, Conhece]
 
     int i, j, score, flagCeleb, flag1, flag2, indexNome1, indexNome2;
 
@@ -39,7 +39,7 @@ int main()
         printf("Nome 2: '%s'\n", nome2);
 
         /**
-         * Registro de nomes na matriz
+         * Registro de nomes no vetor
          */
 
         // Verificação de nome já registrado
@@ -66,25 +66,21 @@ int main()
         if(!flag1)
         {
             indexNome1 = i;
-            strcpy(populacao[i++], nome1);
+            relacionamentos[indexNome1][0] = 1; // Se conhece
+            relacionamentos[indexNome1][1] = 1; // Conhece nome2 
+            strcpy(populacao[i++], nome1); // Insere o nome
             registrados++;
         }
-        if(!flag1)
+        if(!flag2)
         {
             indexNome2 = i;
-            strcpy(populacao[i], nome2);
+            relacionamentos[indexNome2][0] = 1; // Se conhece 
+            strcpy(populacao[i], nome2); // Insere o nome
             registrados++;
         }
-        /**
-         * Manipulação da matriz
-         */
 
-        // Preenche a diagonal principal com 1 (Conhece si mesmo)
-        for(i = 0; i < registrados; i++)
-        {
-            relacionamentos[i][i] = 1;
-        }
-        relacionamentos[indexNome1][indexNome2] = 1; // nome1 conhece nome2
+        // nome2 é conhecido por nome1
+        relacionamentos[indexNome2][0] += 1;
     }
 
     /**
@@ -94,19 +90,19 @@ int main()
     score = 0;
     flagCeleb = 1;
     i = 0;
-    j = 0;
-    while(j < registrados && flagCeleb == 1)
+    while(i < registrados)
     {
-        while(i < registrados && flagCeleb == 1)
-        {
-            if(relacionamentos[i][j] == 1)
-                score += 1;
-            else
-                flagCeleb = 0;
-            i++;
-        }
-        if(flagCeleb == 1)
-            printf("%s e' celebridade", populacao[j]);
-        j++;
+        if(relacionamentos[i][0] == registrados)
+            // É conhecido por todos
+            if(relacionamentos[i][1] == 0)
+                // Não conhece ninguem
+                printf("%s e' celebridade.", populacao[i]);
+                if(flagCeleb == 1)
+                    // Celebridade não tinha sido encontrada até agora
+                    flagCeleb = 0;
+        i++;
     }
+    if(flagCeleb)
+        // Nenhuma celebridade
+        printf("Nao ha' celebridade.");
 }
