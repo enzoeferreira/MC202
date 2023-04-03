@@ -15,7 +15,7 @@ int main()
 
     int i, flagCeleb, flag1, flag2, indexNome1, indexNome2;
 
-    while(*(pString = fgets(rawIn, 111, stdin)) != '\n') // Não foi apenas '\n'
+    while(fgets(rawIn, 111, stdin) != NULL) // Não foi apenas '\n'
     {
         /**
          * Extração dos nomes
