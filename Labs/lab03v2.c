@@ -10,13 +10,13 @@ struct clientes
     int chegada, atendimentoAtual, atendimentoTotal, espera;
 };
 
-void imprimirCliente(struct clientes cliente)
-{
-    printf("Status: %s, ", cliente.status);
-    printf("Chegada: %d, ", cliente.chegada);
-    printf("Atendimento: %d de %d, ", cliente.atendimentoAtual, cliente.atendimentoTotal);
-    printf("Espera: %d\n", cliente.espera);
-}
+// void imprimirCliente(struct clientes cliente)
+// {
+//     printf("Status: %s, ", cliente.status);
+//     printf("Chegada: %d, ", cliente.chegada);
+//     printf("Atendimento: %d de %d, ", cliente.atendimentoAtual, cliente.atendimentoTotal);
+//     printf("Espera: %d\n", cliente.espera);
+// }
 
 int main()
 {
@@ -36,7 +36,7 @@ int main()
     t = 0;
     while(strcmp(clientes[qntClientes - 1].status, "Atendido"))
     {
-        printf("\n\nTEMPO = %d\n\n", t);
+        // printf("\n\nTEMPO = %d\n\n", t);
         for(i = 0; i < qntClientes; i++)
         {
             if(!funcionariosLivres)
@@ -46,15 +46,15 @@ int main()
                 {
                     // Cliente acabou de chegar
                     strcpy(clientes[i].status, "Fila");
-                    printf("Cliente %d de chegada = %d, ", i, clientes[i].chegada);
-                    printf("acabou de chegar e esta na fila!\n");
+                    // printf("Cliente %d de chegada = %d, ", i, clientes[i].chegada);
+                    // printf("acabou de chegar e esta na fila!\n");
                 }
                 else
                 {
                     if(!strcmp(clientes[i].status, "Fila"))
                     {
                         clientes[i].espera++; // Esperou 1 min sem ser atendido
-                        printf("Cliente %d esperou +1min na fila\n", i);
+                        // printf("Cliente %d esperou +1min na fila\n", i);
                     }
                     if(!strcmp(clientes[i].status, "Atendimento"))
                     {
@@ -63,14 +63,14 @@ int main()
                             // Ainda precisa ser atendido
                             clientes[i].espera++;
                             clientes[i].atendimentoAtual++; // +1 min de atendimento
-                            printf("Cliente %d foi atendido por +1min\n", i);
+                            // printf("Cliente %d foi atendido por +1min\n", i);
                         }
                         if(clientes[i].atendimentoAtual == clientes[i].atendimentoTotal)
                         {
                             // Atendimento acabou
                             strcpy(clientes[i].status, "Atendido");
                             funcionariosLivres++;
-                            printf("Cliente %d concluiu seu atendimento\n", i);
+                            // printf("Cliente %d concluiu seu atendimento\n", i);
                         }
                     }
                 }
@@ -82,8 +82,8 @@ int main()
                 {
                     // Cliente acabou de chegar
                     strcpy(clientes[i].status, "Fila");
-                    printf("Cliente %d de chegada = %d, ", i, clientes[i].chegada);
-                    printf("acabou de chegar e esta na fila!\n");
+                    // printf("Cliente %d de chegada = %d, ", i, clientes[i].chegada);
+                    // printf("acabou de chegar e esta na fila!\n");
                 }
 
                 if(!strcmp(clientes[i].status, "Fila"))
@@ -93,7 +93,7 @@ int main()
                         // Há funcionários livres, cliente será atendido
                         funcionariosLivres--;
                         strcpy(clientes[i].status, "Atendimento");
-                        printf("Cliente %d comecou a ser atendido\n", i);
+                        // printf("Cliente %d comecou a ser atendido\n", i);
                         clientes[i].espera++;
                     }
                 }
@@ -106,24 +106,24 @@ int main()
                             // Cliente ainda precisa ser atendido
                             clientes[i].atendimentoAtual++;
                             clientes[i].espera++;
-                            printf("Cliente %d foi atendido por +1 min (case 2)\n", i);
+                            // printf("Cliente %d foi atendido por +1 min (case 2)\n", i);
                         }
                         if(clientes[i].atendimentoAtual == clientes[i].atendimentoTotal)
                         {
                             // Cliente não precisa mais ser atendido
                             strcpy(clientes[i].status, "Atendido");
-                            printf("Cliente %d concluiu seu atendimento (case 2)\n", i);
+                            // printf("Cliente %d concluiu seu atendimento (case 2)\n", i);
                             funcionariosLivres++;
                         }
                     }
                 }
             }
         }
-        for(i = 0; i < qntClientes; i++)
-        {
-            printf("\nAnalisando Cliente %d\n", i);
-            imprimirCliente(clientes[i]);
-        }
+        // for(i = 0; i < qntClientes; i++)
+        // {
+        //     printf("\nAnalisando Cliente %d\n", i);
+        //     imprimirCliente(clientes[i]);
+        // }
         t++; // Passa o tempo
     }
 
@@ -131,18 +131,18 @@ int main()
      * Contagem de quantos esperaram na fila por mais de 20 min
      */
 
-    printf("\nComecando a contagem\n");
+    // printf("\nComecando a contagem\n");
     for(i = 0; i < qntClientes; i++)
     {
         clientes[i].espera -= clientes[i].atendimentoTotal; // Retira o tempo de atendimento
         if(clientes[i].espera > 20)
         {
             cont++;
-            printf("Cliente %d esperou por mais de 20 min!\n", i);
+            // printf("Cliente %d esperou por mais de 20 min!\n", i);
         }
-        imprimirCliente(clientes[i]);
+        // imprimirCliente(clientes[i]);
     }
-    printf("%d", cont);
+    printf("%d\n", cont);
 
     return 0;
 }
