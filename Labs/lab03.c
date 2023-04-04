@@ -6,13 +6,12 @@
 
 struct clientes
 {
-    char status[12]; // Nao chegou, Fila, Atendimento, Atendido
-    int chegada, atendimentoAtual, atendimentoTotal, espera;
+    int status, chegada, atendimentoAtual, atendimentoTotal, espera;
 };
 
 void imprimirCliente(struct clientes cliente)
 {
-    printf("Status: %s, ", cliente.status);
+    printf("\tStatus: %d, ", cliente.status);
     printf("Chegada: %d, ", cliente.chegada);
     printf("Atendimento: %d de %d, ", cliente.atendimentoAtual, cliente.atendimentoTotal);
     printf("Espera: %d\n", cliente.espera);
@@ -29,28 +28,24 @@ int main()
 
     for(i = 0; i < qntClientes; i++) // Percorre clientes
     {
-        strcpy(clientes[i].status, "Nao chegou"); // Coloca "Não chegou" como status padrão
+        clientes[i].status = -1; // Coloca "Não chegou" como status padrão
+        clientes[i].atendimentoAtual = 0; // Coloca 0 como atendimento atual por padrão
+        clientes[i].espera = 0; // Coloca 0 como espera por padrão
         scanf("%d %d", &clientes[i].chegada, &clientes[i].atendimentoTotal);
     }
     
     t = 0;
-    while(strcmp(clientes[qntClientes - 1].status, "Atendido"))
+    while(clientes[qntClientes - 1].status != 1)
     {
         printf("\n\nTEMPO = %d\n\n", t);
         for(i = 0; i < qntClientes; i++) // Percorre clientes
         {
-            if(t >= clientes[i].chegada)
+            if(t >= clientes[i].chegada && clientes[i].status < 1)
             {
-                // Cliente já chegou
-                if(t == clientes[i].chegada)
+                // Cliente já chegou e ainda não saiu
+                if(clientes[i].status == 0)
                 {
-                    // Cliente acabou de chegar
-                    strcpy(clientes[i].status, "Fila");
-                    printf("Cliente %d acabou de chegar e esta na fila!\n", i);
-                }
-
-                if(!strcmp(clientes[i].status, "Atendimento"))
-                {
+                    // Cliente está sendo atendido
                     if(clientes[i].atendimentoAtual < clientes[i].atendimentoTotal)
                     {
                         // Cliente está sendo e ainda precisa de atendimento
@@ -61,27 +56,34 @@ int main()
                     {
                         // Cliente estava sendo atendido mas completou o atendimento
                         funcionariosLivres++;
-                        strcpy(clientes[i].status, "Atendido");
+                        clientes[i].status = 1;
                         printf("Cliente %d completou seu atendimento!\n", i);
                     }
                 }
-                
-                if(funcionariosLivres > 0 && !strcmp(clientes[i].status, "Fila"))
+                else
                 {
-                    // Há funcionários livres e cliente está na fila
-                    funcionariosLivres--;
-                    strcpy(clientes[i].status, "Atendimento");
-                    printf("Cliente %d comecou seu atendimento!\n", i);
-                }
-                if(!funcionariosLivres && !strcmp(clientes[i].status, "Fila"))
-                {
-                    // Não há funcionários livres e cliente está na fila
-                    clientes[i].espera++;
-                    printf("Cliente %d esta na fila mas nao ha funcionarios livres\n", i);
+                    // Cliente ainda não está sendo atendido
+                    if(funcionariosLivres > 0 && clientes[i].status == -1)
+                    {
+                        // Há funcionários livres e cliente está na fila
+                        funcionariosLivres--;
+                        clientes[i].status = 0;
+                        printf("Cliente %d comecou seu atendimento!\n", i);
+                        if(t > clientes[i].chegada)
+                            clientes[i].espera++;
+                    }
+                    else if(!funcionariosLivres && clientes[i].status == -1 &&
+                            t > clientes[i].chegada)
+                    {
+                        // Não há funcionários livres e cliente está na fila
+                        clientes[i].espera++;
+                        printf("Cliente %d esta na fila mas nao ha funcionarios livres\n", i);
+                    }
                 }
                 
-                printf("Analisando Cliente %d:\n", i);
+                printf("\n\tAnalisando Cliente %d:\n", i);
                 imprimirCliente(clientes[i]);
+                printf("\n");
             }
         }
         t++; // Passa o tempo
@@ -92,6 +94,10 @@ int main()
         {
             cont++;
             printf("Cliente %d esperou mais de 20 min na fila!\n", i);
+        }
+        else
+        {
+            printf("\tCliente %d esperou %d min na fila\n", i, clientes[i].espera);
         }
     }
     printf("%d\n", cont);
