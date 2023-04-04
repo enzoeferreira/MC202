@@ -9,13 +9,13 @@ struct clientes
     int status, chegada, atendimentoAtual, atendimentoTotal, espera;
 };
 
-void imprimirCliente(struct clientes cliente)
-{
-    printf("\tStatus: %d, ", cliente.status);
-    printf("Chegada: %d, ", cliente.chegada);
-    printf("Atendimento: %d de %d, ", cliente.atendimentoAtual, cliente.atendimentoTotal);
-    printf("Espera: %d\n", cliente.espera);
-}
+// void imprimirCliente(struct clientes cliente)
+// {
+//     printf("\tStatus: %d, ", cliente.status);
+//     printf("Chegada: %d, ", cliente.chegada);
+//     printf("Atendimento: %d de %d, ", cliente.atendimentoAtual, cliente.atendimentoTotal);
+//     printf("Espera: %d\n", cliente.espera);
+// }
 
 int main()
 {
@@ -37,7 +37,7 @@ int main()
     t = 0;
     while(clientes[qntClientes - 1].status != 1)
     {
-        printf("\n\nTEMPO = %d\n\n", t);
+        // printf("\n\nTEMPO = %d\n\n", t);
         for(i = 0; i < qntClientes; i++) // Percorre clientes
         {
             if(t >= clientes[i].chegada && clientes[i].status < 1)
@@ -50,14 +50,14 @@ int main()
                     {
                         // Cliente está sendo e ainda precisa de atendimento
                         clientes[i].atendimentoAtual++;
-                        printf("Cliente %d esta sendo atendido +1 min\n", i);
+                        // printf("Cliente %d esta sendo atendido +1 min\n", i);
                     }
                     if(clientes[i].atendimentoAtual == clientes[i].atendimentoTotal)
                     {
                         // Cliente estava sendo atendido mas completou o atendimento
                         funcionariosLivres++;
                         clientes[i].status = 1;
-                        printf("Cliente %d completou seu atendimento!\n", i);
+                        // printf("Cliente %d completou seu atendimento!\n", i);
                     }
                 }
                 else
@@ -68,7 +68,7 @@ int main()
                         // Há funcionários livres e cliente está na fila
                         funcionariosLivres--;
                         clientes[i].status = 0;
-                        printf("Cliente %d comecou seu atendimento!\n", i);
+                        // printf("Cliente %d comecou seu atendimento!\n", i);
                         if(t > clientes[i].chegada)
                             clientes[i].espera++;
                     }
@@ -77,13 +77,13 @@ int main()
                     {
                         // Não há funcionários livres e cliente está na fila
                         clientes[i].espera++;
-                        printf("Cliente %d esta na fila mas nao ha funcionarios livres\n", i);
+                        // printf("Cliente %d esta na fila mas nao ha funcionarios livres\n", i);
                     }
                 }
                 
-                printf("\n\tAnalisando Cliente %d:\n", i);
-                imprimirCliente(clientes[i]);
-                printf("\n");
+                // printf("\n\tAnalisando Cliente %d:\n", i);
+                // imprimirCliente(clientes[i]);
+                // printf("\n");
             }
         }
         t++; // Passa o tempo
@@ -93,12 +93,12 @@ int main()
         if(clientes[i].espera > 20)
         {
             cont++;
-            printf("Cliente %d esperou mais de 20 min na fila!\n", i);
+            // printf("Cliente %d esperou mais de 20 min na fila!\n", i);
         }
-        else
-        {
-            printf("\tCliente %d esperou %d min na fila\n", i, clientes[i].espera);
-        }
+        // else
+        // {
+        //     printf("\tCliente %d esperou %d min na fila\n", i, clientes[i].espera);
+        // }
     }
     printf("%d\n", cont);
 
