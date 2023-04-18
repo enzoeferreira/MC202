@@ -131,10 +131,22 @@ int main()
             if(elementos > 0)
             {
                 printf("VC: ");
-                for(i = 0; i < elementos; i++)
+                for(linha = 0; linha < m; linha++)
                 {
-                    if(vetor[i].status)
-                        printf("(%d,%d,%d) ", vetor[i].linha, vetor[i].coluna, vetor[i].valor);
+                    for(coluna = 0; coluna < n; coluna++)
+                    {
+                        for(i = 0; i < elementos; i++)
+                        {
+                            if(vetor[i].status &&
+                                vetor[i].linha == linha && vetor[i].coluna == coluna)
+                            {
+                                // Elemento ativo, linha e coluna certa
+                                printf("(%d,%d,%d) ", vetor[i].linha,
+                                                        vetor[i].coluna,
+                                                        vetor[i].valor);
+                            }
+                        }
+                    }
                 }
                 printf("\n");
             }
