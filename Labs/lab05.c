@@ -25,6 +25,7 @@ int main()
         scanf("[%d,%d] %d", &vetor[i].linha, &vetor[i].coluna, &vetor[i].valor);
         vetor[i].status = 1;
     }
+    elementosInvalidos = 0;
 
     /**
      * Modo Interativo
@@ -39,7 +40,7 @@ int main()
             sscanf(rawIn, "a [%d,%d] %d", &linha, &coluna, &valor);
             i = 0;
             encontrado = 0;
-            while(i < elementos + elementosInvalidos && encontrado == 0)
+            while(((i < m + n) && (i < elementos + elementosInvalidos)) && encontrado == 0)
             {
                 if(vetor[i].status == 1)
                 {
