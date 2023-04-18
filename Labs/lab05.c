@@ -122,7 +122,7 @@ int main()
             if(!encontrado)
             {
                 // Elemento nulo
-                printf("M[%d][%d] == 0\n", vetor[i].linha, vetor[i].coluna);
+                printf("M[%d][%d] == 0\n", (int)(*(rawIn + 3) - '0'), (int)(*(rawIn + 5) - '0'));
             }
         }
         else if(*rawIn == 'p')
