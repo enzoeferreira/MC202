@@ -120,7 +120,6 @@ int main()
         else if(*rawIn == 'p')
         {
             // Modo 'p'
-            printf("Modo P\n");
             if(elementos > 0)
             {
                 printf("VC: ");
