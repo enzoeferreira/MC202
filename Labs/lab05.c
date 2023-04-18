@@ -24,7 +24,7 @@ int main()
         getchar(); // Pega o \n do buffer
         // [a,b] x -> Linha 'a', coluna 'b' tem valor 'x'
         scanf("[%d,%d] %d", &vetor[i].linha, &vetor[i].coluna, &vetor[i].valor);
-        printf("linha %d, coluna %d, valor %d\n", vetor[i].linha, vetor[i].coluna, vetor[i].valor);
+        // printf("linha %d, coluna %d, valor %d\n", vetor[i].linha, vetor[i].coluna, vetor[i].valor);
         vetor[i].status = 1;
     }
 
