@@ -37,6 +37,7 @@ int main()
         if(*rawIn == 'a')
         {
             // Modo 'a'
+            sscanf(rawIn, "a [%d, %d] %d", &linha, &coluna, &valor);
             i = 0;
             encontrado = 0;
             while(i < elementos && encontrado == 0)
@@ -44,19 +45,19 @@ int main()
                 if(vetor[i].status == 1)
                 {
                     // Elemento ativo
-                    if(vetor[i].linha == (int)(*(rawIn + 3) - '0')) // - '0' para fazer char -> int
+                    if(vetor[i].linha == linha) // - '0' para fazer char -> int
                     {
                         // Linha igual
-                        if(vetor[i].coluna == (int)(*(rawIn + 5) - '0'))
+                        if(vetor[i].coluna == coluna)
                         {
                             // Elemento encontrado (Linha e coluna igual)
                             encontrado = 1;
                             // printf("Elemento encontrado e ");
-                            if(*(rawIn + 8) - '0')
+                            if(valor)
                             {
                                 // Alterar valor
                                 // printf("alterado\n");
-                                vetor[i].valor = (int)(*(rawIn + 8) - '0');
+                                vetor[i].valor = valor;
                             }
                             else
                             {
@@ -79,9 +80,9 @@ int main()
                 {
                     // Há espaço para adicionar
                     for(i = 0; vetor[i].status == 1; i++) {}
-                    vetor[i].linha = (int)(*(rawIn + 3) - '0');
-                    vetor[i].coluna = (int)(*(rawIn + 5) - '0');
-                    vetor[i].valor = (int)(*(rawIn + 8) - '0');
+                    vetor[i].linha = linha;
+                    vetor[i].coluna = coluna;
+                    vetor[i].valor = valor;
                     vetor[i].status = 1;
                     elementos++;
                 }
