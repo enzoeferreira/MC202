@@ -9,7 +9,7 @@ int main()
         int linha, coluna, valor, status;
     } triplet;
     
-    int i, m, n, elementos, linha, coluna, valor, encontrado;
+    int i, j, v, m, n, elementos, linha, coluna, valor, encontrado;
     char modo, rawIn[INMAX];
     triplet tripla;
 
@@ -96,6 +96,26 @@ int main()
         {
             // Modo 'r'
             printf("Modo R\n");
+            while(i < elementos && encontrado == 0)
+            {
+                if(vetor[i].status == 1)
+                {
+                    // Elemento ativo
+                    if(vetor[i].linha == (int)(*(rawIn + 3) - '0')) // - '0' para fazer char -> int
+                    {
+                        // Linha igual
+                        if(vetor[i].coluna == (int)(*(rawIn + 5) - '0'))
+                        {
+                            // Elemento encontrado (Linha e coluna igual)
+                            encontrado = 1;
+                            printf("Elemento encontrado!\n");
+                            printf("M[%d][%d] == %d\n",
+                                    vetor[i].linha, vetor[i].coluna, vetor[i].valor);
+                        }
+                    }
+                }
+                i++;
+            }
         }
         else if(*rawIn == 'p')
         {
