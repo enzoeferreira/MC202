@@ -9,7 +9,7 @@ int main()
         int linha, coluna, valor, status;
     } triplet;
     
-    int i, j, v, m, n, elementos, linha, coluna, valor, encontrado;
+    int i, j, v, m, n, elementos, elementosInvalidos, linha, coluna, valor, encontrado;
     char modo, rawIn[INMAX];
     triplet tripla;
 
@@ -37,10 +37,10 @@ int main()
         if(*rawIn == 'a')
         {
             // Modo 'a'
-            sscanf(rawIn, "a [%d, %d] %d", &linha, &coluna, &valor);
+            sscanf(rawIn, "a [%d,%d] %d", &linha, &coluna, &valor);
             i = 0;
             encontrado = 0;
-            while(i < elementos && encontrado == 0)
+            while(i < elementos + elementosInvalidos && encontrado == 0)
             {
                 if(vetor[i].status == 1)
                 {
@@ -52,7 +52,7 @@ int main()
                         {
                             // Elemento encontrado (Linha e coluna igual)
                             encontrado = 1;
-                            // printf("\tElemento encontrado e ");
+                            // printf("\tElemento [%d,%d] encontrado e ", linha, coluna);
                             if(valor)
                             {
                                 // Alterar valor
@@ -71,6 +71,8 @@ int main()
                         }
                     }
                 }
+                else
+                    elementosInvalidos++;
                 i++;
             }
 
@@ -99,7 +101,7 @@ int main()
         else if(*rawIn == 'r')
         {
             // Modo 'r'
-            sscanf(rawIn, "r [%d, %d]", &linha, &coluna);
+            sscanf(rawIn, "r [%d,%d]", &linha, &coluna);
             i = 0;
             encontrado = 0;
             while(i <= elementos && encontrado == 0)
