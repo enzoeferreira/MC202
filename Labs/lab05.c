@@ -73,7 +73,7 @@ int main()
                 i++;
             }
 
-            if(encontrado == 0)
+            if(!encontrado)
             {
                 // Elemento novo
                 if(elementos < m + n)
@@ -117,6 +117,12 @@ int main()
                     }
                 }
                 i++;
+            }
+
+            if(!encontrado)
+            {
+                // Elemento nulo
+                printf("M[%d][%d] == 0\n", vetor[i].linha, vetor[i].coluna);
             }
         }
         else if(*rawIn == 'p')
