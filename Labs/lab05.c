@@ -96,6 +96,7 @@ int main()
         else if(*rawIn == 'r')
         {
             // Modo 'r'
+            sscanf(rawIn, "r [%d, %d]", &linha, &coluna);
             i = 0;
             encontrado = 0;
             while(i < elementos && encontrado == 0)
@@ -103,16 +104,15 @@ int main()
                 if(vetor[i].status == 1)
                 {
                     // Elemento ativo
-                    if(vetor[i].linha == (int)(*(rawIn + 3) - '0')) // - '0' para fazer char -> int
+                    if(vetor[i].linha == linha) // - '0' para fazer char -> int
                     {
                         // Linha igual
-                        if(vetor[i].coluna == (int)(*(rawIn + 5) - '0'))
+                        if(vetor[i].coluna == coluna)
                         {
                             // Elemento encontrado (Linha e coluna igual)
                             encontrado = 1;
                             // printf("Elemento encontrado!\n");
-                            printf("M[%d][%d] == %d\n",
-                                    vetor[i].linha, vetor[i].coluna, vetor[i].valor);
+                            printf("M[%d][%d] == %d\n", linha, coluna, vetor[i].valor);
                         }
                     }
                 }
@@ -122,7 +122,7 @@ int main()
             if(!encontrado)
             {
                 // Elemento nulo
-                printf("M[%d][%d] == 0\n", (int)(*(rawIn + 3) - '0'), (int)(*(rawIn + 5) - '0'));
+                printf("M[%d][%d] == 0\n", linha, coluna);
             }
         }
         else if(*rawIn == 'p')
