@@ -75,12 +75,21 @@ int main()
 
             if(encontrado == 0)
             {
-                // Elemento novo, adiciona
-                vetor[++i].linha = (int)(*(rawIn + 3) - '0');
-                vetor[i].coluna = (int)(*(rawIn + 5) - '0');
-                vetor[i].valor = (int)(*(rawIn + 8) - '0');
-                vetor[i].status = 1;
-                elementos++;
+                // Elemento novo
+                if(elementos < m + n)
+                {
+                    // Há espaço para adicionar
+                    vetor[++i].linha = (int)(*(rawIn + 3) - '0');
+                    vetor[i].coluna = (int)(*(rawIn + 5) - '0');
+                    vetor[i].valor = (int)(*(rawIn + 8) - '0');
+                    vetor[i].status = 1;
+                    elementos++;
+                }
+                else
+                {
+                    // Não há espaço para adicionar
+                    printf("O VC esta' cheio.\n");
+                }
             }
         }
         else if(*rawIn == 'r')
