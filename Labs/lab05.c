@@ -80,7 +80,8 @@ int main()
                 {
                     // Há espaço para adicionar
                     for(i = 0; vetor[i].status == 1; i++) {}
-                    vetor[++i].linha = (int)(*(rawIn + 3) - '0');
+                    printf("cheguei no i = %d\n", i);
+                    vetor[i].linha = (int)(*(rawIn + 3) - '0');
                     vetor[i].coluna = (int)(*(rawIn + 5) - '0');
                     vetor[i].valor = (int)(*(rawIn + 8) - '0');
                     vetor[i].status = 1;
@@ -96,6 +97,7 @@ int main()
         else if(*rawIn == 'r')
         {
             // Modo 'r'
+            encontrado = 0;
             while(i < elementos && encontrado == 0)
             {
                 if(vetor[i].status == 1)
