@@ -101,17 +101,20 @@ int main()
         {
             // Modo 'p'
             printf("Modo P\n");
-            printf("VC: ");
-            for(i = 0; i < elementos; i++)
+            if(elementos > 0)
             {
-                if(vetor[i].status)
-                    printf("(%d,%d,%d) ", vetor[i].linha, vetor[i].coluna, vetor[i].valor);
+                printf("VC: ");
+                for(i = 0; i < elementos; i++)
+                {
+                    if(vetor[i].status)
+                        printf("(%d,%d,%d) ", vetor[i].linha, vetor[i].coluna, vetor[i].valor);
+                }
+                printf("\n");
             }
-            if(elementos == 0)
+            else
             {
                 printf("O VC esta' vazio.\n");
             }
-            printf("\n");
         }
     }
 
