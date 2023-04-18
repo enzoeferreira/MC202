@@ -66,6 +66,7 @@ int main()
                                 printf("removido\n");
                                 vetor[i].valor = 0;
                                 vetor[i].status = 0;
+                                elementos--;
                             }
                         }
                     }
