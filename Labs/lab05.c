@@ -27,6 +27,13 @@ int main()
     }
     elementosInvalidos = 0;
 
+    // Status 0 no restante dos elementos
+    while(i < m + n)
+    {
+        vetor[i].status = 0;
+        i++;
+    }
+
     /**
      * Modo Interativo
      */
@@ -80,7 +87,7 @@ int main()
                     vetor[i].valor = valor;
                     vetor[i].status = 1;
                     elementos++;
-                    // printf("\tElemento NAO encontrado, adicionado / ");
+                    // printf("\tElemento [%d,%d] NAO encontrado, adicionado em %d / ", linha, coluna, i);
                     // printf("E = %d\n", elementos);
                 }
                 else
@@ -161,7 +168,7 @@ int main()
     //     }
     // }
 
-    // for(i = 0; i <= elementos; i++)
+    // for(i = 0; i < elementos; i++)
     // {
     //     printf("%d(%d,%d,%d)%d ", i, vetor[i].linha, vetor[i].coluna, vetor[i].valor, vetor[i].status);
     // }
