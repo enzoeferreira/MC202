@@ -140,7 +140,7 @@ int main()
                     {
                         for(i = 0; i <= elementos; i++)
                         {
-                            if(vetor[i].status &&
+                            if(vetor[i].status && vetor[i].valor &&
                                vetor[i].linha == linha && vetor[i].coluna == coluna)
                             {
                                 // Elemento ativo, linha e coluna certa
@@ -178,6 +178,8 @@ int main()
     // {
     //     printf("%d(%d,%d,%d)%d ", i, vetor[i].linha, vetor[i].coluna, vetor[i].valor, vetor[i].status);
     // }
+
+    // printf("E = %d\n", elementos);
 
     return 0;
 }
