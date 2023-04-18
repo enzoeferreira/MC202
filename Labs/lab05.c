@@ -134,9 +134,9 @@ int main()
             if(elementos > 0)
             {
                 printf("VC: ");
-                for(linha = 0; linha < m; linha++)
+                for(linha = 0; linha <= m; linha++)
                 {
-                    for(coluna = 0; coluna < n; coluna++)
+                    for(coluna = 0; coluna <= n; coluna++)
                     {
                         for(i = 0; i <= elementos; i++)
                         {
@@ -159,15 +159,25 @@ int main()
             }
         }
     }
-    // i = 0;
-    // while(1)
+    // while(*(fgets(rawIn, INMAX, stdin)) != 't')
     // {
-    //     if(vetor[i].linha == 72 && vetor[i].coluna == 72)
+    //     i = 0;
+    //     sscanf(rawIn, "r [%d, %d]", &linha, &coluna);
+    //     while(1)
     //     {
-    //         printf("%d(%d,%d,%d)%d\n", i, vetor[i].linha, vetor[i].coluna, vetor[i].valor, vetor[i].status);
-    //         break;
+    //         if(vetor[i].linha == linha && vetor[i].coluna == coluna)
+    //         {
+    //             printf("%d(%d,%d,%d)%d\n", i, vetor[i].linha, vetor[i].coluna, vetor[i].valor, vetor[i].status);
+    //             break;
+    //         }
+    //         i++;
     //     }
-    //     i++;
     // }
+
+    // for(i = 0; i <= elementos; i++)
+    // {
+    //     printf("%d(%d,%d,%d)%d ", i, vetor[i].linha, vetor[i].coluna, vetor[i].valor, vetor[i].status);
+    // }
+
     return 0;
 }
