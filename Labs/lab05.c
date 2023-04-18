@@ -38,7 +38,6 @@ int main()
         if(*rawIn == 'a')
         {
             // Modo 'a'
-            printf("Modo A\n");
             i = 0;
             encontrado = 0;
             while(i < elementos && encontrado == 0)
@@ -97,7 +96,6 @@ int main()
         else if(*rawIn == 'r')
         {
             // Modo 'r'
-            printf("Modo R\n");
             while(i < elementos && encontrado == 0)
             {
                 if(vetor[i].status == 1)
