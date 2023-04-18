@@ -42,36 +42,28 @@ int main()
             encontrado = 0;
             while(((i < m + n) && (i < elementos + elementosInvalidos)) && encontrado == 0)
             {
-                if(vetor[i].status == 1)
+                if(vetor[i].status && vetor[i].linha == linha && vetor[i].coluna == coluna)
                 {
-                    // Elemento ativo
-                    if(vetor[i].linha == linha)
+                    // Elemento ativo, linhas e coluna iguais (encontrado)
+                    encontrado = 1;
+                    // printf("\tElemento [%d,%d] encontrado e ", linha, coluna);
+                    if(valor)
                     {
-                        // Linha igual
-                        if(vetor[i].coluna == coluna)
-                        {
-                            // Elemento encontrado (Linha e coluna igual)
-                            encontrado = 1;
-                            // printf("\tElemento [%d,%d] encontrado e ", linha, coluna);
-                            if(valor)
-                            {
-                                // Alterar valor
-                                // printf("alterado\n");
-                                vetor[i].valor = valor;
-                            }
-                            else
-                            {
-                                // Remover valor
-                                // printf("removido / ");
-                                vetor[i].valor = 0;
-                                vetor[i].status = 0;
-                                elementos--;
-                                // printf("E = %d\n", elementos);
-                            }
-                        }
+                        // Alterar valor
+                        // printf("alterado\n");
+                        vetor[i].valor = valor;
+                    }
+                    else
+                    {
+                        // Remover valor
+                        // printf("removido / ");
+                        vetor[i].valor = 0;
+                        vetor[i].status = 0;
+                        elementos--;
+                        // printf("E = %d\n", elementos);
                     }
                 }
-                else
+                else if(!vetor[i].status)// Elemento inativo
                     elementosInvalidos++;
                 i++;
             }
@@ -106,20 +98,12 @@ int main()
             encontrado = 0;
             while(i <= elementos && encontrado == 0)
             {
-                if(vetor[i].status == 1)
+                if(vetor[i].status && vetor[i].linha == linha && vetor[i].coluna == coluna)
                 {
-                    // Elemento ativo
-                    if(vetor[i].linha == linha)
-                    {
-                        // Linha igual
-                        if(vetor[i].coluna == coluna)
-                        {
-                            // Elemento encontrado (Linha e coluna igual)
-                            encontrado = 1;
-                            // printf("Elemento encontrado!\n");
-                            printf("M[%d][%d] == %d\n", linha, coluna, vetor[i].valor);
-                        }
-                    }
+                    // Elemento ativo, linhas e coluna iguais (encontrado)
+                    encontrado = 1;
+                    // printf("Elemento encontrado!\n");
+                    printf("M[%d][%d] == %d\n", linha, coluna, vetor[i].valor);
                 }
                 i++;
             }
@@ -142,8 +126,9 @@ int main()
                     {
                         for(i = 0; i <= elementos; i++)
                         {
-                            if(vetor[i].status && vetor[i].valor &&
-                               vetor[i].linha == linha && vetor[i].coluna == coluna)
+                            if(vetor[i].status &&
+                               vetor[i].linha == linha && vetor[i].coluna == coluna &&
+                               vetor[i].valor)
                             {
                                 // Elemento ativo, linha e coluna certa
                                 printf("(%d,%d,%d) ", vetor[i].linha,
