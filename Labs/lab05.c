@@ -6,10 +6,10 @@ int main()
 {
     typedef struct
     {
-        int linha, coluna, valor;
+        int linha, coluna, valor, status;
     } triplet;
     
-    int i, m, n, linhas, linha, coluna, valor;
+    int i, m, n, elementos, linha, coluna, valor, encontrado;
     char modo, rawIn[INMAX];
     triplet tripla;
 
@@ -18,13 +18,14 @@ int main()
     triplet vetor[m+n];
 
     // Recebimento das triplas
-    scanf("%d", &linhas);
-    for(i = 0; i < linhas; i++)
+    scanf("%d", &elementos);
+    for(i = 0; i < elementos; i++)
     {
         getchar(); // Pega o \n do buffer
         // [a,b] x -> Linha 'a', coluna 'b' tem valor 'x'
         scanf("[%d,%d] %d", &vetor[i].linha, &vetor[i].coluna, &vetor[i].valor);
         printf("linha %d, coluna %d, valor %d\n", vetor[i].linha, vetor[i].coluna, vetor[i].valor);
+        vetor[i].status = 1;
     }
 
     /**
@@ -38,6 +39,49 @@ int main()
         {
             // Modo 'a'
             printf("Modo A\n");
+            i = 0;
+            encontrado = 0;
+            while(i < elementos && encontrado == 0)
+            {
+                if(vetor[i].status == 1)
+                {
+                    // Elemento ativo
+                    if(vetor[i].linha == (int)(*(rawIn + 3) - '0')) // - '0' para fazer char -> int
+                    {
+                        // Linha igual
+                        if(vetor[i].coluna == (int)(*(rawIn + 5) - '0'))
+                        {
+                            // Elemento encontrado (Linha e coluna igual)
+                            encontrado = 1;
+                            printf("Elemento encontrado e ");
+                            if(*(rawIn + 8) - '0')
+                            {
+                                // Alterar valor
+                                printf("alterado\n");
+                                vetor[i].valor = (int)(*(rawIn + 8) - '0');
+                            }
+                            else
+                            {
+                                // Remover valor
+                                printf("removido\n");
+                                vetor[i].valor = 0;
+                                vetor[i].status = 0;
+                            }
+                        }
+                    }
+                }
+                i++;
+            }
+
+            if(encontrado == 0)
+            {
+                // Elemento novo, adiciona
+                vetor[++i].linha = (int)(*(rawIn + 3) - '0');
+                vetor[i].coluna = (int)(*(rawIn + 5) - '0');
+                vetor[i].valor = (int)(*(rawIn + 8) - '0');
+                vetor[i].status = 1;
+                elementos++;
+            }
         }
         else if(*rawIn == 'r')
         {
@@ -48,6 +92,17 @@ int main()
         {
             // Modo 'p'
             printf("Modo P\n");
+            printf("VC: ");
+            for(i = 0; i < elementos; i++)
+            {
+                if(vetor[i].status)
+                    printf("(%d,%d,%d) ", vetor[i].linha, vetor[i].coluna, vetor[i].valor);
+            }
+            if(elementos == 0)
+            {
+                printf("O VC esta' vazio.\n");
+            }
+            printf("\n");
         }
     }
 
