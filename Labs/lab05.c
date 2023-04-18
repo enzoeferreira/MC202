@@ -24,7 +24,6 @@ int main()
         getchar(); // Pega o \n do buffer
         // [a,b] x -> Linha 'a', coluna 'b' tem valor 'x'
         scanf("[%d,%d] %d", &vetor[i].linha, &vetor[i].coluna, &vetor[i].valor);
-        // printf("linha %d, coluna %d, valor %d\n", vetor[i].linha, vetor[i].coluna, vetor[i].valor);
         vetor[i].status = 1;
     }
 
@@ -52,17 +51,17 @@ int main()
                         {
                             // Elemento encontrado (Linha e coluna igual)
                             encontrado = 1;
-                            printf("Elemento encontrado e ");
+                            // printf("Elemento encontrado e ");
                             if(*(rawIn + 8) - '0')
                             {
                                 // Alterar valor
-                                printf("alterado\n");
+                                // printf("alterado\n");
                                 vetor[i].valor = (int)(*(rawIn + 8) - '0');
                             }
                             else
                             {
                                 // Remover valor
-                                printf("removido\n");
+                                // printf("removido\n");
                                 vetor[i].valor = 0;
                                 vetor[i].status = 0;
                                 elementos--;
@@ -110,7 +109,7 @@ int main()
                         {
                             // Elemento encontrado (Linha e coluna igual)
                             encontrado = 1;
-                            printf("Elemento encontrado!\n");
+                            // printf("Elemento encontrado!\n");
                             printf("M[%d][%d] == %d\n",
                                     vetor[i].linha, vetor[i].coluna, vetor[i].valor);
                         }
