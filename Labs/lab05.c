@@ -45,14 +45,14 @@ int main()
                 if(vetor[i].status == 1)
                 {
                     // Elemento ativo
-                    if(vetor[i].linha == linha) // - '0' para fazer char -> int
+                    if(vetor[i].linha == linha)
                     {
                         // Linha igual
                         if(vetor[i].coluna == coluna)
                         {
                             // Elemento encontrado (Linha e coluna igual)
                             encontrado = 1;
-                            // printf("Elemento encontrado e ");
+                            // printf("\tElemento encontrado e ");
                             if(valor)
                             {
                                 // Alterar valor
@@ -62,10 +62,11 @@ int main()
                             else
                             {
                                 // Remover valor
-                                // printf("removido\n");
+                                // printf("removido / ");
                                 vetor[i].valor = 0;
                                 vetor[i].status = 0;
                                 elementos--;
+                                // printf("E = %d\n", elementos);
                             }
                         }
                     }
@@ -73,7 +74,7 @@ int main()
                 i++;
             }
 
-            if(!encontrado)
+            if(!encontrado && valor != 0)
             {
                 // Elemento novo
                 if(elementos < m + n)
@@ -85,6 +86,8 @@ int main()
                     vetor[i].valor = valor;
                     vetor[i].status = 1;
                     elementos++;
+                    // printf("\tElemento NAO encontrado, adicionado / ");
+                    // printf("E = %d\n", elementos);
                 }
                 else
                 {
@@ -99,12 +102,12 @@ int main()
             sscanf(rawIn, "r [%d, %d]", &linha, &coluna);
             i = 0;
             encontrado = 0;
-            while(i < elementos && encontrado == 0)
+            while(i <= elementos && encontrado == 0)
             {
                 if(vetor[i].status == 1)
                 {
                     // Elemento ativo
-                    if(vetor[i].linha == linha) // - '0' para fazer char -> int
+                    if(vetor[i].linha == linha)
                     {
                         // Linha igual
                         if(vetor[i].coluna == coluna)
@@ -135,15 +138,15 @@ int main()
                 {
                     for(coluna = 0; coluna < n; coluna++)
                     {
-                        for(i = 0; i < elementos; i++)
+                        for(i = 0; i <= elementos; i++)
                         {
                             if(vetor[i].status &&
-                                vetor[i].linha == linha && vetor[i].coluna == coluna)
+                               vetor[i].linha == linha && vetor[i].coluna == coluna)
                             {
                                 // Elemento ativo, linha e coluna certa
                                 printf("(%d,%d,%d) ", vetor[i].linha,
-                                                        vetor[i].coluna,
-                                                        vetor[i].valor);
+                                                      vetor[i].coluna,
+                                                      vetor[i].valor);
                             }
                         }
                     }
@@ -156,6 +159,15 @@ int main()
             }
         }
     }
-
+    // i = 0;
+    // while(1)
+    // {
+    //     if(vetor[i].linha == 72 && vetor[i].coluna == 72)
+    //     {
+    //         printf("%d(%d,%d,%d)%d\n", i, vetor[i].linha, vetor[i].coluna, vetor[i].valor, vetor[i].status);
+    //         break;
+    //     }
+    //     i++;
+    // }
     return 0;
 }
