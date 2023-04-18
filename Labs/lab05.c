@@ -9,9 +9,8 @@ int main()
         int linha, coluna, valor, status;
     } triplet;
     
-    int i, j, v, m, n, elementos, elementosInvalidos, linha, coluna, valor, encontrado;
-    char modo, rawIn[INMAX];
-    triplet tripla;
+    int i, m, n, elementos, elementosInvalidos, linha, coluna, valor, encontrado;
+    char rawIn[INMAX];
 
     // Criação do vetor que armazenará triplas dos não-nulos de uma matriz m x n
     scanf("%d %d", &m, &n);
