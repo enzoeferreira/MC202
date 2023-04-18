@@ -131,7 +131,9 @@ int main()
                 {
                     for(coluna = 0; coluna <= n; coluna++)
                     {
-                        for(i = 0; i <= elementos; i++)
+                        i = 0;
+                        encontrado = 0;
+                        while(i < elementos && encontrado == 0)
                         {
                             if(vetor[i].status &&
                                vetor[i].linha == linha && vetor[i].coluna == coluna &&
@@ -141,7 +143,9 @@ int main()
                                 printf("(%d,%d,%d) ", vetor[i].linha,
                                                       vetor[i].coluna,
                                                       vetor[i].valor);
+                                encontrado = 1;
                             }
+                            i++;
                         }
                     }
                 }
