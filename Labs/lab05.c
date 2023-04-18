@@ -80,7 +80,8 @@ int main()
                 if(elementos < m + n)
                 {
                     // Há espaço para adicionar
-                    vetor[i].linha = (int)(*(rawIn + 3) - '0');
+                    for(i = 0; vetor[i].status == 1; i++) {}
+                    vetor[++i].linha = (int)(*(rawIn + 3) - '0');
                     vetor[i].coluna = (int)(*(rawIn + 5) - '0');
                     vetor[i].valor = (int)(*(rawIn + 8) - '0');
                     vetor[i].status = 1;
