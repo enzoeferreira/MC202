@@ -22,6 +22,7 @@ struct playlist
     song *head;
     song *tail;
     song *pos;
+    long songs;
 };
 typedef struct playlist playlist;
 
@@ -56,6 +57,8 @@ playlist* playlist_create()
     P->tail->prev = P->head;
     P->tail->next = NULL;
 
+    P->songs = 0;
+
     return P;
 }
 
@@ -87,7 +90,42 @@ int song_add(playlist* P)
     n->next = P->pos->next;
     P->pos->next->prev = n;
     P->pos->next = n;
+    P->songs++;
     return 1;
+}
+
+void song_remove(playlist* P)
+{
+    char name[MAXNAME];
+    fgets(name, MAXNAME, stdin); // Recebe o nome da música
+
+    char *cleaner = strchr(name, '\n'); // Ponteiro cleaner aponta para \n
+    *cleaner = '\0'; // Substitui '\n' por '\0'
+    
+    song *s = P->head->next;
+    short int found = 0;
+    while(s != P->tail && !found)
+    {
+        if(strcmp(s->name, name) == 0)
+        {
+            // Música a ser deletada encontrada
+            printf("\tACHEI!\n");
+            found = 1;
+            s->prev->next = s->next;
+            s->next->prev = s->prev;
+            if(s == P->pos)
+            {
+                // Música está no indicador
+                if(s->prev != P->head) // Há mais musicas antes
+                    P->pos = s->prev;
+                else
+                    P->pos = s->next;
+            }
+
+            free(s);
+        }
+        s = s->next;
+    }
 }
 
 void print(playlist* P)
@@ -129,7 +167,8 @@ int main(void)
         else if (strcmp(cmd, "remove") == 0)
         {
             printf("\tModo REMOVE\n");
-
+            getchar();
+            song_remove(P);
         }
 
         else if (strcmp(cmd, "toca") == 0)
