@@ -231,5 +231,9 @@ int main()
    df_push(D, 99.1);
    df_print(D);
 
+   printf("D size: %d\n", df_size(D));
+   df_free(D);
+   df_print(D);
+
    return 0;
 }
