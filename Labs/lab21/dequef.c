@@ -1,3 +1,8 @@
+/**
+ * DISCLAIMER
+ * não está funcionando até o momento
+ */
+
 #include <stdlib.h>
 #include <errno.h>
 #include <stdio.h>
@@ -34,7 +39,7 @@ dequef* df_alloc(long capacity, double factor)
    D->mincap = capacity;
    D->factor = factor;
 
-   return ;
+   return D;
 }
 
 
@@ -72,7 +77,6 @@ int df_push(dequef* D, float x)
    if(D->size == D->cap)
    {
       // Deque cheia
-      printf("Caso 1\n");
       float *newData = malloc((D->size*D->factor) * sizeof(float));
       if(!newData)
          return 0; // Alocação de mais data falhou
@@ -93,6 +97,7 @@ int df_push(dequef* D, float x)
       }
       *p = x; // Adiciona x no fim
       D->size++;
+      D->cap *= D->factor;
       return 1;
    }
    else
@@ -101,7 +106,6 @@ int df_push(dequef* D, float x)
       if(D->first + D->size > D->cap)
       {
          // Vetor circular
-         printf("Caso 2\n");
          float *p = D->data; // P aponta pro dado antigo, Q pro dado novo (vazio)
          p += D->first; // P avança até first
          for(int i = 0; i < D->size; i++)
@@ -117,12 +121,10 @@ int df_push(dequef* D, float x)
          // Chegou no lugar para adicionar
          *p = x;
          D->size++;
-         D->cap *= D->factor;
       }
       else
       {
          // Vetor simples
-         printf("Caso 3\n");
          float *p = D->data; // P aponta pro dado
          for(int i = 0; i < D->size; i++)
             p++;
@@ -146,7 +148,49 @@ int df_push(dequef* D, float x)
    This function returns the float removed from D.
    If D was empty prior to invocation, it returns 0.0 and D remains unchanged.
 **/
-float df_pop(dequef* D) {
+float df_pop(dequef* D)
+{
+   if(D->size == 0)
+      return (0.0);
+
+   if((D->size - 1) == (D->cap / (D->factor * D->factor)))
+   {
+      if((D->cap / D->factor) >= D->mincap)
+      {
+         // Reduzir tamanho da deque
+         float *newData = malloc((D->size/D->factor) * sizeof(float));
+         if(!newData)
+            return 0; // Alocação de data falhou
+
+         // Cópia dos dados
+         float *p = D->data, *q = newData; // P aponta pro dado antigo, Q pro dado novo (vazio)
+         p += D->first; // P avança até first
+         for(int i = 0; i < D->size; i++)
+         {
+            if(p == D->data + D->cap)
+            {
+               // Chegou no fim, volta ao começo
+               p = D->data;
+            }
+            *q = *p; // Copia valor de P para Q
+            q++;
+            p++;
+         }
+         D->cap /= D->factor;
+      }
+      else
+      {
+         // Tamanho minimo
+
+      }
+   }
+
+   float *p = D->data;
+   for(int i = 0; i < D->size; i++)
+      p++;
+   D->size--;
+
+   return (*p);
 }
 
 
@@ -160,7 +204,71 @@ float df_pop(dequef* D) {
    On success it returns 1.
    If attempting to resize the array fails then it returns 0 and D remains unchanged.
 **/
-int df_inject(dequef* D, float x) {
+int df_inject(dequef* D, float x)
+{
+   if(D->size == D->cap)
+   {
+      // Deque cheia
+      float *newData = malloc((D->size*D->factor) * sizeof(float));
+      if(!newData)
+         return 0; // Alocação de mais data falhou
+
+      // Cópia dos dados
+      float *p = D->data, *q = newData; // P aponta pro dado antigo, Q pro dado novo (vazio)
+      p += D->first; // P avança até first
+      *q = x; // Adiciona 'x' no inicio
+      q++;
+      for(int i = 0; i < D->size; i++)
+      {
+         if(p == D->data + D->cap)
+         {
+            // Chegou no fim, volta ao começo
+            p = D->data;
+         }
+         *q = *p; // Copia valor de P para Q
+         q++;
+         p++;
+      }
+      D->first--;
+      D->size++;
+      return 1;
+   }
+   else
+   {
+      // Deque com espaço suficiente
+      if(D->first + D->size > D->cap)
+      {
+         // Vetor circular
+         float *p = D->data; // P aponta pro dado antigo, Q pro dado novo (vazio)
+         p += D->first - 1; // P avança até o anterior de first
+         *p = x;
+         D->first--;
+         D->size++;
+      }
+      else
+      {
+         // Vetor simples
+         if(!D->first)
+         {
+            // Começa em 0
+            float *p = D->data;
+            for(int i = 0; i < D->size; i++)
+               p++;
+            *p = x;
+            D->first = D->size;
+            D->size++;
+         }
+         else
+         {
+            // Não começa em 0
+            float *p = D->data + D->first - 1; // Vai pra 1 antes do inicio
+            *p = x; // Insere 'x'
+            D->first--;
+            D->size++;
+         }
+      }
+      return 1;
+   }
 }
 
 
@@ -177,7 +285,51 @@ int df_inject(dequef* D, float x) {
    This function returns the float removed from D.
    If D was empty prior to invocation, it returns 0.0 and D remains unchanged.
 **/
-float df_eject(dequef* D) {
+float df_eject(dequef* D)
+{
+   if(D->size == 0)
+      return (0.0);
+
+   if((D->size - 1) == (D->cap / (D->factor * D->factor)))
+   {
+      if((D->cap / D->factor) >= D->mincap)
+      {
+         // Reduzir tamanho da deque
+         float *newData = malloc((D->size/D->factor) * sizeof(float));
+         if(!newData)
+            return 0; // Alocação de data falhou
+
+         // Cópia dos dados
+         float *p = D->data, *q = newData; // P aponta pro dado antigo, Q pro dado novo (vazio)
+         p += D->first; // P avança até first
+         float aux = *p; // Armazena o float que vai ser retirado
+         p++; // Pula o primeiro
+         for(int i = 0; i < D->size; i++)
+         {
+            if(p == D->data + D->cap)
+            {
+               // Chegou no fim, volta ao começo
+               p = D->data;
+            }
+            *q = *p; // Copia valor de P para Q
+            q++;
+            p++;
+         }
+
+         D->cap /= D->factor;
+         D->first++;
+         return aux;
+      }
+      else
+      {
+         // Tamanho minimo
+
+      }
+   }
+
+   float *p = D->data + D->first;
+   D->first++;
+   return (*p);
 }
 
 
@@ -187,7 +339,23 @@ float df_eject(dequef* D) {
 
    If i is not in [0,|D|-1]] then D remains unchanged.
 **/
-void df_set(dequef* D, long i, float x) {
+void df_set(dequef* D, long i, float x)
+{
+   if(!(i > D->size + 1))
+   {
+      // i está no intervalo
+      float *p = D->data;
+      for(int i = 0; i < D->size; i++)
+      {
+         if(p == D->data + D->cap)
+         {
+            // Chegou no fim, volta ao começo
+            p = D->data;
+         }
+         p++;
+      }
+      *p = x; // Seta 'x'
+   }
 }
 
 
@@ -197,7 +365,27 @@ void df_set(dequef* D, long i, float x) {
 
    If i is not in [0,|D|-1]] it returns 0.0.
 **/
-float df_get(dequef* D, long i) {
+float df_get(dequef* D, long i)
+{
+   if(i > D->size + 1)
+   {
+      return (0.0);
+   }
+   else
+   {
+      // i está no intervalo
+      float *p = D->data;
+      for(int i = 0; i < D->size; i++)
+      {
+         if(p == D->data + D->cap)
+         {
+            // Chegou no fim, volta ao começo
+            p = D->data;
+         }
+         p++;
+      }
+      return(*p);
+   }
 }
 
 
@@ -208,33 +396,16 @@ float df_get(dequef* D, long i) {
 void df_print(dequef* D)
 {
    printf("deque(%ld): ", D->size);
-   float *p = D->data;
+   float *p = D->data + D->first;
    for(int i = 0; i < D->size; i++)
    {
+      if(p == D->data + D->cap - 1)
+      {
+         // Chegou no fim, volta ao começo
+         p = D->data;
+      }
       printf("%.1f ", *p);
       p++;
    }
    printf("\n");
-}
-
-int main()
-{
-   dequef* D = df_alloc(4, 2.0);
-
-   df_push(D, 1.2);
-   df_print(D);
-   
-   df_push(D, 3.14);
-   df_push(D, 6.9);
-   df_push(D, 12);
-   df_print(D);
-
-   df_push(D, 99.1);
-   df_print(D);
-
-   printf("D size: %d\n", df_size(D));
-   df_free(D);
-   df_print(D);
-
-   return 0;
 }
