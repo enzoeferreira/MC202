@@ -91,7 +91,6 @@ int df_push(dequef* D, float x)
          q++;
          p++;
       }
-      p++;
       *p = x; // Adiciona x no fim
       D->size++;
       return 1;
