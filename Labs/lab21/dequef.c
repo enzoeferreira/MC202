@@ -17,7 +17,7 @@
 **/
 dequef* df_alloc(long capacity, double factor)
 {
-   dequef *D = malloc(capacity * sizeof(dequef));
+   dequef *D = malloc(sizeof(dequef));
    if(D == NULL)
       return NULL; // Alocação da deque falhou
    
@@ -67,9 +67,72 @@ long df_size(dequef* D)
    On success it returns 1.
    If attempting to resize the array fails then it returns 0 and D remains unchanged.
 **/
-int df_push(dequef* D, float x) {
-}
+int df_push(dequef* D, float x)
+{
+   if(D->size == D->cap)
+   {
+      // Deque cheia
+      printf("Caso 1\n");
+      float *newData = malloc((D->size*D->factor) * sizeof(float));
+      if(!newData)
+         return 0; // Alocação de mais data falhou
 
+      // Cópia dos dados
+      float *p = D->data, *q = newData; // P aponta pro dado antigo, Q pro dado novo (vazio)
+      p += D->first; // P avança até first
+      for(int i = 0; i < D->size; i++)
+      {
+         if(p == D->data + D->cap)
+         {
+            // Chegou no fim, volta ao começo
+            p = D->data;
+         }
+         *q = *p; // Copia valor de P para Q
+         q++;
+         p++;
+      }
+      p++;
+      *p = x; // Adiciona x no fim
+      D->size++;
+      return 1;
+   }
+   else
+   {
+      // Deque com espaço suficiente
+      if(D->first + D->size > D->cap)
+      {
+         // Vetor circular
+         printf("Caso 2\n");
+         float *p = D->data; // P aponta pro dado antigo, Q pro dado novo (vazio)
+         p += D->first; // P avança até first
+         for(int i = 0; i < D->size; i++)
+         {
+            if(p == D->data + D->cap)
+            {
+               // Chegou no fim, volta ao começo
+               p = D->data;
+            }
+            p++;
+         }
+         p++;
+         *p = x;
+         D->size++;
+         // Chegou no lugar para adicionar
+      }
+      else
+      {
+         // Vetor simples
+         printf("Caso 3\n");
+         float *p = D->data; // P aponta pro dado
+         for(int i = 0; i <= D->size; i++)
+            p++;
+         // Chegou no endereço vazio
+         *p = x;
+         D->size++;
+      }
+      return 1;
+   }
+}
 
 
 /**
@@ -142,12 +205,24 @@ float df_get(dequef* D, long i) {
 /**
    Print the elements of D in a line.
 **/
-void df_print(dequef* D) {
+void df_print(dequef* D)
+{
+   printf("deque(%ld): ", D->size);
+   float *p = D->data;
+   for(int i = 0; i <= D->size; i++)
+   {
+      printf("%.1f ", *p);
+      p++;
+   }
+   printf("\n");
 }
 
 int main()
 {
-   create(16, 2.0);
+   dequef* D = df_alloc(16, 2.0);
+   int debug = df_push(D, 1.3);
+   df_print(D);
+   printf("%d", debug);
    
    return 0;
 }
