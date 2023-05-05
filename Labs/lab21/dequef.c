@@ -17,19 +17,24 @@
 **/
 dequef* df_alloc(long capacity, double factor)
 {
-   dequef *n = malloc(capacity * sizeof(dequef));
-   if(n == NULL)
+   dequef *D = malloc(capacity * sizeof(dequef));
+   if(D == NULL)
       return NULL; // Alocação da deque falhou
    
-   dequef *D;
-   D->data = n;
+   D->data = malloc(capacity * sizeof(float));
+   if(D->data == NULL)
+   {
+      free(D); // Libera D
+      return NULL; // Alocação da data falhou
+   }
+
    D->first = 0;
    D->size = 0;
    D->cap = capacity;
    D->mincap = capacity;
    D->factor = factor;
 
-   return D;
+   return ;
 }
 
 
@@ -37,7 +42,10 @@ dequef* df_alloc(long capacity, double factor)
 /**
   Release a dequef and its data.
 **/
-void df_free(dequef* D) {
+void df_free(dequef* D)
+{
+   free(D->data);
+   free(D);
 }
 
 
@@ -45,15 +53,10 @@ void df_free(dequef* D) {
 /**
    The size of the deque.
 **/
-long df_size(dequef* D) {
+long df_size(dequef* D)
+{
+   return D->size;
 }
-
-
-
-int df_resize(dequef* D, long new_cap) {
-}
-
-
 
 /**
    Add x to the end of D.
