@@ -25,7 +25,7 @@ dequef* df_alloc(long capacity, double factor)
    D->data = n;
    D->first = 0;
    D->size = 0;
-   D->cap = 0;
+   D->cap = capacity;
    D->mincap = capacity;
    D->factor = factor;
 
