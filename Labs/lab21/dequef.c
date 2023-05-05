@@ -124,7 +124,7 @@ int df_push(dequef* D, float x)
          // Vetor simples
          printf("Caso 3\n");
          float *p = D->data; // P aponta pro dado
-         for(int i = 0; i <= D->size; i++)
+         for(int i = 0; i < D->size; i++)
             p++;
          // Chegou no endereço vazio
          *p = x;
@@ -209,7 +209,7 @@ void df_print(dequef* D)
 {
    printf("deque(%ld): ", D->size);
    float *p = D->data;
-   for(int i = 0; i <= D->size; i++)
+   for(int i = 0; i < D->size; i++)
    {
       printf("%.1f ", *p);
       p++;
@@ -219,10 +219,18 @@ void df_print(dequef* D)
 
 int main()
 {
-   dequef* D = df_alloc(16, 2.0);
-   int debug = df_push(D, 1.3);
+   dequef* D = df_alloc(4, 2.0);
+
+   df_push(D, 1.2);
    df_print(D);
-   printf("%d", debug);
    
+   df_push(D, 3.14);
+   df_push(D, 6.9);
+   df_push(D, 12);
+   df_print(D);
+
+   df_push(D, 99.1);
+   df_print(D);
+
    return 0;
 }
