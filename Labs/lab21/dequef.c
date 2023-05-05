@@ -114,9 +114,10 @@ int df_push(dequef* D, float x)
             p++;
          }
          p++;
+         // Chegou no lugar para adicionar
          *p = x;
          D->size++;
-         // Chegou no lugar para adicionar
+         D->cap *= D->factor;
       }
       else
       {
