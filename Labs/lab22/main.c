@@ -12,7 +12,7 @@
 
 struct song
 {
-    char* name;
+    char name[MAXNAME];
     struct song *next, *prev;
 };
 typedef struct song song;
@@ -74,7 +74,7 @@ playlist* playlist_create()
  */
 int song_add(playlist* P)
 {
-    song *n = (song*) malloc(sizeof(song));
+    song *n = malloc(sizeof(song));
     if(!n)
     {
         printf("\tFALHA AO ADICIONAR MUSICA\n");
@@ -90,6 +90,9 @@ int song_add(playlist* P)
     n->next = P->pos->next;
     P->pos->next->prev = n;
     P->pos->next = n;
+
+    if(!P->songs)
+        P->pos = n;
     P->songs++;
     return 1;
 }
@@ -118,14 +121,56 @@ void song_remove(playlist* P)
                 // Música está no indicador
                 if(s->prev != P->head) // Há mais musicas antes
                     P->pos = s->prev;
-                else
+                else if(P->pos->next != P->tail) // Há música depois
                     P->pos = s->next;
+                else // Playlist vazia
+                    P->pos = P->head;
             }
 
             free(s);
+            P->songs--;
         }
         s = s->next;
     }
+}
+
+/**
+ * Toca a música indicada pelo ponteiro e avança para a próxima música (Caso exista)
+ * 
+ * @param P playlis
+ */
+void toca(playlist* P)
+{
+    if(P->pos != P->head && P->pos != P->tail)
+        printf("%s\n", P->pos->name);
+    else
+        printf("\n");
+    if(P->pos->next != P->tail)
+        P->pos = P->pos->next;
+}
+
+/**
+ * Volta para a música anterior a indicada pelo ponteiro. Se for a primeira nada acontece
+ * 
+ * @param P playlis
+ */
+void volta(playlist* P)
+{
+    if(P->pos->prev != P->head)
+        P->pos = P->pos->prev;
+}
+
+void final(playlist* P)
+{
+    while(P->pos != P->tail)
+        toca(P);
+}
+
+void inverte(playlist* P)
+{
+    song *aux = P->head;
+    P->head = P->tail;
+    P->tail = aux;
 }
 
 void print(playlist* P)
@@ -134,6 +179,8 @@ void print(playlist* P)
     printf("PLAYLIST:");
     while(n != P->tail)
     {
+        if(P->pos == n)
+            printf(" (->)");
         printf(" %s,", n->name);
         n = n->next;
     }
@@ -147,52 +194,51 @@ void print(playlist* P)
 int main(void)
 {
     int i = 0, operations;
-    char cmd[MAXCMD], name[MAXNAME];
+    char cmd[MAXCMD];
 
     playlist* P = playlist_create();
-    // scanf("%d", &operations);
+    scanf("%d", &operations);
 
-    // while(i < operations)
-    while(1)
+    while(i < operations)
     {
         scanf("%s", cmd); // Pega a operação da entrada
 
         if (strcmp(cmd, "insere") == 0)
         {
-            printf("\tModo INSERE\n");
+            // printf("\tModo INSERE\n");
             getchar(); // Pega o espaço
             song_add(P);
         }
 
         else if (strcmp(cmd, "remove") == 0)
         {
-            printf("\tModo REMOVE\n");
+            // printf("\tModo REMOVE\n");
             getchar();
             song_remove(P);
         }
 
         else if (strcmp(cmd, "toca") == 0)
         {
-            printf("\tModo TOCA\n");
-
+            // printf("\tModo TOCA\n");
+            toca(P);
         }
 
         else if (strcmp(cmd, "volta") == 0)
         {
-            printf("\tModo VOLTA\n");
-
+            // printf("\tModo VOLTA\n");
+            volta(P);
         }
 
         else if (strcmp(cmd, "final") == 0)
         {
-            printf("\tModo FINAL\n");
-
+            // printf("\tModo FINAL\n");
+            final(P);
         }
 
         else if (strcmp(cmd, "inverte") == 0)
         {
-            printf("\tModo INVERTE\n");
-
+            // printf("\tModo INVERTE\n");
+            inverte(P);
         }
 
         else if (strcmp(cmd, "print") == 0)
