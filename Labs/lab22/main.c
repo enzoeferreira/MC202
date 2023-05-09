@@ -63,6 +63,22 @@ playlist* playlist_create()
 }
 
 /**
+ * Deleta uma playlist
+ * 
+ * @param P playlist
+ */
+void playlist_delete(playlist* P)
+{
+    song *s = P->head;
+    while(!s)
+    {
+        P->head = P->head->next;
+        free(s);
+        s = P->head;
+    }
+}
+
+/**
  * Adiciona uma música na playlist após a posição atual
  * Caso a playlist esteja vazia, a música é inserida na primeira posição
  * Uma música pode aparecer na playlist mais de uma vez
@@ -164,12 +180,12 @@ void final(playlist* P)
 {
     while(P->pos != P->tail)
     {
-        toca(P);
         if(P->pos->next == P->tail) // Última música
         {
             printf("%s\n", P->pos->name);
             return;
         }
+        toca(P);
     }
 }
 
@@ -178,6 +194,21 @@ void inverte(playlist* P)
     song *aux = P->head;
     P->head = P->tail;
     P->tail = aux;
+
+    P->head->next = P->head->prev;
+    P->head->prev = NULL;
+    P->tail->prev = P->tail->next;
+    P->tail->next = NULL;
+
+    song *s = P->tail->prev;
+    while(s != P->head)
+    {
+        s->prev = s->next;
+        s->next = aux;
+
+        aux = aux->prev;
+        s = s->prev;
+    }
 }
 
 void print(playlist* P)
@@ -203,11 +234,11 @@ int main(void)
     int i = 0, operations;
     char cmd[MAXCMD];
 
-    playlist* P = playlist_create();
     scanf("%d", &operations);
 
     while(operations)
     {
+        playlist* P = playlist_create();
         while(i < operations)
         {
             scanf("%s", cmd); // Pega a operação da entrada
@@ -258,8 +289,10 @@ int main(void)
             
             i++;
         }
+        printf("\n");
 
-        scanf("%d", &operations);
+        playlist_delete(P); // Deleta playlist antiga
+        scanf("%d", &operations); // Recebe um novo número de operações
         i = 0;
     }
     
