@@ -92,7 +92,7 @@ int song_add(playlist* P)
     P->pos->next = n;
 
     if(!P->songs)
-        P->pos = n;
+        P->pos = n; // Se for a primeira música, aponta para ela
     P->songs++;
     return 1;
 }
@@ -112,7 +112,7 @@ void song_remove(playlist* P)
         if(strcmp(s->name, name) == 0)
         {
             // Música a ser deletada encontrada
-            printf("\tACHEI!\n");
+            // printf("\tACHEI!\n");
             found = 1;
             s->prev->next = s->next;
             s->next->prev = s->prev;
@@ -123,7 +123,7 @@ void song_remove(playlist* P)
                     P->pos = s->prev;
                 else if(P->pos->next != P->tail) // Há música depois
                     P->pos = s->next;
-                else // Playlist vazia
+                else if(P->songs == 1) // Última música
                     P->pos = P->head;
             }
 
@@ -163,7 +163,14 @@ void volta(playlist* P)
 void final(playlist* P)
 {
     while(P->pos != P->tail)
+    {
         toca(P);
+        if(P->pos->next == P->tail) // Última música
+        {
+            printf("%s\n", P->pos->name);
+            return;
+        }
+    }
 }
 
 void inverte(playlist* P)
@@ -176,7 +183,7 @@ void inverte(playlist* P)
 void print(playlist* P)
 {
     song *n = P->head->next;
-    printf("PLAYLIST:");
+    printf("PLAYLIST(%d):", P->songs);
     while(n != P->tail)
     {
         if(P->pos == n)
@@ -199,55 +206,61 @@ int main(void)
     playlist* P = playlist_create();
     scanf("%d", &operations);
 
-    while(i < operations)
+    while(operations)
     {
-        scanf("%s", cmd); // Pega a operação da entrada
-
-        if (strcmp(cmd, "insere") == 0)
+        while(i < operations)
         {
-            // printf("\tModo INSERE\n");
-            getchar(); // Pega o espaço
-            song_add(P);
+            scanf("%s", cmd); // Pega a operação da entrada
+
+            if (strcmp(cmd, "insere") == 0)
+            {
+                // printf("\tModo INSERE\n");
+                getchar(); // Pega o espaço
+                song_add(P);
+            }
+
+            else if (strcmp(cmd, "remove") == 0)
+            {
+                // printf("\tModo REMOVE\n");
+                getchar();
+                song_remove(P);
+            }
+
+            else if (strcmp(cmd, "toca") == 0)
+            {
+                // printf("\tModo TOCA\n");
+                toca(P);
+            }
+
+            else if (strcmp(cmd, "volta") == 0)
+            {
+                // printf("\tModo VOLTA\n");
+                volta(P);
+            }
+
+            else if (strcmp(cmd, "final") == 0)
+            {
+                // printf("\tModo FINAL\n");
+                final(P);
+            }
+
+            else if (strcmp(cmd, "inverte") == 0)
+            {
+                // printf("\tModo INVERTE\n");
+                inverte(P);
+            }
+
+            else if (strcmp(cmd, "print") == 0)
+            {
+                // Deletar esse modo !!!!!
+                print(P);
+            }
+            
+            i++;
         }
 
-        else if (strcmp(cmd, "remove") == 0)
-        {
-            // printf("\tModo REMOVE\n");
-            getchar();
-            song_remove(P);
-        }
-
-        else if (strcmp(cmd, "toca") == 0)
-        {
-            // printf("\tModo TOCA\n");
-            toca(P);
-        }
-
-        else if (strcmp(cmd, "volta") == 0)
-        {
-            // printf("\tModo VOLTA\n");
-            volta(P);
-        }
-
-        else if (strcmp(cmd, "final") == 0)
-        {
-            // printf("\tModo FINAL\n");
-            final(P);
-        }
-
-        else if (strcmp(cmd, "inverte") == 0)
-        {
-            // printf("\tModo INVERTE\n");
-            inverte(P);
-        }
-
-        else if (strcmp(cmd, "print") == 0)
-        {
-            // Deletar esse modo !!!!!
-            print(P);
-        }
-        
-        i++;
+        scanf("%d", &operations);
+        i = 0;
     }
     
     return 0;
