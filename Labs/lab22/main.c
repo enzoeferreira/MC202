@@ -211,19 +211,19 @@ void inverte(playlist* P)
     }
 }
 
-void print(playlist* P)
-{
-    song *n = P->head->next;
-    printf("PLAYLIST(%d):", P->songs);
-    while(n != P->tail)
-    {
-        if(P->pos == n)
-            printf(" (->)");
-        printf(" %s,", n->name);
-        n = n->next;
-    }
-    printf("\n");
-}
+// void print(playlist* P)
+// {
+//     song *n = P->head->next;
+//     printf("PLAYLIST(%ld):", P->songs);
+//     while(n != P->tail)
+//     {
+//         if(P->pos == n)
+//             printf(" (->)");
+//         printf(" %s,", n->name);
+//         n = n->next;
+//     }
+//     printf("\n");
+// }
 
 /**
  * MAIN
@@ -281,20 +281,19 @@ int main(void)
                 inverte(P);
             }
 
-            else if (strcmp(cmd, "print") == 0)
-            {
-                // Deletar esse modo !!!!!
-                print(P);
-            }
+            // else if (strcmp(cmd, "print") == 0)
+            // {
+            //     // Modo print para debugs
+            //     print(P);
+            // }
             
             i++;
         }
-        printf("\n");
 
         playlist_delete(P); // Deleta playlist antiga
         scanf("%d", &operations); // Recebe um novo número de operações
+        if(operations)
+            printf("\n"); // Haverá uma prox. playlist
         i = 0;
     }
-    
-    return 0;
 }
