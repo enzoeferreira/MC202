@@ -82,7 +82,7 @@ void print(list* L) {
         printf(" %d,", p->data);
         p = p->next;
     }
-    printf(" %d }", p->data); // Último elemento
+    printf(" %d }\n", p->data); // Último elemento
 }
 
 /**
@@ -105,5 +105,25 @@ int main() {
         }
     }
     insertNode(L, num); // Insere o último digito
-    print(L);
+    getchar(); // Pega o \n
+
+    /**
+     * Comandos para manipulação da lista
+     */
+
+    int start, end, index;
+    while((c = getchar()) != 'f') { // Não acabou execução
+        if(c == 's') {
+            scanf(" A[%d..%d]", &start, &end);
+            getchar(); // Pega o \n
+            // sliceList(L, start, end);
+        }
+        else if(c == '+') {
+            scanf(" A[%d..%d] %d", &start, &end, &index);
+            getchar(); // Pega o \n
+            // copyList(L, start, end, index);
+        }
+
+        print(L);
+    }
 }
