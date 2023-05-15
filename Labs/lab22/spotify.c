@@ -12,7 +12,7 @@
 /**
  * Cria uma playlist com dummys no inicio e fim, pos começa no inicio
  * 
- * @return 1) 0, em caso de falha de alocação de espaço para playlist
+ * @return 1) NULL, em caso de falha de alocação de espaço para playlist
  * @return 2) P, onde P é um apontador para playlist
  */
 playlist* playlist_create()
