@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 /**
  * Header
@@ -76,13 +77,13 @@ int insertNode(list* L, int data) {
 }
 
 /**
- * Faz um slice da lista L do índice start ao índice end, criando uma cópia auxiliar para isso
+ * Extrai uma sublista de A e substituir A pela sublista, removendo A anterior no processo
  * 
  * @param L lista
  * @param start índice inicial
  * @param end índice final
  * 
- * @return 1) 0, em caso de falha para criar a lista auxiliar
+ * @return 1) 0, em caso de falha para criar a lista auxiliar e/ou nós copiados
  * @return 2) 1, em caso de sucesso
  */
 int sliceList(list* L, int start, int end) {
@@ -93,6 +94,7 @@ int sliceList(list* L, int start, int end) {
     /**
      * Apontador p vai do inicio a start se estiver na metade esquerda da lista
      * ou do fim a start se estiver na metade direita
+     * Apontador q aponta para o mesmo que p
      */
     int i = 0;
     node *p, *q;
@@ -112,6 +114,9 @@ int sliceList(list* L, int start, int end) {
     }
     q = p;
 
+    /**
+     * Faz a copia dos elementos, liberando os originais
+     */
     i = 0;
     int sucess;
     int delta = (end >= start) ? end - start : start - end;
@@ -134,7 +139,122 @@ int sliceList(list* L, int start, int end) {
 
     L->head = newL->head;
     L->tail = newL->tail;
+    free(newL);
 
+    return 1;
+}
+
+/**
+ * Extrai uma sublista de A e substituir A pela sublista, NÃO removendo A anterior no processo
+ * 
+ * @param L lista
+ * @param start índice inicial
+ * @param end índice final
+ * 
+ * @return 1) NULL, em caso de falha para criar a lista auxiliar e/ou nós copiados
+ * @return 2) newL, onde newL é um apontador para a nova lista
+ */
+list* copySliceList(list* L, int start, int end) {
+    list *newL = startList(); // Cria uma nova lista
+    if(!newL)
+        return NULL;
+
+    /**
+     * Apontador p vai do inicio a start se estiver na metade esquerda da lista
+     * ou do fim a start se estiver na metade direita
+     * Apontador q aponta para o mesmo que p
+     */
+    int i = 0;
+    node *p;
+    if(start <= (L->size/2)) {
+        p = L->head->next; // Começa no primeiro
+        while(i < start) {
+            p = p->next;
+            i++;
+        }
+    }
+    else {
+        p = L->tail->prev; // Começa no último
+        while(i < (L->size - start - 1)) {
+            p = p->prev;
+            i++;
+        }
+    }
+
+    /**
+     * Faz a copia dos elementos, liberando os originais
+     */
+    i = 0;
+    int sucess;
+    int delta = (end >= start) ? end - start : start - end;
+    while(i <= delta) {
+        sucess = insertNode(newL, p->data);
+        if(!sucess)
+            return NULL;
+        if(delta == end - start)
+            p = p->next;
+        else
+            p = p->prev;
+
+        i++;
+    }
+
+    return newL;
+}
+
+/**
+ * 
+ * 
+ * @param L lista
+ * @param start índice inicial
+ * @param end índice final
+ * @param index índice onde sera colocada a cópia
+ * 
+ * @return 1) 0, em caso de falha para criar a lista auxiliar e/ou nós copiados
+ * @return 2) 1, em caso de sucesso
+ */
+int copyList(list* L, int start, int end, int index) {
+    list *copyL = copySliceList(L, start, end);
+    if(!copyL)
+        return 0;
+    
+    /**
+     * Apontador p vai do inicio a index se estiver na metade esquerda da lista
+     * ou do fim a index se estiver na metade direita
+     */
+    int i = 0;
+    node *p;
+    if(index <= (L->size/2)) {
+        p = L->head->next; // Começa no primeiro
+        while(i < index) {
+            p = p->next;
+            i++;
+        }
+    }
+    else {
+        p = L->tail->prev; // Começa no último
+        while(i < (L->size - index - 1)) {
+            p = p->prev;
+            i++;
+        }
+    }
+    node *aux = p;
+    p = p->prev; // Volta 1
+    
+    /**
+     * Inserção dos elementos
+     */
+    node *q = copyL->head->next;
+    p->next = q;
+    q->prev = p;
+    
+    while(q->next != copyL->tail)
+        q = q->next;
+    q->next = aux;
+    aux->prev = q;
+    L->size += copyL->size;
+
+    free(copyL);
     return 1;
 }
 
@@ -143,10 +263,14 @@ int sliceList(list* L, int start, int end) {
  * 
  * @param L lista
  */
-void print(list* L) {
+void print(list* L) {  
     printf("A: {");
 
     node *p = L->head->next; // Aponta para o primeiro elemento
+    if(p == L->tail) {
+        printf(" }\n");
+        return; // Lista vazia
+    }
     while(p != L->tail->prev) {
         printf(" %d,", p->data);
         p = p->next;
@@ -190,7 +314,7 @@ int main() {
         else if(c == '+') {
             scanf(" A[%d..%d] %d", &start, &end, &index);
             getchar(); // Pega o \n
-            // copyList(L, start, end, index);
+            copyList(L, start, end, index);
         }
 
         print(L);
