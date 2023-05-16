@@ -11,6 +11,7 @@ typedef struct node node;
 
 struct list {
     node *head, *tail;
+    int size;
 };
 typedef struct list list;
 
@@ -44,6 +45,8 @@ list* startList() {
     L->tail->prev = L->head;
     L->tail->next = NULL;
 
+    L->size = 0;
+
     return L;
 }
 
@@ -66,6 +69,59 @@ int insertNode(list* L, int data) {
     n->prev = L->tail->prev;
     L->tail->prev->next = n;
     L->tail->prev = n;
+
+    L->size++;
+
+    return 1;
+}
+
+int sliceList(list* L, int start, int end) {
+    list *newL = startList(); // Cria uma nova lista
+    if(!newL)
+        return NULL;
+
+    /**
+     * Apontador p vai do inicio a start se estiver na metade esquerda da lista
+     * ou do fim a start se estiver na metade direita
+     */
+    int i = 0;
+    node *p, *q;
+    if(start <= (L->size/2)) {
+        p = L->head->next; // Começa no primeiro
+        while(i < start) {
+            p = p->next;
+            i++;
+        }
+    }
+    else {
+        p = L->tail->prev; // Começa no último
+        while(i < (L->size - start - 1)) {
+            p = p->prev;
+            i++;
+        }
+    }
+    q = p;
+
+    i = 0;
+    int delta = (end >= start) ? end - start : start - end;
+    while(i <= delta) {
+        insertNode(newL, p->data);
+        if(delta == end - start) {
+            p = p->next;
+            free(q);
+            q = p;
+        }
+        else {
+            p = p->prev;
+            free(q);
+            q = p;
+        }
+        i++;
+    }
+
+    L->head = newL->head;
+    L->tail = newL->tail;
+
     return 1;
 }
 
@@ -116,7 +172,7 @@ int main() {
         if(c == 's') {
             scanf(" A[%d..%d]", &start, &end);
             getchar(); // Pega o \n
-            // sliceList(L, start, end);
+            sliceList(L, start, end);
         }
         else if(c == '+') {
             scanf(" A[%d..%d] %d", &start, &end, &index);
