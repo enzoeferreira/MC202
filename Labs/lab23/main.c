@@ -75,10 +75,20 @@ int insertNode(list* L, int data) {
     return 1;
 }
 
+/**
+ * Faz um slice da lista L do índice start ao índice end, criando uma cópia auxiliar para isso
+ * 
+ * @param L lista
+ * @param start índice inicial
+ * @param end índice final
+ * 
+ * @return 1) 0, em caso de falha para criar a lista auxiliar
+ * @return 2) 1, em caso de sucesso
+ */
 int sliceList(list* L, int start, int end) {
     list *newL = startList(); // Cria uma nova lista
     if(!newL)
-        return NULL;
+        return 0;
 
     /**
      * Apontador p vai do inicio a start se estiver na metade esquerda da lista
@@ -103,9 +113,12 @@ int sliceList(list* L, int start, int end) {
     q = p;
 
     i = 0;
+    int sucess;
     int delta = (end >= start) ? end - start : start - end;
     while(i <= delta) {
-        insertNode(newL, p->data);
+        sucess = insertNode(newL, p->data);
+        if(!sucess)
+            return 0;
         if(delta == end - start) {
             p = p->next;
             free(q);
