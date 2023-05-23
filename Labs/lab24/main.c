@@ -55,6 +55,10 @@ void printPostOrder(node* T) {
     printf("%c", T->data);
 }
 
+void printBreadth(node* T) {
+
+}
+
 /**
  * Insere um caractére em um vetor dinâmico, aumentando o tamanho do array com fator 2 se preciso
  * 
@@ -109,13 +113,14 @@ char* insert(char* array, long int* size, long int* sizeMax, char c) {
  */
 long int findChar(char* array, long int start, long int end, char c) {
     int i;
-    for(i = start; i < end; i++)
+    for(i = start; i <= end; i++)
         if(array[i] == c)
             return i;
     return NULL;
 }
 
 /**
+ * Constrói uma árvore binária a partir de seus elementos em 2 char arrays em Pré-Ordem e Em-Ordem
  * 
  * @param preOrder array da árvore em pré-ordem
  * @param inOrder array da árvore em-ordem
@@ -141,14 +146,64 @@ node* constructTree(char* preOrder, char* inOrder, long start, long end) {
 
     long int nIndex = findChar(inOrder, start, end, n->data);
 
-    printf("\t\n-----INSERINDO %c-----\n", n->data);
-    printf("\tstart = %li\n", start);
-    printf("\tnIndex = %li\n", nIndex);
-    printf("\tend = %li\n", end);
+    // printf("\t\n-----INSERINDO %c-----\n", n->data);
+    // printf("\tstart = %li\n", start);
+    // printf("\tnIndex = %li\n", nIndex);
+    // printf("\tend = %li\n", end);
 
     n->left = constructTree(preOrder, inOrder, start, nIndex - 1);
     n->right = constructTree(preOrder, inOrder, nIndex + 1, end);
     return n;
+}
+
+void freeTree(node* T) {
+    if(!T)
+        return;
+    freeTree(T->left);
+    freeTree(T->right);
+    free(T);
+}
+
+void rec_dot_print(node* p, int* nnull) {
+
+  if (p == NULL)
+    return;
+
+  if (p->left == NULL) {
+    printf("  N%d [shape=point];\n",*nnull);
+    printf("  %c -> N%d;\n",p->data,*nnull);
+    *nnull += 1;
+  }
+  else {
+    printf("  %c -> %c;\n",p->data,p->left->data);
+    rec_dot_print(p->left,nnull);
+  }
+
+  if (p->right == NULL) {
+    printf("  N%d [shape=point];\n",*nnull);
+    printf("  %c -> N%d;\n",p->data,*nnull);
+    *nnull += 1;
+  }
+  else {
+    printf("  %c -> %c;\n",p->data,p->right->data);
+    rec_dot_print(p->right,nnull);
+  }
+}
+
+/*
+  Imprime a árvore no formato do graphviz dot (graphviz.org).
+  Um arquivo x.dot pode ser convertido em png com o comando
+  dot -T png x.dot >x.png
+*/
+void bt_dot_print(node* T) {
+
+  printf("digraph BT {\n");
+  printf("  node [fontname=\"Arial\"];\n");
+
+  int n = 0;
+  rec_dot_print(T, &n);
+
+  printf("}\n");
 }
 
 int main() {
@@ -167,9 +222,12 @@ int main() {
     // printArray(inOrder, sizeInOrder);
 
     node* T = constructTree(preOrder, inOrder, 0, sizePreOrder - 1);
+    printPostOrder(T);
+    printf(" ");
+    printBreadth(T);
 
-    printPreOrder(T);
-    printf("\n");
-    printInOrder(T);
-    printf("\n");
+    // printPreOrder(T);
+    // printf("\n");
+
+    // bt_dot_print(T);
 }
