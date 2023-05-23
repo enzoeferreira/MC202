@@ -101,12 +101,17 @@ list* startList() {
  * @param L lista
  * @param n nó a ser colocado na fila
  */
-void enqueue(list* L, listNode* n) {
+void enqueue(list* L, node* n) {
+    listNode *lN = malloc(sizeof(listNode));
+    if(!lN)
+        return NULL;
+    lN->data = n->data;
+    lN->next = L->tail;
+
     listNode *p = L->head;
     while(p->next != L->tail)
         p = p->next;
-    p->next = n;
-    n->next = L->tail;
+    p->next = lN;
 }
 
 /**
