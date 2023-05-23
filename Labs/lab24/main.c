@@ -109,12 +109,19 @@ void enqueue(list* L, listNode* n) {
     n->next = L->tail;
 }
 
+/**
+ * 
+ * @param L list
+ * 
+ * @return 1) NULL, caso lista esteja vazia
+ * @return 2) aux, ponteiro para nó de lista que acabou de sair da fila
+ */
 listNode* dequeue(list* L) {
     listNode *p = L->head;
-    while(p->next->next != L->tail)
-        p = p->next;
+    if(p->next == L->tail)
+        return NULL;
     listNode *aux = p->next;
-    p->next = L->tail;
+    p->next = p->next->next;
     return aux;
 }
 
