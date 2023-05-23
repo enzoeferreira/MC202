@@ -81,17 +81,17 @@ list* startList() {
     if(!L)
         return NULL;
     
-    listNode *n = malloc(sizeof(listNode));
-    if(!n)
+    listNode *head = malloc(sizeof(listNode));
+    if(!head)
         return NULL;
-    listNode *t = malloc(sizeof(listNode));
-    if(!t)
+    listNode *tail = malloc(sizeof(listNode));
+    if(!tail)
         return NULL;
 
-    L->head = n;
-    L->tail = t;
-    n->next = t;
-    t->next = NULL;
+    L->head = head;
+    L->tail = tail;
+    head->next = tail;
+    tail->next = NULL;
     return L;
 }
 
@@ -108,6 +108,15 @@ void enqueue(list* L, listNode* n) {
     p->next = n;
     n->next = NULL;
     L->tail = n;
+}
+
+listNode* dequeue(list* L) {
+    listNode *p = L->head;
+    while(p->next->next != L->tail)
+        p = p->next;
+    listNode *aux = p->next;
+    p->next = L->tail;
+    return aux;
 }
 
 /**
