@@ -7,6 +7,17 @@ struct node {
 };
 typedef struct node node;
 
+struct listNode {
+    node *data;
+    struct listNode *next;
+};
+typedef struct listNode listNode;
+
+struct list {
+    listNode *head, *tail;
+};
+typedef struct list list;
+
 /**
  * Printa um array dinâmico
  * 
@@ -60,6 +71,31 @@ void printBreadth(node* T) {
 }
 
 /**
+ * Inicia uma lista de nós de lista com dummys na head e tail
+ * 
+ * @return 1) NULL, caso falha em alocar espaço para lista ou nó de lista
+ * @return 2) L, ponteiro para lista
+ */
+list* startList() {
+    list *L = malloc(sizeof(list));
+    if(!L)
+        return NULL;
+    
+    listNode *n = malloc(sizeof(listNode));
+    if(!n)
+        return NULL;
+    listNode *t = malloc(sizeof(listNode));
+    if(!t)
+        return NULL;
+
+    L->head = n;
+    L->tail = t;
+    n->next = t;
+    t->next = NULL;
+    return L;
+}
+
+/**
  * Insere um caractére em um vetor dinâmico, aumentando o tamanho do array com fator 2 se preciso
  * 
  * @param array array dinâmico
@@ -70,7 +106,7 @@ void printBreadth(node* T) {
  * @return 1) NULL, caso não seja possivel alocar um novo array
  * @return 2) array, ponteiro para o mesmo ou novo array com o caractére adicionado
  */
-char* insert(char* array, long int* size, long int* sizeMax, char c) {
+char* insertArray(char* array, long int* size, long int* sizeMax, char c) {
     if(*size < *sizeMax) {
         // Espaço suficiente para adicionar
         *(array + (*size)) = c;
@@ -213,10 +249,10 @@ int main() {
     
     char c;
     while((c = getchar()) != ' ') {
-        preOrder = insert(preOrder, &sizePreOrder, &sizePreOrderMax, c);
+        preOrder = insertArray(preOrder, &sizePreOrder, &sizePreOrderMax, c);
     }
     while((c = getchar()) != '\n') {
-        inOrder = insert(inOrder, &sizeInOrder, &sizeInOrderMax, c);
+        inOrder = insertArray(inOrder, &sizeInOrder, &sizeInOrderMax, c);
     }
     // printArray(preOrder, sizePreOrder);
     // printArray(inOrder, sizeInOrder);
