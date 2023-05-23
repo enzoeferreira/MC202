@@ -103,11 +103,10 @@ list* startList() {
  */
 void enqueue(list* L, listNode* n) {
     listNode *p = L->head;
-    while(p != L->tail)
+    while(p->next != L->tail)
         p = p->next;
     p->next = n;
-    n->next = NULL;
-    L->tail = n;
+    n->next = L->tail;
 }
 
 listNode* dequeue(list* L) {
