@@ -119,14 +119,16 @@ void enqueue(list* L, node* n) {
  * @param L list
  * 
  * @return 1) NULL, caso lista esteja vazia
- * @return 2) aux, ponteiro para nó de lista que acabou de sair da fila
+ * @return 2) aux, char com o dado do nó que foi tirado da lista
  */
-listNode* dequeue(list* L) {
+char* dequeue(list* L) {
     listNode *p = L->head;
     if(p->next == L->tail)
         return NULL;
-    listNode *aux = p->next;
+    listNode *temp = p->next;
+    char aux = p->next->data;
     p->next = p->next->next;
+    free(temp);
     return aux;
 }
 
