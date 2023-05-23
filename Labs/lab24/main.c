@@ -96,6 +96,21 @@ list* startList() {
 }
 
 /**
+ * Coloca um nó no final de uma lista
+ * 
+ * @param L lista
+ * @param n nó a ser colocado na fila
+ */
+void enqueue(list* L, listNode* n) {
+    listNode *p = L->head;
+    while(p != L->tail)
+        p = p->next;
+    p->next = n;
+    n->next = NULL;
+    L->tail = n;
+}
+
+/**
  * Insere um caractére em um vetor dinâmico, aumentando o tamanho do array com fator 2 se preciso
  * 
  * @param array array dinâmico
