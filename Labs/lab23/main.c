@@ -21,6 +21,26 @@ typedef struct list list;
  */
 
 /**
+ * Printa a lista de head a tail
+ * 
+ * @param L lista
+ */
+void print(list* L) {  
+    printf("A: {");
+
+    node *p = L->head->next; // Aponta para o primeiro elemento
+    if(p == L->tail) {
+        printf(" }\n");
+        return; // Lista vazia
+    }
+    while(p != L->tail->prev) {
+        printf(" %d,", p->data);
+        p = p->next;
+    }
+    printf(" %d }\n", p->data); // Último elemento
+}
+
+/**
  * Cria uma lista com dummys no inicio e fim
  * 
  * @return 1) NULL, caso ocorra falha ao alocar a lista ou dummys
@@ -50,6 +70,7 @@ list* startList() {
 
     return L;
 }
+
 
 /**
  * Adiciona um nó com o dado no fim da lista
@@ -139,6 +160,7 @@ int sliceList(list* L, int start, int end) {
 
     L->head = newL->head;
     L->tail = newL->tail;
+    L->size = newL->size;
     free(newL);
 
     return 1;
@@ -238,8 +260,14 @@ int copyList(list* L, int start, int end, int index) {
             i++;
         }
     }
-    node *aux = p;
-    p = p->prev; // Volta 1
+    node *aux;
+    if(index != L->size) {
+        aux = p;
+        p = p->prev; // Volta 1
+    }
+    else {
+        aux = L->tail;
+    }
     
     /**
      * Inserção dos elementos
@@ -258,25 +286,6 @@ int copyList(list* L, int start, int end, int index) {
     return 1;
 }
 
-/**
- * Printa a lista de head a tail
- * 
- * @param L lista
- */
-void print(list* L) {  
-    printf("A: {");
-
-    node *p = L->head->next; // Aponta para o primeiro elemento
-    if(p == L->tail) {
-        printf(" }\n");
-        return; // Lista vazia
-    }
-    while(p != L->tail->prev) {
-        printf(" %d,", p->data);
-        p = p->next;
-    }
-    printf(" %d }\n", p->data); // Último elemento
-}
 
 /**
  * Main
@@ -319,4 +328,7 @@ int main() {
 
         print(L);
     }
+    sliceList(L, 0, 0); // Remove nós da lista L
+    free(L->head);
+    free(L->tail);
 }
