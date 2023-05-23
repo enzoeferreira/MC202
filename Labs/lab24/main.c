@@ -90,8 +90,8 @@ list* startList() {
 
     L->head = head;
     L->tail = tail;
-    head->next = tail;
-    tail->next = NULL;
+    L->head->next = L->tail;
+    L->tail->next = NULL;
     return L;
 }
 
