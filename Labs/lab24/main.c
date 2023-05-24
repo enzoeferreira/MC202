@@ -142,6 +142,7 @@ void printBreadth(node* T) {
         if(n->right != NULL)
             enqueue(L, n->right);
     }
+    printf("\n");
 }
 
 void printQueue(list* L) {
