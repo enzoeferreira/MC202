@@ -25,7 +25,7 @@ client* startTree() {
     if(!T)
         return NULL;
 
-    T->key = NULL;
+    T->key = -1;
     T->left = NULL;
     T->right = NULL;
     return T;
@@ -104,7 +104,7 @@ client* createClient(client* T, int key, char name[MAXNAME], float score) {
  */
 void insertClient(client* T, client* c) {
     client *p = T;
-    if(p == NULL) { // Primeiro elemento
+    if(p->key == -1) { // Primeiro elemento
         T = c;
         return;
     }
