@@ -130,6 +130,8 @@ char dequeue(list* L) {
 }
 
 void printBreadth(node* T) {
+    if(!T)
+        return;
     list *L = startList();
     enqueue(L, T);
     while(L->head->next != L->tail) {
