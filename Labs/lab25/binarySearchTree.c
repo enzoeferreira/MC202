@@ -93,6 +93,8 @@ client* createClient(client* T, int key, char name[MAXNAME], float score) {
 }
 
 int main() {
+    client *T;
+    unsigned short existingTree = 0;
     int inKey, inStart, inEnd;
     float inScore;
     char cmd[MAXCMD], inName[MAXNAME];
@@ -104,6 +106,10 @@ int main() {
              * Criar uma árvore binária de busca vazia.
              * Se já houver uma árvore sendo processada, todos os nós dela devem ser removidos.
              */
+            if(existingTree)
+                freeTree(T);
+            T = startTree();
+            existingTree = 1;
 
         } else if(!strcmp(cmd, "inserir")) {
             /**
