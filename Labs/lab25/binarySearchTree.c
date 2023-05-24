@@ -15,6 +15,19 @@ struct client {
 typedef struct client client;
 
 /**
+ * Imprime os clientes da árvore binária no formato "nome1 (k1) nome2 (k2) ... nomeN (kN)"
+ * 
+ * @param T raiz da árvore binária
+ */
+void print(client* T) {
+    if(!T)
+        return;
+    print(T->left);
+    printf("%s (%d) ", T->name, T->key);
+    print(T->right);
+}
+
+/**
  * Cria uma árvore binária
  * 
  * @return 1) NULL, caso falha em alocar espaço para árvore
@@ -104,7 +117,9 @@ client* createClient(client* T, int key, char name[MAXNAME], float score) {
 void insertClient(client* T, client* c) {
     client *p = T;
     if(p->key == -1) { // Primeiro elemento
-        T = c;
+        T->key = c->key;
+        strcpy(T->name, c->name);
+        T->score = c->score;
         return;
     }
     client *q = NULL;
@@ -160,6 +175,7 @@ int main() {
                     "\tScore: %0.2f\n", inKey, inName, inScore);
             client *c = createClient(T, inKey, inName, inScore);
             if(c) {
+                printf("\tCliente criado: %s (%d) -> %.2f\n", c->name, c->key, c->score);
                 printf("\tCliente sendo inserido...\n");
                 insertClient(T, c);
             }
@@ -196,6 +212,13 @@ int main() {
              * 
              * OBS: Se a árvore estiver vazia, imprimir: "arvore vazia"
              */
+            if(T->key == -1)
+                printf("arvore vazia\n");
+            else {
+                printf("clientes: ");
+                print(T);
+                printf("\n");
+            }
             
         } else if(!strcmp(cmd, "minimo")) {
             /**
