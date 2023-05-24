@@ -36,7 +36,7 @@ client* startTree() {
  * 
  * @param T raiz da árvore
  */
-void* freeTree(client* T) {
+void freeTree(client* T) {
     if(!T)
         return;
     freeTree(T->left);
