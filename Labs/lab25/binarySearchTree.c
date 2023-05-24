@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define MAXNAME 101
+#define MAXCMD 17
 
 struct client {
     int key;
@@ -18,5 +20,10 @@ struct tree {
 typedef struct tree tree;
 
 int main() {
-    
+    char cmd[MAXCMD];
+    scanf("%s", cmd);
+    while(strcmp(cmd, "terminar")) {
+        
+        scanf("%s", cmd);
+    }
 }
