@@ -95,6 +95,33 @@ client* createClient(client* T, int key, char name[MAXNAME], float score) {
     return c;
 }
 
+/**
+ * Insere um cliente (de chave única) na árvore binária
+ * 
+ * @param T raiz da árvore binária
+ * @param c cliente a ser inserido na árvore
+ */
+void insertClient(client* T, client* c) {
+    client *p = T;
+    if(p == NULL) { // Primeiro elemento
+        T = c;
+        return;
+    }
+    client *q = NULL;
+    while(p != NULL) {
+        q = p;
+        if(c->key < p->key)
+            p = p->left;
+        else
+            p = p->right;
+    }
+    if(c->key < p->key)
+        p->left = c;
+    else
+        p->right = c;
+    return 1;
+}
+
 int main() {
     client *T;
     unsigned short existingTree = 0;
@@ -131,7 +158,12 @@ int main() {
                     "\tKey: %d\n"
                     "\tNome: %s\n"
                     "\tScore: %0.2f\n", inKey, inName, inScore);
-            
+            client *c = createClient(T, inKey, inName, inScore);
+            if(c) {
+                printf("\tCliente sendo inserido...\n");
+                insertClient(T, c);
+            }
+
         } else if(!strcmp(cmd, "remover")) {
             /**
              * Formato: "remover k"
