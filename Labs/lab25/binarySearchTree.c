@@ -120,7 +120,7 @@ void insertClient(client* T, client* c) {
         q->left = c;
     else
         q->right = c;
-    return 1;
+    return;
 }
 
 int main() {
