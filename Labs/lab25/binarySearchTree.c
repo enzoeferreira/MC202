@@ -137,6 +137,34 @@ void insertClient(client* T, client* c) {
     return;
 }
 
+/**
+ * Retorna a menor chave de uma árvore binária
+ * 
+ * @param T raiz da árvore binária
+ * 
+ * @return key, menor chave da árvore binária
+ */
+int min(client* T) {
+    client* p = T;
+    while(p->left != NULL)
+        p = p->left;
+    return p->key;
+}
+
+/**
+ * Retorna a maior chave de uma árvore binária
+ * 
+ * @param T raiz da árvore binária
+ * 
+ * @return key, maior chave da árvore binária
+ */
+int max(client* T) {
+    client* p = T;
+    while(p->right != NULL)
+        p = p->right;
+    return p->key;
+}
+
 int main() {
     client *T, *c;
     unsigned short existingTree = 0;
@@ -232,6 +260,7 @@ int main() {
              * 
              * OBS: Se a árvore estiver vazia, imprimir: "arvore vazia"
              */
+            printf("minimo: %d\n", min(T));
             
         } else if(!strcmp(cmd, "maximo")) {
             /**
@@ -240,6 +269,7 @@ int main() {
              * 
              * OBS: Se a árvore estiver vazia, imprimir: "arvore vazia"
              */
+            printf("maximo: %d\n", max(T));
             
         } else if(!strcmp(cmd, "sucessor")) {
             /**
