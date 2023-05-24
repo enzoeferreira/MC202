@@ -63,15 +63,15 @@ void freeTree(client* T) {
  * @param T raiz da árvore binária
  * @param key chave do cliente a ser procurado
  * 
- * @return 1) 0, caso não encontre o cliente
- * @return 2) 1, caso encontre
+ * @return 1) NULL, caso não encontre o cliente
+ * @return 2) p, apontador para o cliente
  */
-unsigned short searchClient(client* T, int key) {
+client* searchClient(client* T, int key) {
     client* p = T;
     if(p == NULL)
-        return 0;
+        return NULL;
     if(key == p->key)
-        return 1;
+        return p;
     if(key < p->key)
         return searchClient(p->left, key);
     else
@@ -91,7 +91,7 @@ unsigned short searchClient(client* T, int key) {
  * @return 3) c, apontador para cliente que foi criado
  */
 client* createClient(client* T, int key, char name[MAXNAME], float score) {
-    unsigned short found = searchClient(T, key);
+    client* found = searchClient(T, key);
     if(found)
         return NULL;
     
