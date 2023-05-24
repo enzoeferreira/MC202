@@ -8,7 +8,7 @@ struct node {
 typedef struct node node;
 
 struct listNode {
-    node *data;
+    node *pNode;
     struct listNode *next;
 };
 typedef struct listNode listNode;
@@ -101,8 +101,8 @@ list* startList() {
 void enqueue(list* L, node* n) {
     listNode *lN = malloc(sizeof(listNode));
     if(!lN)
-        return NULL;
-    lN->data = n->data;
+        return;
+    lN->pNode = n;
     lN->next = L->tail;
 
     listNode *p = L->head;
@@ -116,16 +116,16 @@ void enqueue(list* L, node* n) {
  * @param L list
  * 
  * @return 1) NULL, caso lista esteja vazia
- * @return 2) aux, char com o dado do nó que foi tirado da lista
+ * @return 2) aux, apontador para nó com o nó que foi tirado da fila
  */
-char dequeue(list* L) {
+node* dequeue(list* L) {
     listNode *p = L->head;
     if(p->next == L->tail)
         return NULL;
-    listNode *temp = p->next;
-    char aux = p->next->data;
+    listNode *q = p->next;
+    node *aux = p->next->pNode;
     p->next = p->next->next;
-    free(temp);
+    free(q);
     return aux;
 }
 
@@ -135,11 +135,12 @@ void printBreadth(node* T) {
     list *L = startList();
     enqueue(L, T);
     while(L->head->next != L->tail) {
-        printf("%c", dequeue(L));
-        if(T->left != NULL)
-            enqueue(L, T->left);
-        if(T->right != NULL)
-            enqueue(L, T->right);
+        node* n = dequeue(L);
+        printf("%c", n->data);
+        if(n->left != NULL)
+            enqueue(L, n->left);
+        if(n->right != NULL)
+            enqueue(L, n->right);
     }
 }
 
@@ -147,7 +148,7 @@ void printQueue(list* L) {
     listNode *p = L->head->next;
     printf("L: ");
     while(p != L->tail) {
-        printf("%c ", p->data->data);
+        printf("%c ", p->pNode->data);
         p = p->next;
     }
 }
