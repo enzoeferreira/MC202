@@ -36,6 +36,8 @@ tree* startTree() {
 
     T->root = r;
     T->root->key = NULL;
+    T->root->left = NULL;
+    T->root->right = NULL;
     return T;
 }
 
