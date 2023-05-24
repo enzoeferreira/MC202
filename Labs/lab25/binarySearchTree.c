@@ -60,10 +60,10 @@ unsigned short searchClient(client* T, int key) {
     if(key < p->key) {
         if(p->left == NULL)
             return 0;
-        searchClient(p->left, key);
+        return searchClient(p->left, key);
     }
     else
-        searchClient(p->right, key);
+        return searchClient(p->right, key);
 }
 
 /**
