@@ -19,6 +19,26 @@ struct tree {
 };
 typedef struct tree tree;
 
+/**
+ * Cria uma árvore binária
+ * 
+ * @return 1) NULL, caso falha em alocar espaço para árvore
+ * @return 2) T, apontador para árvore
+ */
+tree* startTree() {
+    tree *T = malloc(sizeof(tree));
+    if(!T)
+        return NULL;
+    
+    client *r = malloc(sizeof(client));
+    if(!r)
+        return NULL;
+
+    T->root = r;
+    T->root->key = NULL;
+    return T;
+}
+
 int main() {
     int inKey, inStart, inEnd;
     float inScore;
