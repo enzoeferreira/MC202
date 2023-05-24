@@ -44,6 +44,54 @@ void* freeTree(client* T) {
     free(T);
 }
 
+/**
+ * Procura cliente na árvore pela key
+ * 
+ * @param T raiz da árvore binária
+ * @param key chave do cliente a ser procurado
+ * 
+ * @return 1) NULL, caso não encontre o cliente
+ * @return 2) key, caso encontre
+ */
+unsigned short searchClient(client* T, int key) {
+    client* p = T;
+    if(p == NULL || p->key == key)
+        return p;
+    if(key < p->key)
+        return searchClient(p->left, key);
+    return searchClient(p->right, key);
+}
+
+/**
+ * Cria o registro de um cliente
+ * 
+ * @param T raiz da árvore binária
+ * @param key chave do cliente a ser criado
+ * @param name nome do cliente a ser criado
+ * @param score pontuação do cliente a ser criado
+ * 
+ * @return 1) NULL, caso cliente já exista
+ * @return 2) 0, printando "memoria insuficiente" caso falte memória
+ * @return 3) c, apontador para cliente que foi criado
+ */
+client* createClient(client* T, int key, char name[MAXNAME], float score) {
+    unsigned short found = searchClient(T, key);
+    if(found)
+        return NULL;
+    
+    client *c = malloc(sizeof(client));
+    if(!c) {
+        printf("memoria insuficiente");
+        return 0;
+    }
+    c->key = key;
+    strcpy(c->name, name);
+    c->score = score;
+    c->left = NULL;
+    c->right = NULL;
+    return c;
+}
+
 int main() {
     int inKey, inStart, inEnd;
     float inScore;
