@@ -116,10 +116,10 @@ void insertClient(client* T, client* c) {
         else
             p = p->right;
     }
-    if(c->key < p->key)
-        p->left = c;
+    if(c->key < q->key)
+        q->left = c;
     else
-        p->right = c;
+        q->right = c;
     return 1;
 }
 
