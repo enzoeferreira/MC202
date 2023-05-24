@@ -51,15 +51,18 @@ void* freeTree(client* T) {
  * @param key chave do cliente a ser procurado
  * 
  * @return 1) NULL, caso não encontre o cliente
- * @return 2) key, caso encontre
+ * @return 2) 1, caso encontre
  */
 unsigned short searchClient(client* T, int key) {
     client* p = T;
-    if(p == NULL || p->key == key)
-        return p;
-    if(key < p->key)
-        return searchClient(p->left, key);
-    return searchClient(p->right, key);
+    if(key == p->key)
+        return 1;
+    if(key < p->key) {
+        if(p->left == NULL)
+            return NULL;
+        searchClient(p->left, key);
+    }
+    searchClient(p->right, key);
 }
 
 /**
