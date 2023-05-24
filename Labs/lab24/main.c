@@ -18,6 +18,7 @@ struct list {
 };
 typedef struct list list;
 
+
 /**
  * Printa um array dinâmico
  * 
@@ -49,9 +50,9 @@ void printPreOrder(node* T) {
 void printInOrder(node* T) {
     if(!T)
         return;
-    printPreOrder(T->left);
+    printInOrder(T->left);
     printf("%c", T->data);
-    printPreOrder(T->right);
+    printInOrder(T->right);
 }
 
 /**
@@ -61,13 +62,9 @@ void printInOrder(node* T) {
 void printPostOrder(node* T) {
     if(!T)
         return;
-    printPreOrder(T->left);
-    printPreOrder(T->right);
+    printPostOrder(T->left);
+    printPostOrder(T->right);
     printf("%c", T->data);
-}
-
-void printBreadth(node* T) {
-
 }
 
 /**
@@ -121,7 +118,7 @@ void enqueue(list* L, node* n) {
  * @return 1) NULL, caso lista esteja vazia
  * @return 2) aux, char com o dado do nó que foi tirado da lista
  */
-char* dequeue(list* L) {
+char dequeue(list* L) {
     listNode *p = L->head;
     if(p->next == L->tail)
         return NULL;
@@ -130,6 +127,18 @@ char* dequeue(list* L) {
     p->next = p->next->next;
     free(temp);
     return aux;
+}
+
+void printBreadth(node* T) {
+    list *L = startList();
+    enqueue(L, T);
+    while(L->head->next != L->tail) {
+        dequeue(L);
+        if(T->left != NULL)
+            enqueue(L, T->left);
+        if(T->right != NULL)
+            enqueue(L, T->right);
+    }
 }
 
 /**
@@ -189,7 +198,7 @@ long int findChar(char* array, long int start, long int end, char c) {
     for(i = start; i <= end; i++)
         if(array[i] == c)
             return i;
-    return NULL;
+    return 0;
 }
 
 /**
