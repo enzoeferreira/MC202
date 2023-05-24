@@ -39,6 +39,19 @@ tree* startTree() {
     return T;
 }
 
+/**
+ * Libera o espaço de memória alocado para uma árvore binária e todos os seus nós
+ * 
+ * @param T árvore binária
+ */
+void* freeTree(tree* T) {
+    if(!T->root)
+        return;
+    freeTree(T->root->left);
+    freeTree(T->root->right);
+    free(T);
+}
+
 int main() {
     int inKey, inStart, inEnd;
     float inScore;
