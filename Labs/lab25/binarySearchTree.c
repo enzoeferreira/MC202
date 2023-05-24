@@ -55,13 +55,12 @@ void freeTree(client* T) {
  */
 unsigned short searchClient(client* T, int key) {
     client* p = T;
+    if(p == NULL)
+        return 0;
     if(key == p->key)
         return 1;
-    if(key < p->key) {
-        if(p->left == NULL)
-            return 0;
+    if(key < p->key)
         return searchClient(p->left, key);
-    }
     else
         return searchClient(p->right, key);
 }
