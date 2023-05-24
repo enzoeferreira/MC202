@@ -133,11 +133,20 @@ void printBreadth(node* T) {
     list *L = startList();
     enqueue(L, T);
     while(L->head->next != L->tail) {
-        dequeue(L);
+        printf("%c", dequeue(L));
         if(T->left != NULL)
             enqueue(L, T->left);
         if(T->right != NULL)
             enqueue(L, T->right);
+    }
+}
+
+void printQueue(list* L) {
+    listNode *p = L->head->next;
+    printf("L: ");
+    while(p != L->tail) {
+        printf("%c ", p->data->data);
+        p = p->next;
     }
 }
 
