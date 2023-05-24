@@ -142,6 +142,7 @@ void printBreadth(node* T) {
         if(n->right != NULL)
             enqueue(L, n->right);
     }
+    free(L);
     printf("\n");
 }
 
@@ -166,6 +167,10 @@ void printQueue(list* L) {
  * @return 2) array, ponteiro para o mesmo ou novo array com o caractére adicionado
  */
 char* insertArray(char* array, long int* size, long int* sizeMax, char c) {
+    // printf("\t-----INSERINDO %c-----\n", c);
+    // printf("\tsize: %li\n", *size);
+    // printf("\tsizeMax: %li\n", *sizeMax);
+    // printf("\tarray[0]: %c\n", *array);
     if(*size < *sizeMax) {
         // Espaço suficiente para adicionar
         *(array + (*size)) = c;
@@ -221,19 +226,20 @@ long int findChar(char* array, long int start, long int end, char c) {
  * @param inOrder array da árvore em-ordem
  * @param start índice de início dos arrays
  * @param end índice de fim dos arrays
+ * @param index ponteiro que guarda índice na Pré-Ordem
  * 
  * @return 1) NULL, caso falhe em alocar memória para os nós da árvore
  * @return 2) n, apontador para a raiz de uma árvore
  */
-node* constructTree(char* preOrder, char* inOrder, long start, long end) {
-    static int index = 0;
+node* constructTree(char* preOrder, char* inOrder, long start, long end, int* index) {
     if(start > end)
         return NULL;
     
     node *n = malloc(sizeof(node));
     if(!n)
         return NULL;
-    n->data = preOrder[index++];
+    n->data = preOrder[*index];
+    (*index)++;
     n->left = NULL;
     n->right = NULL;
     if(start == end)
@@ -246,8 +252,8 @@ node* constructTree(char* preOrder, char* inOrder, long start, long end) {
     // printf("\tnIndex = %li\n", nIndex);
     // printf("\tend = %li\n", end);
 
-    n->left = constructTree(preOrder, inOrder, start, nIndex - 1);
-    n->right = constructTree(preOrder, inOrder, nIndex + 1, end);
+    n->left = constructTree(preOrder, inOrder, start, nIndex - 1, index);
+    n->right = constructTree(preOrder, inOrder, nIndex + 1, end, index);
     return n;
 }
 
@@ -302,27 +308,34 @@ void bt_dot_print(node* T) {
 }
 
 int main() {
-    char *preOrder = malloc(sizeof(char));
-    char *inOrder = malloc(sizeof(char));
-    long int sizePreOrder = 0, sizePreOrderMax = 1, sizeInOrder = 0, sizeInOrderMax = 1;
-    
+
+    char *preOrder, *inOrder;
+    long int sizePreOrder, sizePreOrderMax, sizeInOrder, sizeInOrderMax;
     char c;
-    while((c = getchar()) != ' ') {
-        preOrder = insertArray(preOrder, &sizePreOrder, &sizePreOrderMax, c);
-    }
     while((c = getchar()) != '\n') {
-        inOrder = insertArray(inOrder, &sizeInOrder, &sizeInOrderMax, c);
+        preOrder = malloc(sizeof(char));
+        inOrder = malloc(sizeof(char));
+        sizePreOrder = 0, sizePreOrderMax = 1;
+        sizeInOrder = 0, sizeInOrderMax = 1;
+
+        preOrder = insertArray(preOrder, &sizePreOrder, &sizePreOrderMax, c);
+        while((c = getchar()) != ' ') {
+            preOrder = insertArray(preOrder, &sizePreOrder, &sizePreOrderMax, c);
+        }
+        while((c = getchar()) != '\n') {
+            inOrder = insertArray(inOrder, &sizeInOrder, &sizeInOrderMax, c);
+        }
+        // printArray(preOrder, sizePreOrder);
+        // printArray(inOrder, sizeInOrder);
+
+        int index = 0;
+        node* T = constructTree(preOrder, inOrder, 0, sizePreOrder - 1, &index);
+        printPostOrder(T);
+        printf(" ");
+        printBreadth(T);
+
+        freeTree(T);
+        free(preOrder);
+        free(inOrder);
     }
-    // printArray(preOrder, sizePreOrder);
-    // printArray(inOrder, sizeInOrder);
-
-    node* T = constructTree(preOrder, inOrder, 0, sizePreOrder - 1);
-    printPostOrder(T);
-    printf(" ");
-    printBreadth(T);
-
-    // printPreOrder(T);
-    // printf("\n");
-
-    // bt_dot_print(T);
 }
