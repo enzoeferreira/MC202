@@ -129,6 +129,16 @@ node* dequeue(list* L) {
     return aux;
 }
 
+void freeList(list* L) {
+    listNode* current = L->head;
+    while (current != NULL) {
+        listNode* temp = current;
+        current = current->next;
+        free(temp);
+    }
+    free(L);
+}
+
 void printBreadth(node* T) {
     if(!T)
         return;
@@ -142,7 +152,7 @@ void printBreadth(node* T) {
         if(n->right != NULL)
             enqueue(L, n->right);
     }
-    free(L);
+    freeList(L);
     printf("\n");
 }
 
@@ -333,6 +343,7 @@ int main() {
         printPostOrder(T);
         printf(" ");
         printBreadth(T);
+        // bt_dot_print(T);
 
         freeTree(T);
         free(preOrder);
