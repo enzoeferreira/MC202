@@ -14,43 +14,33 @@ struct client {
 };
 typedef struct client client;
 
-struct tree {
-    client *root;
-};
-typedef struct tree tree;
-
 /**
  * Cria uma árvore binária
  * 
  * @return 1) NULL, caso falha em alocar espaço para árvore
- * @return 2) T, apontador para árvore
+ * @return 2) T, apontador para raiz de uma árvore binária
  */
-tree* startTree() {
-    tree *T = malloc(sizeof(tree));
+client* startTree() {
+    client *T = malloc(sizeof(client));
     if(!T)
         return NULL;
-    
-    client *r = malloc(sizeof(client));
-    if(!r)
-        return NULL;
 
-    T->root = r;
-    T->root->key = NULL;
-    T->root->left = NULL;
-    T->root->right = NULL;
+    T->key = NULL;
+    T->left = NULL;
+    T->right = NULL;
     return T;
 }
 
 /**
- * Libera o espaço de memória alocado para uma árvore binária e todos os seus nós
+ * Libera o espaço de memória alocado para todos os nós de uma árvore binária
  * 
- * @param T árvore binária
+ * @param T raiz da árvore
  */
-void* freeTree(tree* T) {
-    if(!T->root)
+void* freeTree(client* T) {
+    if(!T)
         return;
-    freeTree(T->root->left);
-    freeTree(T->root->right);
+    freeTree(T->left);
+    freeTree(T->right);
     free(T);
 }
 
