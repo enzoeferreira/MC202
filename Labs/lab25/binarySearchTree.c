@@ -138,7 +138,7 @@ void insertClient(client* T, client* c) {
 }
 
 int main() {
-    client *T;
+    client *T, *c;
     unsigned short existingTree = 0;
     int inKey, inStart, inEnd;
     float inScore;
@@ -173,7 +173,7 @@ int main() {
                     "\tKey: %d\n"
                     "\tNome: %s\n"
                     "\tScore: %0.2f\n", inKey, inName, inScore);
-            client *c = createClient(T, inKey, inName, inScore);
+            c = createClient(T, inKey, inName, inScore);
             if(c) {
                 printf("\tCliente criado: %s (%d) -> %.2f\n", c->name, c->key, c->score);
                 printf("\tCliente sendo inserido...\n");
@@ -204,6 +204,11 @@ int main() {
             scanf("%d", &inKey);
             printf("\t----------Buscando Cliente----------\n"
                     "\tKey: %d\n", inKey);
+            c = searchClient(T, inKey);
+            if(c)
+                printf("cliente %d: %s, %.2f pontos\n", c->key, c->name, c->score);
+            else
+                printf("nao ha cliente %d\n", inKey);
             
         } else if(!strcmp(cmd, "imprimir")) {
             /**
