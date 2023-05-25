@@ -165,6 +165,34 @@ int max(client* T) {
     return p->key;
 }
 
+int predecessor(client* T, int key) {
+    int predecessor;
+
+    client *c = searchClient(T, key);
+    if(!c)
+        return -1;
+    if(c->left != NULL)
+        return max(c->left);
+    if(c->left == NULL && c->right != NULL)
+        return min(c->right);
+    
+    client *p = T;
+    while(p != NULL) {
+        if(key > p->key) {
+            predecessor = p->key;
+            p = p->right;
+        }
+    }
+    return predecessor;
+}
+
+int sucessor(client* T, int key) {
+    client *c = searchClient(T, key);
+    if(!c)
+        return -1;
+
+}
+
 int main() {
     client *T, *c;
     unsigned short existingTree = 0;
@@ -279,6 +307,8 @@ int main() {
              * OBS: Se não tiver sucessor, imprimir: "sucessor de k: nao ha"
              * OBS: Se k não estiver na árvore, imprimir: "nao ha cliente k"
              */
+            getchar();
+            scanf("%d", &inKey);
             
         } else if(!strcmp(cmd, "predecessor")) {
             /**
@@ -288,6 +318,8 @@ int main() {
              * OBS: Se não tiver sucessor, imprimir: "predecessor de k: nao ha"
              * OBS: Se k não estiver na árvore, imprimir: "nao ha cliente k"
              */
+            getchar();
+            scanf("%d", &inKey);
             
         } else if(!strcmp(cmd, "buscar-intervalo")) {
             /**
