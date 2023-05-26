@@ -220,11 +220,8 @@ int main() {
              * OBS: Se k já estiver na árvore, o programa não faz nada.
              * OBS: Se não houver memória, o programa imprime "memoria insuficiente" e continua.
              */
-            getchar(); // Tira espaço
-            scanf("%d, ", &inKey);
-            scanf("%[^,]s", inName);
             getchar();
-            scanf("%f", &inScore);
+            scanf("%d, %[^,], %f", &inKey, inName, &inScore);
             printf( "\t----------Inserindo Cliente----------\n"
                     "\tKey: %d\n"
                     "\tNome: %s\n"
