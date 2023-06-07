@@ -11,6 +11,7 @@ struct client {
     float score;
     struct client *left;
     struct client *right;
+    struct client *parent;
 };
 typedef struct client client;
 
@@ -41,6 +42,7 @@ client* startTree() {
     T->key = -1;
     T->left = NULL;
     T->right = NULL;
+    T->parent = NULL;
     return T;
 }
 
@@ -105,6 +107,7 @@ client* createClient(client* T, int key, char name[MAXNAME], float score) {
     c->score = score;
     c->left = NULL;
     c->right = NULL;
+    c->parent = NULL;
     return c;
 }
 
@@ -130,10 +133,14 @@ void insertClient(client* T, client* c) {
         else
             p = p->right;
     }
-    if(c->key < q->key)
+    if(c->key < q->key) {
         q->left = c;
-    else
+        c->parent = q;
+    }
+    else {
         q->right = c;
+        c->parent = q;
+    }
     return;
 }
 
@@ -166,30 +173,10 @@ int max(client* T) {
 }
 
 int predecessor(client* T, int key) {
-    int predecessor;
 
-    client *c = searchClient(T, key);
-    if(!c)
-        return -1;
-    if(c->left != NULL)
-        return max(c->left);
-    if(c->left == NULL && c->right != NULL)
-        return min(c->right);
-    
-    client *p = T;
-    while(p != NULL) {
-        if(key > p->key) {
-            predecessor = p->key;
-            p = p->right;
-        }
-    }
-    return predecessor;
 }
 
 int sucessor(client* T, int key) {
-    client *c = searchClient(T, key);
-    if(!c)
-        return -1;
 
 }
 
