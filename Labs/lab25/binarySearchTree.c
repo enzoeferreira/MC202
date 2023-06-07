@@ -178,20 +178,20 @@ int max(client* T) {
  * @param T raiz da árvore binária
  * @param key chave que o predecessor será procurado
  * 
- * @return 1) -1, caso o cliente não exista ou não tenha predecessor
+ * @return 1) 0, caso o cliente não exista ou não tenha predecessor
  * @return 2) key, chave do predecessor do cliente
  */
 int predecessor(client* T, int key) {
     client *p = searchClient(T, key);
     if(!p)
-        return -1; // Cliente não existe
+        return 0; // Cliente não existe
     if(p->left != NULL)
         return max(p->left);
     while(p->parent->left == p) // 'p' é filho da esquerda
         p = p->parent;
     if(p->parent != NULL) // Pai de 'p' é o predecessor do cliente
         return p->parent->key;
-    return -1; // Cliente não tem predecessor
+    return 0; // Cliente não tem predecessor
 }
 
 /**
@@ -200,20 +200,20 @@ int predecessor(client* T, int key) {
  * @param T raiz da árvore binária
  * @param key chave que o sucessor será procurado
  * 
- * @return 1) -1, caso o cliente não exista ou não tenha sucessor
+ * @return 1) 0, caso o cliente não exista ou não tenha sucessor
  * @return 2) key, chave do sucessor do cliente
  */
 int sucessor(client* T, int key) {
     client *p = searchClient(T, key);
     if(!p)
-        return -1; // Cliente não existe
+        return 0; // Cliente não existe
     if(p->right != NULL)
         return max(p->right);
     while(p->parent->right == p) // 'p' é filho da direita
         p = p->parent;
     if(p->parent != NULL) // Pai de 'p' é o sucessor do cliente
         return p->parent->key;
-    return -1; // Cliente não tem sucessor
+    return 0; // Cliente não tem sucessor
 }
 
 int main() {
@@ -329,6 +329,11 @@ int main() {
              */
             getchar();
             scanf("%d", &inKey);
+            int suc = sucessor(T, inKey);
+            if(!suc)
+                printf("sucessor de %d: %d\n", inKey, suc);
+            else
+                printf("sucessor de %d: nao ha\n", inKey);
             
         } else if(!strcmp(cmd, "predecessor")) {
             /**
@@ -340,6 +345,11 @@ int main() {
              */
             getchar();
             scanf("%d", &inKey);
+            int pred = predecessor(T, inKey);
+            if(!pred)
+                printf("sucessor de %d: %d\n", inKey, pred);
+            else
+                printf("sucessor de %d: nao ha\n", inKey);
             
         } else if(!strcmp(cmd, "buscar-intervalo")) {
             /**
