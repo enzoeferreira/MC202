@@ -245,14 +245,14 @@ int main() {
              */
             getchar();
             scanf("%d, %[^,], %f", &inKey, inName, &inScore);
-            printf( "\t----------Inserindo Cliente----------\n"
-                    "\tKey: %d\n"
-                    "\tNome: %s\n"
-                    "\tScore: %0.2f\n", inKey, inName, inScore);
+            // printf( "\t----------Inserindo Cliente----------\n"
+            //         "\tKey: %d\n"
+            //         "\tNome: %s\n"
+            //         "\tScore: %0.2f\n", inKey, inName, inScore);
             c = createClient(T, inKey, inName, inScore);
             if(c) {
-                printf("\tCliente criado: %s (%d) -> %.2f\n", c->name, c->key, c->score);
-                printf("\tCliente sendo inserido...\n");
+                // printf("\tCliente criado: %s (%d) -> %.2f\n", c->name, c->key, c->score);
+                // printf("\tCliente sendo inserido...\n");
                 insertClient(T, c);
             }
 
@@ -265,8 +265,8 @@ int main() {
              */
             getchar();
             scanf("%d", &inKey);
-            printf("\t----------Removendo Cliente----------\n"
-                    "\tKey: %d\n", inKey);
+            // printf("\t----------Removendo Cliente----------\n"
+            //         "\tKey: %d\n", inKey);
             
         } else if(!strcmp(cmd, "buscar")) {
             /**
@@ -278,8 +278,8 @@ int main() {
              */
             getchar();
             scanf("%d", &inKey);
-            printf("\t----------Buscando Cliente----------\n"
-                    "\tKey: %d\n", inKey);
+            // printf("\t----------Buscando Cliente----------\n"
+            //         "\tKey: %d\n", inKey);
             c = searchClient(T, inKey);
             if(c)
                 printf("cliente %d: %s, %.2f pontos\n", c->key, c->name, c->score);
@@ -347,9 +347,9 @@ int main() {
             scanf("%d", &inKey);
             int pred = predecessor(T, inKey);
             if(!pred)
-                printf("sucessor de %d: %d\n", inKey, pred);
+                printf("predecessor de %d: %d\n", inKey, pred);
             else
-                printf("sucessor de %d: nao ha\n", inKey);
+                printf("predecessor de %d: nao ha\n", inKey);
             
         } else if(!strcmp(cmd, "buscar-intervalo")) {
             /**
@@ -361,9 +361,9 @@ int main() {
              */
             getchar();
             scanf("%d %d", &inStart, &inEnd);
-            printf("\t----------Buscando Clientes em Intervalo----------\n"
-                    "\tInicio: %d\n"
-                    "\tFim: %d\n", inStart, inEnd);
+            // printf("\t----------Buscando Clientes em Intervalo----------\n"
+            //         "\tInicio: %d\n"
+            //         "\tFim: %d\n", inStart, inEnd);
             
         }
 
