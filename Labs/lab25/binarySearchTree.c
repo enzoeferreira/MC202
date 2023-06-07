@@ -172,12 +172,48 @@ int max(client* T) {
     return p->key;
 }
 
+/**
+ * Procura o predecessor de um cliente através de sua chave
+ * 
+ * @param T raiz da árvore binária
+ * @param key chave que o predecessor será procurado
+ * 
+ * @return 1) -1, caso o cliente não exista ou não tenha predecessor
+ * @return 2) key, chave do predecessor do cliente
+ */
 int predecessor(client* T, int key) {
-
+    client *p = searchClient(T, key);
+    if(!p)
+        return -1; // Cliente não existe
+    if(p->left != NULL)
+        return max(p->left);
+    while(p->parent->left == p) // 'p' é filho da esquerda
+        p = p->parent;
+    if(p->parent != NULL) // Pai de 'p' é o predecessor do cliente
+        return p->parent->key;
+    return -1; // Cliente não tem predecessor
 }
 
+/**
+ * Procura o sucessor de um cliente através de sua chave
+ * 
+ * @param T raiz da árvore binária
+ * @param key chave que o sucessor será procurado
+ * 
+ * @return 1) -1, caso o cliente não exista ou não tenha sucessor
+ * @return 2) key, chave do sucessor do cliente
+ */
 int sucessor(client* T, int key) {
-
+    client *p = searchClient(T, key);
+    if(!p)
+        return -1; // Cliente não existe
+    if(p->right != NULL)
+        return max(p->right);
+    while(p->parent->right == p) // 'p' é filho da direita
+        p = p->parent;
+    if(p->parent != NULL) // Pai de 'p' é o sucessor do cliente
+        return p->parent->key;
+    return -1; // Cliente não tem sucessor
 }
 
 int main() {
