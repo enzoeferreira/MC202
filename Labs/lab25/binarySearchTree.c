@@ -145,6 +145,21 @@ void insertClient(client* T, client* c) {
 }
 
 /**
+ * Retorna a quantidade de filhos de um nó
+ * 
+ * @param A cliente desejado
+ * 
+ * @return 1) n, onde n é a quantidade de filhos de um nó. 0 <= n <= 2
+ */
+int getChildCount(client* A) {
+    if(A->left == NULL && A->right == NULL)
+        return 0;
+    if((A->left != NULL && A->right == NULL) || (A->left == NULL && A->right != NULL))
+        return 1;
+    return 2;
+}
+
+/**
  * Retorna a menor chave de uma árvore binária
  * 
  * @param T raiz da árvore binária
@@ -208,12 +223,105 @@ int sucessor(client* T, int key) {
     if(!p)
         return -1; // Cliente não existe
     if(p->right != NULL)
-        return max(p->right);
+        return min(p->right);
     while(p->parent != NULL && p == p->parent->right) // 'p' é filho da direita
         p = p->parent;
     if(p->parent != NULL) // Pai de 'p' é o sucessor do cliente
         return p->parent->key;
     return -1; // Cliente não tem sucessor
+}
+
+/**
+ * Encontra e remove um cliente de uma árvore binária de busca
+ * Se o cliente não estiver na árvore nada acontece
+ * 
+ * @param T raiz da árvore binária
+ * @param key chave do cliente a ser removido
+ * 
+ * @return 1) T, árvore atualizada
+ */
+client* removeClient(client* T, int key) {
+    client *c = searchClient(T, key);
+    if(!c) // Cliente não existe
+        return T;
+    int child = getChildCount(c);
+
+    if(child == 0) {
+        if(c == c->parent->left)
+            c->parent->left = NULL;
+        else if(c == c->parent->right)
+            c->parent->right = NULL;
+        else {  // Cliente era o último
+                T->key = -1;
+                T->left = NULL;
+                T->right = NULL;
+                T->parent = NULL;
+        }
+        free(c);
+        return T;
+    }
+    else if(child == 1) {
+        if(c->left != NULL) { // Filho está na esquerda
+            if(c->parent != NULL) {
+                c->left->parent = c->parent;
+                c->parent->left = c->left;
+                free(c);
+                return T;
+            }
+            // Cliente era raiz, agora o filho que é
+            T = c->left;
+            free(c);
+            return T;
+        }
+        else { // Filho está na direita
+            if(c->parent != NULL) {
+                c->right->parent = c->parent;
+                c->parent->right = c->right;
+                free(c);
+                return T;
+            }
+            
+            // Cliente era raiz, agora o filho que é
+            T = c->right;
+            free(c);
+            return T;
+        }
+    }
+    else if(child == 2) {
+        client *suc = searchClient(T, sucessor(T, c->key));
+        if(suc == c->right) { // Sucessor é filho
+            suc->parent = c->parent;
+            c->parent->right = suc;
+            suc->left = c->left;
+            suc->left->parent = suc;
+            free(c);
+            return T;
+        }
+        
+        // Sucessor não é filho, troca sucessor com seu filho da direita
+        suc->right->parent = suc->parent;
+        suc->parent->left = suc->right;
+
+        // Troca cliente com seu sucessor
+        suc->parent = c->parent;
+        if(c->parent == NULL) { // Cliente era raiz
+            T = suc;
+        }
+        else { // Cliente não era raiz
+            if(c == c->parent->left)
+                c->parent->left = suc;
+            else
+                c->parent->right = suc;
+        }
+
+        suc->right = c->right;
+        suc->left = c->left;
+        c->left->parent = suc;
+        c->right->parent = suc;
+        free(c);
+        return T;
+    }
+    return T;
 }
 
 int main() {
@@ -267,7 +375,7 @@ int main() {
             scanf("%d", &inKey);
             // printf("\t----------Removendo Cliente----------\n"
             //         "\tKey: %d\n", inKey);
-            
+            T = removeClient(T, inKey);
         } else if(!strcmp(cmd, "buscar")) {
             /**
              * Formato: "buscar k"
