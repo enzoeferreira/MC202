@@ -187,8 +187,8 @@ int predecessor(client* T, int key) {
         return -1; // Cliente não existe
     if(p->left != NULL)
         return max(p->left);
-    while(p->parent->left == p) // 'p' é filho da esquerda
-        p = p->parent;
+    while(p->parent != NULL && p == p->parent->left) // 'p' é filho da esquerda
+        p = p->parent; 
     if(p->parent != NULL) // Pai de 'p' é o predecessor do cliente
         return p->parent->key;
     return -1; // Cliente não tem predecessor
@@ -209,7 +209,7 @@ int sucessor(client* T, int key) {
         return -1; // Cliente não existe
     if(p->right != NULL)
         return max(p->right);
-    while(p->parent->right == p) // 'p' é filho da direita
+    while(p->parent != NULL && p == p->parent->right) // 'p' é filho da direita
         p = p->parent;
     if(p->parent != NULL) // Pai de 'p' é o sucessor do cliente
         return p->parent->key;
