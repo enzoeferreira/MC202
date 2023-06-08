@@ -39,7 +39,7 @@ client* startTree() {
     if(!T)
         return NULL;
 
-    T->key = -1;
+    T->key = -__INT32_MAX__;
     T->left = NULL;
     T->right = NULL;
     T->parent = NULL;
@@ -119,10 +119,11 @@ client* createClient(client* T, int key, char name[MAXNAME], float score) {
  */
 void insertClient(client* T, client* c) {
     client *p = T;
-    if(p->key == -1) { // Primeiro elemento
+    if(p->key == -__INT32_MAX__) { // Primeiro elemento
         T->key = c->key;
         strcpy(T->name, c->name);
         T->score = c->score;
+        T->parent = NULL;
         return;
     }
     client *q = NULL;
@@ -193,20 +194,20 @@ int max(client* T) {
  * @param T raiz da árvore binária
  * @param key chave que o predecessor será procurado
  * 
- * @return 1) -1, caso o cliente não exista ou não tenha predecessor
+ * @return 1) __INT32_MAX__, caso o cliente não exista ou não tenha predecessor
  * @return 2) key, chave do predecessor do cliente
  */
 int predecessor(client* T, int key) {
     client *p = searchClient(T, key);
     if(!p)
-        return -1; // Cliente não existe
+        return __INT32_MAX__; // Cliente não existe
     if(p->left != NULL)
         return max(p->left);
     while(p->parent != NULL && p == p->parent->left) // 'p' é filho da esquerda
         p = p->parent; 
     if(p->parent != NULL) // Pai de 'p' é o predecessor do cliente
         return p->parent->key;
-    return -1; // Cliente não tem predecessor
+    return __INT32_MAX__; // Cliente não tem predecessor
 }
 
 /**
@@ -215,20 +216,20 @@ int predecessor(client* T, int key) {
  * @param T raiz da árvore binária
  * @param key chave que o sucessor será procurado
  * 
- * @return 1) -1, caso o cliente não exista ou não tenha sucessor
+ * @return 1) __INT32_MAX__, caso o cliente não exista ou não tenha sucessor
  * @return 2) key, chave do sucessor do cliente
  */
 int sucessor(client* T, int key) {
     client *p = searchClient(T, key);
     if(!p)
-        return -1; // Cliente não existe
+        return __INT32_MAX__; // Cliente não existe
     if(p->right != NULL)
         return min(p->right);
     while(p->parent != NULL && p == p->parent->right) // 'p' é filho da direita
         p = p->parent;
     if(p->parent != NULL) // Pai de 'p' é o sucessor do cliente
         return p->parent->key;
-    return -1; // Cliente não tem sucessor
+    return __INT32_MAX__; // Cliente não tem sucessor
 }
 
 /**
@@ -327,6 +328,56 @@ client* removeClient(client* T, int key) {
     return T;
 }
 
+client* minValueClient(client* T)
+{
+    client* p = T;
+ 
+    while (p && p->left != NULL)
+        p = p->left;
+ 
+    return p;
+}
+ 
+client* deleteClient2(client* T, int key)
+{
+    if (T == NULL)
+        return T;
+
+    if(T->parent == NULL && T->left == NULL && T->right == NULL) {
+        printf("check\n");
+        T->key = -__INT32_MAX__;
+        return T;
+    }
+ 
+    if (key < T->key)
+        T->left = deleteClient2(T->left, key);
+
+    else if (key > T->key)
+        T->right = deleteClient2(T->right, key);
+ 
+    else {
+        if (T->left == NULL) {
+            client* temp = T->right;
+            free(T);
+            return temp;
+        }
+        else if (T->right == NULL) {
+            client* temp = T->left;
+            free(T);
+            return temp;
+        }
+
+        client* temp = minValueClient(T->right);
+ 
+        T->key = temp->key;
+        strcpy(T->name, temp->name);
+        T->score = temp->score;
+ 
+        T->right = deleteClient2(T->right, temp->key);
+    }
+    return T;
+}
+
 void printRange(client* T, int start, int end, int* count) {
     if (T == NULL)
         return;
@@ -394,10 +445,14 @@ int main() {
              * Criar uma árvore binária de busca vazia.
              * Se já houver uma árvore sendo processada, todos os nós dela devem ser removidos.
              */
-            if(existingTree)
+            if(existingTree) {
                 freeTree(T);
-            T = startTree();
-            existingTree = 1;
+                existingTree = 0;
+            }
+            else {
+                T = startTree();
+                existingTree = 1;
+            }
 
         } else if(!strcmp(cmd, "inserir")) {
             /**
@@ -419,7 +474,6 @@ int main() {
                 // printf("\tCliente sendo inserido...\n");
                 insertClient(T, c);
             }
-
         } else if(!strcmp(cmd, "remover")) {
             /**
              * Formato: "remover k"
@@ -429,13 +483,9 @@ int main() {
              */
             getchar();
             scanf("%d", &inKey);
-            // if(inKey == 195) {
-            //     bt_dot_print(T);
-            //     return 0;
-            // }
             // printf("\t----------Removendo Cliente----------\n"
             //         "\tKey: %d\n", inKey);
-            T = removeClient(T, inKey);
+            T = deleteClient2(T, inKey);
         } else if(!strcmp(cmd, "buscar")) {
             /**
              * Formato: "buscar k"
@@ -451,6 +501,10 @@ int main() {
             c = searchClient(T, inKey);
             if(c)
                 printf("cliente %d: %s, %.2f pontos\n", c->key, c->name, c->score);
+            // if(c->key == 2147483647) {
+            //     bt_dot_print(T);
+            //     return;
+            // }
             else
                 printf("nao ha cliente %d\n", inKey);
             
@@ -461,7 +515,7 @@ int main() {
              * 
              * OBS: Se a árvore estiver vazia, imprimir: "arvore vazia"
              */
-            if(T->key == -1)
+            if(T->key == -__INT32_MAX__)
                 printf("arvore vazia\n");
             else {
                 printf("clientes: ");
@@ -498,7 +552,7 @@ int main() {
             getchar();
             scanf("%d", &inKey);
             int suc = sucessor(T, inKey);
-            if(suc != -1)
+            if(suc != -__INT32_MAX__)
                 printf("sucessor de %d: %d\n", inKey, suc);
             else
                 printf("sucessor de %d: nao ha\n", inKey);
@@ -514,7 +568,7 @@ int main() {
             getchar();
             scanf("%d", &inKey);
             int pred = predecessor(T, inKey);
-            if(pred != -1)
+            if(pred != -__INT32_MAX__)
                 printf("predecessor de %d: %d\n", inKey, pred);
             else
                 printf("predecessor de %d: nao ha\n", inKey);
@@ -542,5 +596,6 @@ int main() {
 
         scanf("%s", cmd);
     }
-    freeTree(T);
+    if(existingTree)
+        freeTree(T);
 }
