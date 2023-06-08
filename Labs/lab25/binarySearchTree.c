@@ -245,7 +245,6 @@ client* removeClient(client* T, int key) {
     if(!c) // Cliente não existe
         return T;
     int child = getChildCount(c);
-
     if(child == 0) {
         if(c == c->parent->left)
             c->parent->left = NULL;
@@ -299,8 +298,12 @@ client* removeClient(client* T, int key) {
         }
         
         // Sucessor não é filho, troca sucessor com seu filho da direita
-        suc->right->parent = suc->parent;
-        suc->parent->left = suc->right;
+        if(suc->right != NULL) { // Sucessor tem filhos (na direita)
+            suc->right->parent = suc->parent;
+            suc->parent->left = suc->right;
+        }
+        else
+            suc->parent->left = NULL;
 
         // Troca cliente com seu sucessor
         suc->parent = c->parent;
@@ -324,10 +327,63 @@ client* removeClient(client* T, int key) {
     return T;
 }
 
+void printRange(client* T, int start, int end, int* count) {
+    if (T == NULL)
+        return;
+    if (T->key > start)
+        printRange(T->left, start, end, count);
+    if (T->key >= start && T->key <= end) {
+        printf("%d ", T->key);
+        (*count)++;
+    }
+    if (T->key < end)
+        printRange(T->right, start, end, count);
+}
+
+void rec_dot_print(client* p, int* nnull) {
+    if (p == NULL)
+        return;
+
+    if (p->left == NULL) {
+        printf("  N%d [shape=point];\n",*nnull);
+        printf("  %d -> N%d;\n",p->key,*nnull);
+        *nnull += 1;
+    }
+    else {
+        printf("  %d -> %d;\n",p->key,p->left->key);
+        rec_dot_print(p->left,nnull);
+    }
+
+    if (p->right == NULL) {
+        printf("  N%d [shape=point];\n",*nnull);
+        printf("  %d -> N%d;\n",p->key,*nnull);
+        *nnull += 1;
+    }
+    else {
+        printf("  %d -> %d;\n",p->key,p->right->key);
+        rec_dot_print(p->right,nnull);
+    }
+}
+
+/*
+Imprime a árvore no formato do graphviz dot (graphviz.org).
+Um arquivo x.dot pode ser convertido em png com o comando
+dot -T png x.dot >x.png
+*/
+void bt_dot_print(client* T) {
+    printf("digraph BT {\n");
+    printf("  node [fontname=\"Arial\"];\n");
+
+    int n = 0;
+    rec_dot_print(T, &n);
+
+    printf("}\n");
+}
+
 int main() {
     client *T, *c;
     unsigned short existingTree = 0;
-    int inKey, inStart, inEnd;
+    int inKey, inStart, inEnd, count;
     float inScore;
     char cmd[MAXCMD], inName[MAXNAME];
 
@@ -373,6 +429,10 @@ int main() {
              */
             getchar();
             scanf("%d", &inKey);
+            // if(inKey == 195) {
+            //     bt_dot_print(T);
+            //     return 0;
+            // }
             // printf("\t----------Removendo Cliente----------\n"
             //         "\tKey: %d\n", inKey);
             T = removeClient(T, inKey);
@@ -472,9 +532,15 @@ int main() {
             // printf("\t----------Buscando Clientes em Intervalo----------\n"
             //         "\tInicio: %d\n"
             //         "\tFim: %d\n", inStart, inEnd);
-            
+            printf("clientes no intervalo [%d,%d]: ", inStart, inEnd);
+            count = 0;
+            printRange(T, inStart, inEnd, &count);
+            if(!count)
+                printf("nenhum");
+            printf("\n");
         }
 
         scanf("%s", cmd);
     }
+    freeTree(T);
 }
