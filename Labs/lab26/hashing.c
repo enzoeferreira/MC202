@@ -31,7 +31,31 @@ unsigned long djb2(unsigned char *str) {
     return hash;
 }
 
-
 int main() {
+    char cmd;
 
+    cmd = getchar();
+    while(cmd != 'f') {
+        getchar(); // Retira espaço
+
+        switch(cmd) {
+            case 'c':
+            printf("CRIANDO tabela hash\n");
+            break;
+
+            case 'i':
+            printf("INSERINDO cadeia na tabela hash\n");
+            break;
+
+            case 'r':
+            printf("REMOVENDO cadeia da tabela hash\n");
+            break;
+
+            case 'b':
+            printf("IMPRIMINDO TIMESTAMP de cadeia na tabela hash\n");
+            break;
+        }
+        
+        cmd = getchar();
+    }
 }
