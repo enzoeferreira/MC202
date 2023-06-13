@@ -97,6 +97,7 @@ short int insertString(hashTable* T, unsigned char* str) {
     T->array[hash].key = 0;
     strcpy(T->array[hash].string, str);
     T->array[hash].timestamp = T->timestamp++;
+    T->size++;
     return 1;
 }
 
@@ -115,6 +116,7 @@ short int removeString(hashTable* T, unsigned char* str) {
     while(T->array[hash].key != -1) {
         if(!strcmp(T->array[hash].string, str)) {  // String encontrada
             T->array[hash].key = -1; // Marca posição como vazia
+            T->size--;
             return 1;
         }
         hash = hashing(T, str, ++count);
