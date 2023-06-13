@@ -11,7 +11,7 @@ struct tuple {
 typedef struct tuple tuple;
 
 unsigned long sdbm(unsigned char *str) {
-    unsigned int size = len(str) / sizeof(char);
+    unsigned int size = strlen(str);
     unsigned int hash = 0;
 	unsigned int i = 0;
 
