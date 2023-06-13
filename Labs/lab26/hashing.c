@@ -68,6 +68,8 @@ int main() {
             size = 0;
             existingTable = 1;
             timestamp = 0;
+            for(int i = 0; i < maxSize; i++)
+                T[i].key = -1; // Marca posições como vazias
 
             break;
 
