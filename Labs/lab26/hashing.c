@@ -32,8 +32,16 @@ unsigned long djb2(unsigned char *str) {
     return hash;
 }
 
+/**
+ * Cria uma tabela hash com o tamanho dado
+ * 
+ * @param maxSize tamanho da tabela hash
+ * 
+ * @return 1) NULL, caso falhe em alocar memória para tabela
+ * @return 2) T, apontador para tabela hash
+ */
 tuple* createTable(unsigned long maxSize) {
-    tuple *T = malloc(maxSize * sizeof(tuple));
+    tuple *T = malloc(2 * maxSize * sizeof(tuple));
     if(!T)
         return NULL;
     return T;
