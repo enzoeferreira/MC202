@@ -91,7 +91,7 @@ hashTable* createTable(unsigned long maxSize) {
  * @return 1) 0, caso string já esteja na tabela
  * @return 2) 1, caso string seja inserida na tabela
  */
-short int insertString(hashTable* T, unsigned char* str, unsigned long timestamp) {
+short int insertString(hashTable* T, unsigned char* str, long timestamp) {
     unsigned long count = 0;
     unsigned long hash = hashing(T, str, count);
     while(T->array[hash].key != -1) {
@@ -105,7 +105,7 @@ short int insertString(hashTable* T, unsigned char* str, unsigned long timestamp
     if(timestamp == -1)
         T->array[hash].timestamp = T->timestamp++;
     else
-        T->array[hash].timestamp = timestamp;
+        T->array[hash].timestamp = (unsigned long)timestamp;
 
     T->size++;
     return 1;
@@ -196,7 +196,7 @@ void print(hashTable* T) {
 
 int main() {
     unsigned short existingTable = 0;
-    unsigned long maxSize, count, timestamp;
+    unsigned long maxSize;
     char cmd, string[MAXSTRING];
     hashTable *T;
 
@@ -221,25 +221,25 @@ int main() {
                 getchar();
                 if(T->size > (0.7*T->maxSize)) // Tabela está ocupando mais de 70% do espaço
                     T = updateTable(T);
-                insertString(T, string, -1);
+                insertString(T, (unsigned char *)string, -1);
             }
             break;
 
             case 'r': { // Remove string da tabela hash
                 scanf("%[^\n]", string);
                 getchar();
-                removeString(T, string);
+                removeString(T, (unsigned char *)string);
             }
             break;
 
             case 'b': { // Imprime a timestamp da string
                 scanf("%[^\n]", string);
                 getchar();
-                timestamp = searchString(T, string);
+                long timestamp = searchString(T, (unsigned char *)string);
                 if(timestamp == -1) // String não encontrada
                     printf("[%s] nao esta na tabela\n", string);
                 else
-                    printf("[%s] esta na tabela, timestamp %d\n", string, timestamp);
+                    printf("[%s] esta na tabela, timestamp %li\n", string, timestamp);
             }
             break;
 
@@ -253,6 +253,8 @@ int main() {
     }
 
     // Libera memória alocada
-    free(T->array);
-    free(T);
+    if(existingTable) {
+        free(T->array);
+        free(T);
+    }
 }
