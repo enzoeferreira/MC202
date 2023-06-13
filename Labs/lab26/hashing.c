@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAXSTRING 101
+#define MAXSTRING 251
 #define INITIALTABLESIZE 128
 
 struct triplet {
@@ -75,6 +75,7 @@ int main() {
 
             case 'i':
             printf("INSERINDO cadeia na tabela hash\n");
+
             break;
 
             case 'r':
