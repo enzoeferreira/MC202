@@ -12,7 +12,13 @@ struct triplet {
 };
 typedef struct triplet triplet;
 
-unsigned long sdbm(unsigned char *str) {
+struct hashTable {
+    triplet *array;
+    unsigned long size, maxSize, timestamp;
+};
+typedef struct hashTable hashTable;
+
+unsigned long sdbm(unsigned char* str) {
     unsigned int size = strlen((const char *)str);
     unsigned int hash = 0;
 	unsigned int i = 0;
@@ -23,7 +29,7 @@ unsigned long sdbm(unsigned char *str) {
 	return hash;
 }
 
-unsigned long djb2(unsigned char *str) {
+unsigned long djb2(unsigned char* str) {
     unsigned long hash = 5381;
     int c;
 
@@ -31,6 +37,10 @@ unsigned long djb2(unsigned char *str) {
     hash = ((hash << 5) + hash) ^ c; // hash * 33 XOR c
 
     return hash;
+}
+
+unsigned long hashing(hashTable* T, unsigned char* str, unsigned long* count) {
+    return (djb2(str) + (*count) * sdbm(str)) % T->maxSize;
 }
 
 /**
@@ -41,18 +51,26 @@ unsigned long djb2(unsigned char *str) {
  * @return 1) NULL, caso falhe em alocar memória para tabela
  * @return 2) T, apontador para tabela hash
  */
-triplet* createTable(unsigned long maxSize) {
-    triplet *T = malloc(maxSize * sizeof(triplet));
+hashTable* createTable(unsigned long maxSize) {
+    hashTable *T = malloc(sizeof(hashTable));
     if(!T)
         return NULL;
+    triplet *array = malloc(maxSize * sizeof(triplet));
+    if(!array)
+        return NULL;
+    
+    T->array = array;
+    T->size = 0;
+    T->maxSize = maxSize;
+    T->timestamp = 0;
     return T;
 }
 
 int main() {
     unsigned short existingTable = 0;
-    unsigned long size, maxSize, timestamp;
-    char cmd;
-    triplet *T;
+    unsigned long maxSize, count;
+    char cmd, string[MAXSTRING];
+    hashTable *T;
 
     cmd = getchar();
     while(cmd != 'f') {
@@ -61,21 +79,24 @@ int main() {
         switch(cmd) {
             case 'c':
             printf("CRIANDO tabela hash\n");
-            if(existingTable)
+            if(existingTable) {
+                free(T->array);
                 free(T);
+            }
             scanf("%lu", &maxSize);
             T = createTable(maxSize);
-            size = 0;
-            existingTable = 1;
-            timestamp = 0;
             for(int i = 0; i < maxSize; i++)
-                T[i].key = -1; // Marca posições como vazias
+                T->array[i].key = -1; // Marca posições como vazias
+            for(int i = 0; i < maxSize; i++)
+                printf("posicao %d: %d\n", i, T->array[i].key);
 
             break;
 
             case 'i':
             printf("INSERINDO cadeia na tabela hash\n");
-
+            scanf("%[^\n]", string);
+            count = 0;
+            printf("%d", hashing(T, string, &count));
             break;
 
             case 'r':
