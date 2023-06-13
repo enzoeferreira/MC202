@@ -86,7 +86,7 @@ hashTable* createTable(unsigned long maxSize) {
  * @return 1) 0, caso cadeia já esteja na tabela
  * @return 2) 1, caso cadeia seja inserida na tabela
  */
-short int insert(hashTable* T, unsigned char* str) {
+short int insertString(hashTable* T, unsigned char* str) {
     unsigned long count = 0;
     unsigned long hash = hashing(T, str, count);
     while(T->array[hash].key != -1) {
@@ -101,6 +101,28 @@ short int insert(hashTable* T, unsigned char* str) {
 }
 
 /**
+ * Remove uma string da tabela hash
+ * 
+ * @param T tabela hash
+ * @param str string a ser removida
+ * 
+ * @return 1) 0, caso string não seja encontrada
+ * @return 2) 1, caso string foi encontrada e removida
+ */
+short int removeString(hashTable* T, unsigned char* str) {
+    unsigned long count = 0;
+    unsigned long hash = hashing(T, str, count);
+    while(T->array[hash].key != -1) {
+        if(!strcmp(T->array[hash].string, str)) {  // String encontrada
+            T->array[hash].key = -1; // Marca posição como vazia
+            return 1;
+        }
+        hash = hashing(T, str, ++count);
+    }
+    return 0;
+}
+
+/**
  * Procura na tabela de hash por uma string, retornando sua timestamp caso encontre
  * 
  * @param T tabela de hash
@@ -109,7 +131,7 @@ short int insert(hashTable* T, unsigned char* str) {
  * @return 1) -1, caso a string não esteja na tabela
  * @return 2) timestamp da string
  */
-unsigned long search(hashTable* T, unsigned char* str) {
+unsigned long searchString(hashTable* T, unsigned char* str) {
     unsigned long count = 0;
     unsigned long hash = hashing(T, str, count);
     while(T->array[hash].key != -1) {
@@ -163,21 +185,23 @@ int main() {
             case 'i': { // Inserção de cadeia na tabela hash
                 scanf("%[^\n]", string);
                 getchar();
-                short int unique = insert(T, string);
+                short int unique = insertString(T, string);
                 if(!unique)
                     printf("\tELEMENTO REPETIDO.\n");
             }
             break;
 
             case 'r': { // Remove cadeia da tabela hash
-
+                scanf("%[^\n]", string);
+                getchar();
+                removeString(T, string);
             }
             break;
 
             case 'b': { // Imprime a timestamp da cadeia
                 scanf("%[^\n]", string);
                 getchar();
-                timestamp = search(T, string);
+                timestamp = searchString(T, string);
                 if(timestamp == -1) // String não encontrada
                     printf("[%s] nao esta na tabela\n", string);
                 else
