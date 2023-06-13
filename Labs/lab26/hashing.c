@@ -111,6 +111,15 @@ short int insertString(hashTable* T, unsigned char* str, unsigned long timestamp
     return 1;
 }
 
+/**
+ * Cria uma tabela de hashing nova com o dobro do tamanho da anterior
+ * Faz a cópia de todos os elementos, mantendo a timestamp anterior
+ * 
+ * @param T tabela de hashing a ser atualizada
+ * 
+ * @return 1) NULL, caso não seja possivel alocar espaço para tabela nova
+ * @return 2) newT, nova tabela de hash com o dobro do tamanho
+ */
 hashTable* updateTable(hashTable* T) {
     hashTable *newT = createTable(2*T->maxSize);
     if(!newT)
