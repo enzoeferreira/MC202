@@ -40,15 +40,15 @@ unsigned long djb2(unsigned char* str) {
 }
 
 /**
- * Utiliza sondagem com incremento por hashing dupla para calcular o hash de uma cadeia
+ * Utiliza sondagem com incremento por hashing dupla para calcular o hash de uma string
  * h1: djb2
  * h2: sdbm
  * 
  * @param T tabela hash
- * @param str cadeia que entrará na função de hashing
+ * @param str string que entrará na função de hashing
  * @param count contagem de colisões
  * 
- * @return hash da cadeia
+ * @return hash da string
  */
 unsigned long hashing(hashTable* T, unsigned char* str, unsigned long count) {
     return ((djb2(str) + (count * sdbm(str))) % T->maxSize);
@@ -78,13 +78,13 @@ hashTable* createTable(unsigned long maxSize) {
 }
 
 /**
- * Insere uma cadeia na tabela hash
+ * Insere uma string na tabela hash
  * 
  * @param T tabela hash
- * @param str cadeia a ser adicionada
+ * @param str string a ser adicionada
  * 
- * @return 1) 0, caso cadeia já esteja na tabela
- * @return 2) 1, caso cadeia seja inserida na tabela
+ * @return 1) 0, caso string já esteja na tabela
+ * @return 2) 1, caso string seja inserida na tabela
  */
 short int insertString(hashTable* T, unsigned char* str) {
     unsigned long count = 0;
@@ -182,23 +182,21 @@ int main() {
             }
             break;
 
-            case 'i': { // Inserção de cadeia na tabela hash
+            case 'i': { // Inserção de string na tabela hash
                 scanf("%[^\n]", string);
                 getchar();
-                short int unique = insertString(T, string);
-                if(!unique)
-                    printf("\tELEMENTO REPETIDO.\n");
+                insertString(T, string);
             }
             break;
 
-            case 'r': { // Remove cadeia da tabela hash
+            case 'r': { // Remove string da tabela hash
                 scanf("%[^\n]", string);
                 getchar();
                 removeString(T, string);
             }
             break;
 
-            case 'b': { // Imprime a timestamp da cadeia
+            case 'b': { // Imprime a timestamp da string
                 scanf("%[^\n]", string);
                 getchar();
                 timestamp = searchString(T, string);
