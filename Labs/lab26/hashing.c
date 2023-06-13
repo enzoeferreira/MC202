@@ -86,11 +86,12 @@ hashTable* createTable(unsigned long maxSize) {
  * 
  * @param T tabela hash
  * @param str string a ser adicionada
+ * @param timestamp timestamp a ser adicionada ou -1 caso vá usar a da tabela
  * 
  * @return 1) 0, caso string já esteja na tabela
  * @return 2) 1, caso string seja inserida na tabela
  */
-short int insertString(hashTable* T, unsigned char* str) {
+short int insertString(hashTable* T, unsigned char* str, unsigned long timestamp) {
     unsigned long count = 0;
     unsigned long hash = hashing(T, str, count);
     while(T->array[hash].key != -1) {
@@ -100,7 +101,12 @@ short int insertString(hashTable* T, unsigned char* str) {
     }
     T->array[hash].key = 0;
     strcpy((char *)T->array[hash].string, (char *)str);
-    T->array[hash].timestamp = T->timestamp++;
+
+    if(timestamp == -1)
+        T->array[hash].timestamp = T->timestamp++;
+    else
+        T->array[hash].timestamp = timestamp;
+
     T->size++;
     return 1;
 }
@@ -111,7 +117,7 @@ hashTable* updateTable(hashTable* T) {
         return NULL;
     for(unsigned int i = 0; i < T->maxSize; i++) {
         if(T->array[i].key != -1)
-            insertString(newT, T->array[i].string);
+            insertString(newT, T->array[i].string, T->array[i].timestamp);
     }
     free(T->array);
     free(T);
@@ -205,7 +211,7 @@ int main() {
                 getchar();
                 if(T->size > (0.7*T->maxSize)) // Tabela está ocupando mais de 70% do espaço
                     T = updateTable(T);
-                insertString(T, string);
+                insertString(T, string, -1);
             }
             break;
 
