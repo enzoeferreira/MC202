@@ -100,6 +100,17 @@ short int insert(hashTable* T, unsigned char* str) {
     return 1;
 }
 
+unsigned long search(hashTable* T, unsigned char* str) {
+    unsigned long count = 0;
+    unsigned long hash = hashing(T, str, count);
+    while(T->array[hash].key != -1) {
+        if(!strcmp(T->array[hash].string, str)) // String encontrada
+            return T->array[hash].timestamp;
+        hash = hashing(T, str, ++count);
+    }
+    return -1; // String não encontrada
+}
+
 /**
  * Printa a tabela hash no formato:
  * 1) ['pos'] vazio
@@ -118,7 +129,7 @@ void print(hashTable* T) {
 
 int main() {
     unsigned short existingTable = 0;
-    unsigned long maxSize, count;
+    unsigned long maxSize, count, timestamp;
     char cmd, string[MAXSTRING];
     hashTable *T;
 
@@ -155,7 +166,13 @@ int main() {
             break;
 
             case 'b': { // Imprime a timestamp da cadeia
-
+                scanf("%[^\n]", string);
+                getchar();
+                timestamp = search(T, string);
+                if(timestamp == -1) // String não encontrada
+                    printf("[%s] nao esta na tabela\n", string);
+                else
+                    printf("[%s] esta na tabela, timestamp %d\n", string, timestamp);
             }
             break;
 
