@@ -3,6 +3,7 @@
 #include <string.h>
 
 #define MAXSTRING 101
+#define INITIALTABLESIZE 128
 
 struct tuple {
     unsigned char string[MAXSTRING];
@@ -31,8 +32,18 @@ unsigned long djb2(unsigned char *str) {
     return hash;
 }
 
+tuple* createTable(unsigned long maxSize) {
+    tuple *T = malloc(maxSize * sizeof(tuple));
+    if(!T)
+        return NULL;
+    return T;
+}
+
 int main() {
+    unsigned short existingTable = 0;
+    unsigned long size, maxSize, timestamp;
     char cmd;
+    tuple *T;
 
     cmd = getchar();
     while(cmd != 'f') {
@@ -41,6 +52,14 @@ int main() {
         switch(cmd) {
             case 'c':
             printf("CRIANDO tabela hash\n");
+            if(existingTable)
+                free(T);
+            scanf("%lu", &maxSize);
+            T = createTable(maxSize);
+            size = 0;
+            existingTable = 1;
+            timestamp = 0;
+
             break;
 
             case 'i':
@@ -56,6 +75,7 @@ int main() {
             break;
         }
 
+        free(T);
         cmd = getchar();
     }
 }
