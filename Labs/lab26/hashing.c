@@ -100,6 +100,15 @@ short int insert(hashTable* T, unsigned char* str) {
     return 1;
 }
 
+/**
+ * Procura na tabela de hash por uma string, retornando sua timestamp caso encontre
+ * 
+ * @param T tabela de hash
+ * @param str string a ser encontrada
+ * 
+ * @return 1) -1, caso a string não esteja na tabela
+ * @return 2) timestamp da string
+ */
 unsigned long search(hashTable* T, unsigned char* str) {
     unsigned long count = 0;
     unsigned long hash = hashing(T, str, count);
