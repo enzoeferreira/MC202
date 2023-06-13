@@ -5,11 +5,12 @@
 #define MAXSTRING 101
 #define INITIALTABLESIZE 128
 
-struct tuple {
+struct triplet {
     unsigned char string[MAXSTRING];
     unsigned long timestamp;
+    long key;
 };
-typedef struct tuple tuple;
+typedef struct triplet triplet;
 
 unsigned long sdbm(unsigned char *str) {
     unsigned int size = strlen((const char *)str);
@@ -33,15 +34,15 @@ unsigned long djb2(unsigned char *str) {
 }
 
 /**
- * Cria uma tabela hash com o tamanho dado
+ * Cria uma tabela hash de triplas com o tamanho dado
  * 
  * @param maxSize tamanho da tabela hash
  * 
  * @return 1) NULL, caso falhe em alocar memória para tabela
  * @return 2) T, apontador para tabela hash
  */
-tuple* createTable(unsigned long maxSize) {
-    tuple *T = malloc(2 * maxSize * sizeof(tuple));
+triplet* createTable(unsigned long maxSize) {
+    triplet *T = malloc(maxSize * sizeof(triplet));
     if(!T)
         return NULL;
     return T;
@@ -51,7 +52,7 @@ int main() {
     unsigned short existingTable = 0;
     unsigned long size, maxSize, timestamp;
     char cmd;
-    tuple *T;
+    triplet *T;
 
     cmd = getchar();
     while(cmd != 'f') {
