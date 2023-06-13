@@ -74,6 +74,10 @@ hashTable* createTable(unsigned long maxSize) {
     T->size = 0;
     T->maxSize = maxSize;
     T->timestamp = 0;
+
+    for(unsigned long i = 0; i < maxSize; i++)
+                    T->array[i].key = -1; // Marca posições como vazias
+                    
     return T;
 }
 
@@ -90,15 +94,28 @@ short int insertString(hashTable* T, unsigned char* str) {
     unsigned long count = 0;
     unsigned long hash = hashing(T, str, count);
     while(T->array[hash].key != -1) {
-        if(!strcmp(T->array[hash].string, str)) // String encontrada
+        if(!strcmp((const char *)T->array[hash].string, (const char *)str)) // String encontrada
             return 0;
         hash = hashing(T, str, ++count);
     }
     T->array[hash].key = 0;
-    strcpy(T->array[hash].string, str);
+    strcpy((char *)T->array[hash].string, (char *)str);
     T->array[hash].timestamp = T->timestamp++;
     T->size++;
     return 1;
+}
+
+hashTable* updateTable(hashTable* T) {
+    hashTable *newT = createTable(2*T->maxSize);
+    if(!newT)
+        return NULL;
+    for(unsigned int i = 0; i < T->maxSize; i++) {
+        if(T->array[i].key != -1)
+            insertString(newT, T->array[i].string);
+    }
+    free(T->array);
+    free(T);
+    return newT;
 }
 
 /**
@@ -114,7 +131,7 @@ short int removeString(hashTable* T, unsigned char* str) {
     unsigned long count = 0;
     unsigned long hash = hashing(T, str, count);
     while(T->array[hash].key != -1) {
-        if(!strcmp(T->array[hash].string, str)) {  // String encontrada
+        if(!strcmp((const char *)T->array[hash].string, (const char *)str)) {  // String encontrada
             T->array[hash].key = -1; // Marca posição como vazia
             T->size--;
             return 1;
@@ -133,12 +150,12 @@ short int removeString(hashTable* T, unsigned char* str) {
  * @return 1) -1, caso a string não esteja na tabela
  * @return 2) timestamp da string
  */
-unsigned long searchString(hashTable* T, unsigned char* str) {
+long searchString(hashTable* T, unsigned char* str) {
     unsigned long count = 0;
     unsigned long hash = hashing(T, str, count);
     while(T->array[hash].key != -1) {
-        if(!strcmp(T->array[hash].string, str)) // String encontrada
-            return T->array[hash].timestamp;
+        if(!strcmp((const char *)T->array[hash].string, (const char *)str)) // String encontrada
+            return (long)T->array[hash].timestamp;
         hash = hashing(T, str, ++count);
     }
     return -1; // String não encontrada
@@ -152,11 +169,12 @@ unsigned long searchString(hashTable* T, unsigned char* str) {
  * @param T tabela hash
  */
 void print(hashTable* T) {
-    for(int i = 0; i < T->maxSize; i++) {
+    for(unsigned long i = 0; i < T->maxSize; i++) {
         if(T->array[i].key == -1)
-            printf("[%d] vazio\n", i);
+            printf("[%lu] vazio\n", i);
         else
-            printf("[%d] %s (%d): t = %d\n", i, T->array[i].string, T->array[i].key, T->array[i].timestamp);
+            printf("[%lu] %s (%li): t = %lu\n", i, T->array[i].string, T->array[i].key,
+                                                  T->array[i].timestamp);
     }
 }
 
@@ -179,14 +197,14 @@ int main() {
                 scanf("%lu", &maxSize);
                 getchar();
                 T = createTable(maxSize);
-                for(int i = 0; i < maxSize; i++)
-                    T->array[i].key = -1; // Marca posições como vazias
             }
             break;
 
             case 'i': { // Inserção de string na tabela hash
                 scanf("%[^\n]", string);
                 getchar();
+                if(T->size > (0.7*T->maxSize)) // Tabela está ocupando mais de 70% do espaço
+                    T = updateTable(T);
                 insertString(T, string);
             }
             break;
