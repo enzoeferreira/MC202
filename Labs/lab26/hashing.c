@@ -115,6 +115,7 @@ hashTable* updateTable(hashTable* T) {
     hashTable *newT = createTable(2*T->maxSize);
     if(!newT)
         return NULL;
+    newT->timestamp = T->timestamp; // Continua timestamp
     for(unsigned int i = 0; i < T->maxSize; i++) {
         if(T->array[i].key != -1)
             insertString(newT, T->array[i].string, T->array[i].timestamp);
