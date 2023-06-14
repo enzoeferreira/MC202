@@ -8,7 +8,7 @@
 struct triplet {
     unsigned char string[MAXSTRING];
     unsigned long timestamp;
-    long key;
+    short status;
 };
 typedef struct triplet triplet;
 
@@ -74,7 +74,7 @@ hashTable* createTable(unsigned long maxSize) {
     T->timestamp = 0;
 
     for(unsigned long i = 0; i < maxSize; i++)
-                    T->array[i].key = -1; // Marca posições como vazias
+                    T->array[i].status = -1; // Marca posições como vazias
                     
     return T;
 }
@@ -92,12 +92,12 @@ hashTable* createTable(unsigned long maxSize) {
 short int insertString(hashTable* T, unsigned char* str, long timestamp) {
     unsigned long count = 0;
     unsigned long hash = hashing(T, str, count);
-    while(T->array[hash].key != -1) {
+    while(T->array[hash].status != -1) {
         if(!strcmp((const char *)T->array[hash].string, (const char *)str)) // String encontrada
             return 0;
         hash = hashing(T, str, ++count);
     }
-    T->array[hash].key = 0;
+    T->array[hash].status = 0;
     strcpy((char *)T->array[hash].string, (char *)str);
 
     if(timestamp == -1)
@@ -124,7 +124,7 @@ hashTable* updateTable(hashTable* T) {
         return NULL;
     newT->timestamp = T->timestamp; // Continua timestamp
     for(unsigned int i = 0; i < T->maxSize; i++) {
-        if(T->array[i].key != -1)
+        if(T->array[i].status != -1)
             insertString(newT, T->array[i].string, T->array[i].timestamp);
     }
     free(T->array);
@@ -144,9 +144,9 @@ hashTable* updateTable(hashTable* T) {
 short int removeString(hashTable* T, unsigned char* str) {
     unsigned long count = 0;
     unsigned long hash = hashing(T, str, count);
-    while(T->array[hash].key != -1) {
+    while(T->array[hash].status != -1) {
         if(!strcmp((const char *)T->array[hash].string, (const char *)str)) {  // String encontrada
-            T->array[hash].key = -1; // Marca posição como vazia
+            T->array[hash].status = -1; // Marca posição como vazia
             T->size--;
             return 1;
         }
@@ -167,7 +167,7 @@ short int removeString(hashTable* T, unsigned char* str) {
 long searchString(hashTable* T, unsigned char* str) {
     unsigned long count = 0;
     unsigned long hash = hashing(T, str, count);
-    while(T->array[hash].key != -1) {
+    while(T->array[hash].status != -1) {
         if(!strcmp((const char *)T->array[hash].string, (const char *)str)) // String encontrada
             return (long)T->array[hash].timestamp;
         hash = hashing(T, str, ++count);
@@ -178,16 +178,16 @@ long searchString(hashTable* T, unsigned char* str) {
 /**
  * Printa a tabela hash no formato:
  * 1) ['pos'] vazio
- * 2) ['pos'] 'string' ('key'): t = 'timestamp'
+ * 2) ['pos'] 'string' ('status'): t = 'timestamp'
  * 
  * @param T tabela hash
  */
 void print(hashTable* T) {
     for(unsigned long i = 0; i < T->maxSize; i++) {
-        if(T->array[i].key == -1)
+        if(T->array[i].status == -1)
             printf("[%lu] vazio\n", i);
         else
-            printf("[%lu] %s (%li): t = %lu\n", i, T->array[i].string, T->array[i].key,
+            printf("[%lu] %s (%li): t = %lu\n", i, T->array[i].string, T->array[i].status,
                                                   T->array[i].timestamp);
     }
 }
