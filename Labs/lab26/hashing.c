@@ -186,7 +186,7 @@ void print(hashTable* T) {
         if(T->array[i].status == -1)
             printf("[%lu] vazio\n", i);
         else
-            printf("[%lu] %s (%li): t = %lu\n", i, T->array[i].string, T->array[i].status,
+            printf("[%lu] %s (%hi): t = %lu\n", i, T->array[i].string, T->array[i].status,
                                                   T->array[i].timestamp);
     }
 }
