@@ -3,7 +3,6 @@
 #include <string.h>
 
 #define MAXSTRING 251
-#define INITIALTABLESIZE 128
 
 struct triplet {
     unsigned char string[MAXSTRING];
