@@ -3,6 +3,7 @@
 
 struct node {
     long key, priority;
+    node *left, *right, *parent;
 };
 typedef struct node node;
 
