@@ -198,7 +198,7 @@ int main() {
     hashTable *T;
 
     cmd = getchar();
-    while(cmd != 'f') {
+    while(cmd != 'f' && cmd != EOF) {
         getchar(); // Retira espaço
 
         switch(cmd) {
