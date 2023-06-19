@@ -81,6 +81,31 @@ hashTable* createTable(unsigned long maxSize) {
 }
 
 /**
+ * Libera toda a memória alocada por uma tabela hash, seu array e os elementos VAZIOS de seu array
+ * 
+ * @param T tabela hash
+ */
+void freeEmpty(hashTable* T) {
+    for(unsigned int i = 0; i < T->maxSize; i++)
+        if(T->array[i]->status == -1)
+            free(T->array[i]);
+    free(T->array);
+    free(T);
+}
+
+/**
+ * Libera toda a memória alocada por uma tabela hash, seu array e os elementos de seu array
+ * 
+ * @param T tabela hash
+ */
+void freeTable(hashTable* T) {
+    for(unsigned int i = 0; i < T->maxSize; i++)
+            free(T->array[i]);
+    free(T->array);
+    free(T);
+}
+
+/**
  * Insere uma string na tabela hash
  * 
  * @param T tabela hash
@@ -124,12 +149,18 @@ hashTable* updateTable(hashTable* T) {
     if(!newT)
         return NULL;
     newT->timestamp = T->timestamp; // Continua timestamp
+    newT->size = T->size;
     for(unsigned int i = 0; i < T->maxSize; i++) {
-        if(T->array[i]->status != -1)
-            newT->array[i] = T->array[i];
+        if(T->array[i]->status != -1) {
+            unsigned long count = 0;
+            unsigned long hash = hashing(newT, T->array[i]->string, 0);
+            while(newT->array[hash]->status != -1) {
+                hash = hashing(newT, T->array[i]->string, ++count);
+            }
+            newT->array[hash] = T->array[i];
+        }
     }
-    free(T->array);
-    free(T);
+    freeEmpty(T);
     return newT;
 }
 
@@ -184,13 +215,18 @@ long searchString(hashTable* T, unsigned char* str) {
  * @param T tabela hash
  */
 void print(hashTable* T) {
+    unsigned long trueSize = 0;
     for(unsigned long i = 0; i < T->maxSize; i++) {
-        if(T->array[i]->status == -1)
+        if(T->array[i]->status == -1) 
             printf("[%lu] vazio\n", i);
-        else
+        else {
             printf("[%lu] %s (%hi): t = %lu\n", i, T->array[i]->string, T->array[i]->status,
-                                                  T->array[i]->timestamp);
+                                                   T->array[i]->timestamp);
+            trueSize++;
+        }
     }
+    printf("trueSize = %lu, size = %lu, maxSize = %lu, timestamp = %lu\n",
+            trueSize, T->size, T->maxSize, T->timestamp);
 }
 
 int main() {
@@ -205,10 +241,8 @@ int main() {
 
         switch(cmd) {
             case 'c': { // Criação de tabela hash
-                if(existingTable) {
-                    free(T->array);
-                    free(T);
-                }
+                if(existingTable)
+                    freeTable(T);
                 scanf("%lu", &maxSize);
                 getchar();
                 T = createTable(maxSize);
@@ -252,8 +286,6 @@ int main() {
     }
 
     // Libera memória alocada
-    if(existingTable) {
-        free(T->array);
-        free(T);
-    }
+    if(existingTable)
+        freeTable(T);
 }
