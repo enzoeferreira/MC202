@@ -7,12 +7,12 @@
 struct triplet {
     unsigned char string[MAXSTRING];
     unsigned long timestamp;
-    long key;
+    short status;
 };
 typedef struct triplet triplet;
 
 struct hashTable {
-    triplet *array;
+    triplet **array;
     unsigned long size, maxSize, timestamp;
 };
 typedef struct hashTable hashTable;
@@ -63,19 +63,46 @@ hashTable* createTable(unsigned long maxSize) {
     hashTable *T = malloc(sizeof(hashTable));
     if(!T)
         return NULL;
-    triplet *array = malloc(maxSize * sizeof(triplet));
-    if(!array)
-        return NULL;
+    T->array = (triplet**)malloc(maxSize * sizeof(triplet*));
     
-    T->array = array;
     T->size = 0;
     T->maxSize = maxSize;
     T->timestamp = 0;
 
-    for(unsigned long i = 0; i < maxSize; i++)
-                    T->array[i].key = -1; // Marca posições como vazias
+    for(unsigned long i = 0; i < maxSize; i++) {
+        triplet *tripla = malloc(sizeof(triplet));
+        if(!tripla)
+            return NULL;
+        T->array[i] = tripla;
+        T->array[i]->status = -1; // Marca posições como vazias
+    }
                     
     return T;
+}
+
+/**
+ * Libera toda a memória alocada por uma tabela hash, seu array e os elementos VAZIOS de seu array
+ * 
+ * @param T tabela hash
+ */
+void freeEmpty(hashTable* T) {
+    for(unsigned int i = 0; i < T->maxSize; i++)
+        if(T->array[i]->status == -1)
+            free(T->array[i]);
+    free(T->array);
+    free(T);
+}
+
+/**
+ * Libera toda a memória alocada por uma tabela hash, seu array e os elementos de seu array
+ * 
+ * @param T tabela hash
+ */
+void freeTable(hashTable* T) {
+    for(unsigned int i = 0; i < T->maxSize; i++)
+            free(T->array[i]);
+    free(T->array);
+    free(T);
 }
 
 /**
@@ -91,18 +118,18 @@ hashTable* createTable(unsigned long maxSize) {
 short int insertString(hashTable* T, unsigned char* str, long timestamp) {
     unsigned long count = 0;
     unsigned long hash = hashing(T, str, count);
-    while(T->array[hash].key != -1) {
-        if(!strcmp((const char *)T->array[hash].string, (const char *)str)) // String encontrada
+    while(T->array[hash]->status != -1) {
+        if(!strcmp((const char *)T->array[hash]->string, (const char *)str)) // String encontrada
             return 0;
         hash = hashing(T, str, ++count);
     }
-    T->array[hash].key = 0;
-    strcpy((char *)T->array[hash].string, (char *)str);
+    T->array[hash]->status = 0;
+    strcpy((char *)T->array[hash]->string, (char *)str);
 
     if(timestamp == -1)
-        T->array[hash].timestamp = T->timestamp++;
+        T->array[hash]->timestamp = T->timestamp++;
     else
-        T->array[hash].timestamp = (unsigned long)timestamp;
+        T->array[hash]->timestamp = (unsigned long)timestamp;
 
     T->size++;
     return 1;
@@ -122,12 +149,18 @@ hashTable* updateTable(hashTable* T) {
     if(!newT)
         return NULL;
     newT->timestamp = T->timestamp; // Continua timestamp
+    newT->size = T->size;
     for(unsigned int i = 0; i < T->maxSize; i++) {
-        if(T->array[i].key != -1)
-            insertString(newT, T->array[i].string, T->array[i].timestamp);
+        if(T->array[i]->status != -1) {
+            unsigned long count = 0;
+            unsigned long hash = hashing(newT, T->array[i]->string, 0);
+            while(newT->array[hash]->status != -1) {
+                hash = hashing(newT, T->array[i]->string, ++count);
+            }
+            newT->array[hash] = T->array[i];
+        }
     }
-    free(T->array);
-    free(T);
+    freeEmpty(T);
     return newT;
 }
 
@@ -143,9 +176,9 @@ hashTable* updateTable(hashTable* T) {
 short int removeString(hashTable* T, unsigned char* str) {
     unsigned long count = 0;
     unsigned long hash = hashing(T, str, count);
-    while(T->array[hash].key != -1) {
-        if(!strcmp((const char *)T->array[hash].string, (const char *)str)) {  // String encontrada
-            T->array[hash].key = -1; // Marca posição como vazia
+    while(T->array[hash]->status != -1) {
+        if(!strcmp((const char *)T->array[hash]->string, (const char *)str)) {  // String encontrada
+            T->array[hash]->status = -1; // Marca posição como vazia
             T->size--;
             return 1;
         }
@@ -166,9 +199,9 @@ short int removeString(hashTable* T, unsigned char* str) {
 long searchString(hashTable* T, unsigned char* str) {
     unsigned long count = 0;
     unsigned long hash = hashing(T, str, count);
-    while(T->array[hash].key != -1) {
-        if(!strcmp((const char *)T->array[hash].string, (const char *)str)) // String encontrada
-            return (long)T->array[hash].timestamp;
+    while(T->array[hash]->status != -1) {
+        if(!strcmp((const char *)T->array[hash]->string, (const char *)str)) // String encontrada
+            return (long)T->array[hash]->timestamp;
         hash = hashing(T, str, ++count);
     }
     return -1; // String não encontrada
@@ -177,18 +210,23 @@ long searchString(hashTable* T, unsigned char* str) {
 /**
  * Printa a tabela hash no formato:
  * 1) ['pos'] vazio
- * 2) ['pos'] 'string' ('key'): t = 'timestamp'
+ * 2) ['pos'] 'string' ('status'): t = 'timestamp'
  * 
  * @param T tabela hash
  */
 void print(hashTable* T) {
+    unsigned long trueSize = 0;
     for(unsigned long i = 0; i < T->maxSize; i++) {
-        if(T->array[i].key == -1)
+        if(T->array[i]->status == -1) 
             printf("[%lu] vazio\n", i);
-        else
-            printf("[%lu] %s (%li): t = %lu\n", i, T->array[i].string, T->array[i].key,
-                                                  T->array[i].timestamp);
+        else {
+            printf("[%lu] %s (%hi): t = %lu\n", i, T->array[i]->string, T->array[i]->status,
+                                                   T->array[i]->timestamp);
+            trueSize++;
+        }
     }
+    printf("trueSize = %lu, size = %lu, maxSize = %lu, timestamp = %lu\n",
+            trueSize, T->size, T->maxSize, T->timestamp);
 }
 
 int main() {
@@ -203,10 +241,8 @@ int main() {
 
         switch(cmd) {
             case 'c': { // Criação de tabela hash
-                if(existingTable) {
-                    free(T->array);
-                    free(T);
-                }
+                if(existingTable)
+                    freeTable(T);
                 scanf("%lu", &maxSize);
                 getchar();
                 T = createTable(maxSize);
@@ -250,8 +286,6 @@ int main() {
     }
 
     // Libera memória alocada
-    if(existingTable) {
-        free(T->array);
-        free(T);
-    }
+    if(existingTable)
+        freeTable(T);
 }
