@@ -118,6 +118,13 @@ void swap(heap* H, unsigned long indexA, unsigned long indexB) {
     return;
 }
 
+/**
+ * Adiciona o elemento no fim do array e vai trocando com o pai até ele estar na posição correta.
+ * 
+ * @param H Heap que contém array onde elemento será adicionado
+ * @param key Key do elemento a ser adicionado
+ * @param priority Prioridade do elemento a ser adicionado
+ */
 void insertHeap(heap* H, long key, long priority) {
     // Insere novo nó no fim
     H->array[H->size].key = key;
