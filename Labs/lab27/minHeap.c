@@ -11,6 +11,7 @@ typedef struct node node;
 struct heap {
     long size, maxSize;
     node *array;
+    node *orderArray;
 };
 typedef struct heap heap;
 
@@ -230,5 +231,6 @@ int main() {
         }
         cmd = getchar(); // Recebe próximo comando
     }
+
     killHeap(H);
 }
