@@ -12,6 +12,7 @@ struct heap {
 };
 typedef struct heap heap;
 
+
 /**
  * Cria um heap e um array com espaço para 'maxSize' nós
  * 
@@ -35,6 +36,26 @@ heap* createHeap(long maxSize) {
     return H;
 }
 
+heap* expandHeap(heap* H) {
+    // Criação do novo Heap com o dobro do tamanho no array
+    heap *newH = malloc(sizeof(heap));
+    if(!newH)
+        return NULL;
+    node *newArray = malloc((2*H->maxSize) * sizeof(node));
+    if(!newArray)
+        return NULL;
+
+    newH->array = newArray;
+    newH->size = H->size;
+    newH->maxSize = 2*H->maxSize;
+
+    // Cópia dos elementos
+    for(long int i = 0; i < H->maxSize - 1; i++)
+        newH->array[i] = H->array[i];
+
+    return newH;
+}
+
 /**
  * Libera a memória alocada para um heap
  * 
@@ -46,8 +67,52 @@ void killHeap(heap* H) {
     return;
 }
 
+/**
+ * @param index Índice que quer encontra o pai
+ * 
+ * @return Índice do pai
+ */
+long parent(long index) {
+    return ((index - 1)/2);
+}
+
+void swap(heap* H, unsigned long indexA, unsigned long indexB) {
+    node aux;
+    aux.key = H->array[indexA].key;
+    aux.priority = H->array[indexA].priority;
+    H->array[indexA] = H->array[indexB];
+    H->array[indexB] = aux;
+    return;
+}
+
+void insertHeap(heap* H, long key, long priority) {
+    // Insere novo nó no fim
+    H->array[H->size].key = key;
+    H->array[H->size].priority = priority;
+
+    unsigned long index = H->size;
+    unsigned long parentIndex = parent(index);
+
+    if(H->size == H->maxSize)
+        H = expandHeap(H);
+    while(parentIndex >= 0 && H->array[index].priority < H->array[parentIndex].priority) {
+        swap(H, parentIndex, index);
+        index = parentIndex;
+        parentIndex = parent(index);
+    }
+    H->size++;
+
+    return;
+}
+
+void print(heap* H) {
+    for(unsigned long i = 0; i < H->size; i++)
+        printf("(%lu,%lu) ", H->array[i].key, H->array[i].priority);
+    printf("\n");
+}
+
 int main() {
-    heap *H;
+    heap *H = malloc(sizeof(heap));
     short existingHeap = 0;
     long inMaxSize, inKey, inPriority;
     char cmd;
@@ -66,6 +131,7 @@ int main() {
 
             case 'i': {
                 scanf(" %li %li", &inKey, &inPriority);
+                insertHeap(H, inKey, inPriority);
             }
             break;
 
@@ -76,6 +142,12 @@ int main() {
 
             case 'm': {
 
+            }
+            break;
+
+            case 'p': {
+                // Apenas para debug
+                print(H);
             }
             break;
         }
