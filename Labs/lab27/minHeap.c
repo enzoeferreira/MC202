@@ -230,4 +230,5 @@ int main() {
         }
         cmd = getchar(); // Recebe próximo comando
     }
+    killHeap(H);
 }
