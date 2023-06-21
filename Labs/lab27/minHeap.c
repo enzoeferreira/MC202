@@ -50,7 +50,7 @@ heap* expandHeap(heap* H) {
     newH->maxSize = 2*H->maxSize;
 
     // Cópia dos elementos
-    for(long int i = 0; i < H->maxSize - 1; i++)
+    for(long int i = 0; i < H->size; i++)
         newH->array[i] = H->array[i];
 
     return newH;
