@@ -143,6 +143,45 @@ void insertHeap(heap* H, long key, long priority) {
     return;
 }
 
+/**
+ * Certifica-se a partir de 'index' que o array está em minHeap.
+ * 
+ * @param H Heap
+ * @param index Index inicial do minHeapify
+ */
+void minHeapify(heap* H, long index) {
+    long leftIndex = 2*index + 1; 
+    long rightIndex = 2*index + 2;
+    long minimum = index;
+    if(leftIndex < H->size && H->array[leftIndex].priority < H->array[minimum].priority)
+        minimum = leftIndex;
+    if(rightIndex < H->size && H->array[rightIndex].priority < H->array[minimum].priority)
+        minimum = rightIndex;
+    if(index != minimum) {
+        swap(H, index, minimum);
+        minHeapify(H, minimum);
+    }
+
+    return;
+}
+
+/**
+ * Remove o primeiro elemento (mínimo) se existir do Heap, aplicando minHeapify ao realizar a troca.
+ * 
+ * @param H 
+ */
+void removeMin(heap* H) {
+    if(H->size == 0)
+        return;
+
+    // Troca primeiro elemento com último
+    swap(H, 0, H->size - 1);
+    H->size--;
+
+    minHeapify(H, 0); // Aplica minHeapify no primeiro elemento (que foi trocado para a remoção)
+    return;
+}
+
 int main() {
     heap *H = malloc(sizeof(heap));
     short existingHeap = 0;
@@ -170,12 +209,16 @@ int main() {
             break;
 
             case 'r': {
-
+                removeMin(H);
             }
             break;
 
             case 'm': {
-
+                if(H->size == 0)
+                    printf("fila de prioridades vazia\n");
+                else
+                    printf("prioridade minima %li, chave %li\n",
+                            H->array[0].priority, H->array[0].key);
             }
             break;
 
