@@ -12,6 +12,11 @@ struct heap {
 };
 typedef struct heap heap;
 
+/**
+ * Printa 'size' e 'maxSize' de um Heap, além de todos os seus elementos do array
+ * 
+ * @param H Heap a ser printado
+ */
 void print(heap* H) {
     printf("\n==============================");
     printf("\nSize: %li, MaxSize: %li\n", H->size, H->maxSize);
