@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define EXPANSIONFACTOR 2
+
 struct node {
     long key, priority;
 };
@@ -60,18 +62,29 @@ void killHeap(heap* H) {
     return;
 }
 
-heap* expandHeap(heap* H) {
+/**
+ * Cria um novo Heap com 'fator' vezes o tamanho do array anterior.
+ * 'fator' >= 1, se não, comportamento indefinido (provavelmente erro grave na hora da cópia).
+ * Libera a memória alocada pelo outro Heap (e array).
+ * 
+ * @param H Heap a ser expandido
+ * @param factor Fator de expansão
+ * 
+ * @return 1) NULL, caso falhe em alocar espaço para Heap ou array
+ * @return 2) newH, apontador para novo Heap com array expandido
+ */
+heap* expandHeap(heap* H, long factor) {
     // Criação do novo Heap com o dobro do tamanho no array
     heap *newH = malloc(sizeof(heap));
     if(!newH)
         return NULL;
-    node *newArray = malloc((2*H->maxSize) * sizeof(node));
+    node *newArray = malloc((factor*H->maxSize) * sizeof(node));
     if(!newArray)
         return NULL;
 
     newH->array = newArray;
     newH->size = H->size;
-    newH->maxSize = 2*H->maxSize;
+    newH->maxSize = factor*H->maxSize;
 
     // Cópia dos elementos
     for(long int i = 0; i < H->size; i++)
@@ -116,7 +129,6 @@ void insertHeap(heap* H, long key, long priority) {
     return;
 }
 
-
 int main() {
     heap *H = malloc(sizeof(heap));
     short existingHeap = 0;
@@ -138,7 +150,7 @@ int main() {
             case 'i': {
                 scanf(" %li %li", &inKey, &inPriority);
                 if(H->size == H->maxSize)
-                    H = expandHeap(H);
+                    H = expandHeap(H, EXPANSIONFACTOR);
                 insertHeap(H, inKey, inPriority);
             }
             break;
