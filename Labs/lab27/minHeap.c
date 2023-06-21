@@ -102,6 +102,13 @@ long parent(long index) {
     return ((index - 1)/2);
 }
 
+/**
+ * Troca os valores de 'Elemento A' com 'Elemento B'
+ * 
+ * @param H Heap com o array dos elementos
+ * @param indexA Index do elemento A
+ * @param indexB Index do elemento B
+ */
 void swap(heap* H, unsigned long indexA, unsigned long indexB) {
     node aux;
     aux.key = H->array[indexA].key;
