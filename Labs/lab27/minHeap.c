@@ -4,14 +4,13 @@
 #define EXPANSIONFACTOR 2
 
 struct node {
-    long key, priority;
+    long key, priority, timestamp;
 };
 typedef struct node node;
 
 struct heap {
-    long size, maxSize;
+    long size, maxSize, timestamp;
     node *array;
-    node *orderArray;
 };
 typedef struct heap heap;
 
@@ -24,19 +23,9 @@ void print(heap* H) {
     printf("\n==============================");
     printf("\nSize: %li, MaxSize: %li\n", H->size, H->maxSize);
     for(long i = 0; i < H->size; i++)
-        printf("(%lu,%lu) ", H->array[i].key, H->array[i].priority);
-    printf("\n\n");
-    for(long i = 0; i < H->size; i++)
-        printf("(%lu,%lu) ", H->orderArray[i].key, H->orderArray[i].priority);
+        printf("[%lu](%lu,%lu) ", H->array[i].timestamp, H->array[i].key, H->array[i].priority);
     printf("\n==============================");
     printf("\n");
-}
-
-void printOrder(heap* H) {
-    printf("\n\n\n");
-    for(long i = 0; i < H->size; i++)
-        printf("i %lu %lu\n", H->orderArray[i].key, H->orderArray[i].priority);
-    printf("\n\n\n");
 }
 
 /**
@@ -59,9 +48,9 @@ heap* createHeap(long maxSize) {
         return NULL;
     
     H->array = array;
-    H->orderArray = orderArray;
     H->size = 0;
     H->maxSize = maxSize;
+    H->timestamp = 0;
 
     return H;
 }
@@ -73,7 +62,6 @@ heap* createHeap(long maxSize) {
  */
 void killHeap(heap* H) {
     free(H->array);
-    free(H->orderArray);
     free(H);
     return;
 }
@@ -97,20 +85,15 @@ heap* expandHeap(heap* H, long factor) {
     node *newArray = malloc((factor*H->maxSize) * sizeof(node));
     if(!newArray)
         return NULL;
-    node *newOrderArray = malloc((factor*H->maxSize) * sizeof(node));
-    if(!newOrderArray)
-        return NULL;
 
     newH->array = newArray;
-    newH->orderArray = newOrderArray;
     newH->size = H->size;
     newH->maxSize = factor*H->maxSize;
+    newH->timestamp = H->timestamp;
 
     // Cópia dos elementos
     for(long int i = 0; i < H->size; i++) {
         newH->array[i] = H->array[i];
-        if(H->orderArray[i].key != -__LONG_MAX__)
-            newH->orderArray[i] = H->orderArray[i];
     }
     killHeap(H);
     return newH;
@@ -126,16 +109,14 @@ long parent(long index) {
 }
 
 /**
- * Troca os valores de 'Elemento A' com 'Elemento B'
+ * Troca os dados de 'Elemento A' com 'Elemento B'
  * 
  * @param H Heap com o array dos elementos
  * @param indexA Index do elemento A
  * @param indexB Index do elemento B
  */
 void swap(heap* H, unsigned long indexA, unsigned long indexB) {
-    node aux;
-    aux.key = H->array[indexA].key;
-    aux.priority = H->array[indexA].priority;
+    node aux = H->array[indexA];
     H->array[indexA] = H->array[indexB];
     H->array[indexB] = aux;
     return;
@@ -152,9 +133,7 @@ void insertHeap(heap* H, long key, long priority) {
     // Insere novo nó no fim
     H->array[H->size].key = key;
     H->array[H->size].priority = priority;
-    // Insere no fim do array ordenado
-    H->orderArray[H->size].key = key;
-    H->orderArray[H->size].priority = priority;
+    H->array[H->size].timestamp = H->timestamp++;
 
     long index = H->size;
     long parentIndex = parent(index);
@@ -194,66 +173,41 @@ void minHeapify(heap* H, long index) {
 }
 
 /**
- * Encontra o índice no array ordenado do mínimo mais antigo do array
+ * Encontra o índice do mínimo com menor timestamp (mais antigo)
  * 
  * @param H Heap
  * 
- * @return 1) -__LONG_MAX__, caso não encontre (não deveria acontecer)
- * @return 2) i, índice do mínimo mais antigo do array
+ * @return Índice do mínimo mais antigo
  */
-long findMinOrderIndex(heap* H) {
+long findMinimum(heap* H) {
     long minPriority = H->array[0].priority;
+    long minIndex = 0;
+    long minTimestamp = H->array[0].timestamp;
+    for(long int i = 0; i < H->size; i++)
+        if(H->array[i].priority == minPriority && H->array[i].timestamp < minTimestamp) {
+            minTimestamp = H->array[i].timestamp;
+            minIndex = i;
+        }
 
-    long int i = 0;
-    while(i < H->size) {
-        if(H->orderArray[i].priority == minPriority) // Encontrou o mínimo mais antigo
-            return i;
-        i++;
-    }
-
-    return -__LONG_MAX__;
-}
-
-/**
- * Encontra a Key do mínimo mais antigo através do array ordenado
- * 
- * @param H 
- * @param minOrderIndex Índice do mínimo mais antigo do array
- * @return Key do mínimo mais antigo
- */
-long findMinKey(heap* H, long minOrderIndex) {
-    return H->orderArray[minOrderIndex].key;
+    return minIndex;
 }
 
 /**
  * Remove o primeiro elemento (mínimo) se existir do Heap, aplicando minHeapify ao realizar a troca.
  * 
- * @param H 
+ * @param H Heap
  */
 void removeMin(heap* H) {
     if(H->size == 0)
         return;
 
-    long minOrderIndex = findMinOrderIndex(H);
-    long minKey = findMinKey(H, minOrderIndex);
-    long minIndex = 0;
+    long minIndex = findMinimum(H);
 
-    long int i;
-    // Deslocamento para esquerda no array ordenado a partir do elemento removido
-    for(i = minOrderIndex; i < H->size; i++)
-        if(i + 1 < H->size) { // Existe próximo elemento
-            H->orderArray[i] = H->orderArray[i+1];
-        }
-
-    for(i = 0; i < H->size; i++)
-        if(H->array[i].key == minKey) // Encontra index do elemento a ser removido
-            minIndex = i;
-
-    // Troca o mínimo mais antigo com o último elemento
+    // Troca mínimo mais antigo com último
     swap(H, minIndex, H->size - 1);
     H->size--;
 
-    minHeapify(H, minIndex); // Aplica minHeapify no elemento trocado
+    minHeapify(H, minIndex); // Aplica minHeapify no elemento trocado com o mínimo mais antigo
     return;
 }
 
@@ -292,10 +246,9 @@ int main() {
                 if(H->size == 0)
                     printf("fila de prioridades vazia\n");
                 else {
-                    long minOrderIndex = findMinOrderIndex(H);
+                    long minIndex = findMinimum(H);
                     printf("prioridade minima %li, chave %li\n",
-                            H->orderArray[minOrderIndex].priority,
-                            H->orderArray[minOrderIndex].key);
+                        H->array[minIndex].priority, H->array[minIndex].key);
                 }
             }
             break;
@@ -305,14 +258,9 @@ int main() {
                 print(H);
             }
             break;
-
-            case 'o': {
-                // Apenas para debug
-                printOrder(H);
-            }
         }
         cmd = getchar(); // Recebe próximo comando
     }
-
+    
     killHeap(H);
 }
