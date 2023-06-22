@@ -1,18 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define EXPANSIONFACTOR 2
-
-struct node {
-    long key, priority, timestamp;
-};
-typedef struct node node;
-
-struct heap {
-    long size, maxSize, timestamp;
-    node *array;
-};
-typedef struct heap heap;
+#include "minHeap.h"
 
 /**
  * Printa 'size' e 'maxSize' de um Heap, além de todos os seus elementos do array
@@ -203,58 +192,4 @@ void removeMin(heap* H) {
 
     minHeapify(H, minIndex); // Aplica minHeapify no elemento trocado com o mínimo mais antigo
     return;
-}
-
-int main() {
-    heap *H = malloc(sizeof(heap));
-    short existingHeap = 0;
-    long inMaxSize, inKey, inPriority;
-    char cmd;
-
-    cmd = getchar();
-    while(cmd != 't') {
-        switch(cmd) {
-            case 'c': {
-                scanf(" %li", &inMaxSize);
-                if(existingHeap)
-                    killHeap(H);
-                H = createHeap(inMaxSize);
-                existingHeap = 1;
-            }
-            break;
-
-            case 'i': {
-                scanf(" %li %li", &inKey, &inPriority);
-                if(H->size == H->maxSize)
-                    H = expandHeap(H, EXPANSIONFACTOR);
-                insertHeap(H, inKey, inPriority);
-            }
-            break;
-
-            case 'r': {
-                removeMin(H);
-            }
-            break;
-
-            case 'm': {
-                if(H->size == 0)
-                    printf("fila de prioridades vazia\n");
-                else {
-                    long minIndex = findMinimum(H);
-                    printf("prioridade minima %li, chave %li\n",
-                        H->array[minIndex].priority, H->array[minIndex].key);
-                }
-            }
-            break;
-
-            case 'p': {
-                // Apenas para debug
-                print(H);
-            }
-            break;
-        }
-        cmd = getchar(); // Recebe próximo comando
-    }
-    
-    killHeap(H);
 }
