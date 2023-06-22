@@ -43,9 +43,6 @@ heap* createHeap(long maxSize) {
     node *array = malloc(maxSize * sizeof(node));
     if(!array)
         return NULL;
-    node *orderArray = malloc(maxSize * sizeof(node));
-    if(!orderArray)
-        return NULL;
     
     H->array = array;
     H->size = 0;
@@ -92,9 +89,8 @@ heap* expandHeap(heap* H, long factor) {
     newH->timestamp = H->timestamp;
 
     // Cópia dos elementos
-    for(long int i = 0; i < H->size; i++) {
+    for(long int i = 0; i < H->size; i++)
         newH->array[i] = H->array[i];
-    }
     killHeap(H);
     return newH;
 }
@@ -138,13 +134,11 @@ void insertHeap(heap* H, long key, long priority) {
     long index = H->size;
     long parentIndex = parent(index);
 
-    // Vai trocando com o pai enquanto tiver prioridade menor
     while(parentIndex >= 0 && H->array[index].priority < H->array[parentIndex].priority) {
         swap(H, parentIndex, index);
         index = parentIndex;
         parentIndex = parent(index);
     }
-
     H->size++;
 
     return;
