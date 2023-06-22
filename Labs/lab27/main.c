@@ -6,14 +6,14 @@
 int main() {
     heap *H = malloc(sizeof(heap));
     short existingHeap = 0;
-    long inMaxSize, inKey, inPriority;
+    int inMaxSize, inKey, inPriority;
     char cmd;
 
     cmd = getchar();
     while(cmd != 't') {
         switch(cmd) {
             case 'c': {
-                scanf(" %li", &inMaxSize);
+                scanf(" %i", &inMaxSize);
                 if(existingHeap)
                     killHeap(H);
                 H = createHeap(inMaxSize);
@@ -22,7 +22,7 @@ int main() {
             break;
 
             case 'i': {
-                scanf(" %li %li", &inKey, &inPriority);
+                scanf(" %i %i", &inKey, &inPriority);
                 if(H->size == H->maxSize)
                     H = expandHeap(H, EXPANSIONFACTOR);
                 insertHeap(H, inKey, inPriority);
@@ -38,8 +38,8 @@ int main() {
                 if(H->size == 0)
                     printf("fila de prioridades vazia\n");
                 else {
-                    long minIndex = findMinimum(H);
-                    printf("prioridade minima %li, chave %li\n",
+                    int minIndex = findMinimum(H);
+                    printf("prioridade minima %i, chave %i\n",
                         H->array[minIndex].priority, H->array[minIndex].key);
                 }
             }

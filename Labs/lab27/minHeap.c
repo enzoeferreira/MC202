@@ -10,9 +10,9 @@
  */
 void print(heap* H) {
     printf("\n==============================");
-    printf("\nSize: %li, MaxSize: %li\n", H->size, H->maxSize);
+    printf("\nSize: %i, MaxSize: %i\n", H->size, H->maxSize);
     for(long i = 0; i < H->size; i++)
-        printf("[%lu](%lu,%lu) ", H->array[i].timestamp, H->array[i].key, H->array[i].priority);
+        printf("[%lu](%i,%i) ", H->array[i].timestamp, H->array[i].key, H->array[i].priority);
     printf("\n==============================");
     printf("\n");
 }
@@ -25,7 +25,7 @@ void print(heap* H) {
  * @return 1) NULL, caso falhe em alocar espaço para Heap/Array
  * @return 2) H, ponteiro para Heap
  */
-heap* createHeap(long maxSize) {
+heap* createHeap(int maxSize) {
     heap *H = malloc(sizeof(heap));
     if(!H)
         return NULL;
@@ -63,7 +63,7 @@ void killHeap(heap* H) {
  * @return 1) NULL, caso falhe em alocar espaço para Heap ou array
  * @return 2) newH, apontador para novo Heap com array expandido
  */
-heap* expandHeap(heap* H, long factor) {
+heap* expandHeap(heap* H, int factor) {
     // Criação do novo Heap com o dobro do tamanho no array
     heap *newH = malloc(sizeof(heap));
     if(!newH)
@@ -78,7 +78,7 @@ heap* expandHeap(heap* H, long factor) {
     newH->timestamp = H->timestamp;
 
     // Cópia dos elementos
-    for(long int i = 0; i < H->size; i++)
+    for(int i = 0; i < H->size; i++)
         newH->array[i] = H->array[i];
     killHeap(H);
     return newH;
@@ -89,7 +89,7 @@ heap* expandHeap(heap* H, long factor) {
  * 
  * @return Índice do pai
  */
-long parent(long index) {
+int parent(int index) {
     return ((index - 1)/2);
 }
 
@@ -100,7 +100,7 @@ long parent(long index) {
  * @param indexA Index do elemento A
  * @param indexB Index do elemento B
  */
-void swap(heap* H, unsigned long indexA, unsigned long indexB) {
+void swap(heap* H, int indexA, int indexB) {
     node aux = H->array[indexA];
     H->array[indexA] = H->array[indexB];
     H->array[indexB] = aux;
@@ -114,14 +114,14 @@ void swap(heap* H, unsigned long indexA, unsigned long indexB) {
  * @param key Key do elemento a ser adicionado
  * @param priority Prioridade do elemento a ser adicionado
  */
-void insertHeap(heap* H, long key, long priority) {
+void insertHeap(heap* H, unsigned key, int priority) {
     // Insere novo nó no fim
     H->array[H->size].key = key;
     H->array[H->size].priority = priority;
     H->array[H->size].timestamp = H->timestamp++;
 
-    long index = H->size;
-    long parentIndex = parent(index);
+    int index = H->size;
+    int parentIndex = parent(index);
 
     while(parentIndex >= 0 && H->array[index].priority < H->array[parentIndex].priority) {
         swap(H, parentIndex, index);
@@ -139,10 +139,10 @@ void insertHeap(heap* H, long key, long priority) {
  * @param H Heap
  * @param index Index inicial do minHeapify
  */
-void minHeapify(heap* H, long index) {
-    long leftIndex = 2*index + 1; 
-    long rightIndex = 2*index + 2;
-    long minimum = index;
+void minHeapify(heap* H, int index) {
+    int leftIndex = 2*index + 1; 
+    int rightIndex = 2*index + 2;
+    int minimum = index;
     if(leftIndex < H->size && H->array[leftIndex].priority < H->array[minimum].priority)
         minimum = leftIndex;
     if(rightIndex < H->size && H->array[rightIndex].priority < H->array[minimum].priority)
@@ -162,11 +162,11 @@ void minHeapify(heap* H, long index) {
  * 
  * @return Índice do mínimo mais antigo
  */
-long findMinimum(heap* H) {
-    long minPriority = H->array[0].priority;
-    long minIndex = 0;
-    long minTimestamp = H->array[0].timestamp;
-    for(long int i = 0; i < H->size; i++)
+int findMinimum(heap* H) {
+    int minPriority = H->array[0].priority;
+    int minIndex = 0;
+    unsigned long minTimestamp = H->array[0].timestamp;
+    for(int i = 0; i < H->size; i++)
         if(H->array[i].priority == minPriority && H->array[i].timestamp < minTimestamp) {
             minTimestamp = H->array[i].timestamp;
             minIndex = i;
@@ -184,7 +184,7 @@ void removeMin(heap* H) {
     if(H->size == 0)
         return;
 
-    long minIndex = findMinimum(H);
+    int minIndex = findMinimum(H);
 
     // Troca mínimo mais antigo com último
     swap(H, minIndex, H->size - 1);

@@ -4,28 +4,31 @@
 #define EXPANSIONFACTOR 2
 
 struct node {
-    long key, priority, timestamp;
+    unsigned long timestamp;
+    unsigned key;
+    int priority;
 };
 typedef struct node node;
 
 struct heap {
-    long size, maxSize, timestamp;
+    long timestamp;
+    int size, maxSize;
     node *array;
 };
 typedef struct heap heap;
 
 void print(heap* H);
 
-heap* createHeap(long maxSize);
+heap* createHeap(int maxSize);
 void killHeap(heap* H);
-heap* expandHeap(heap* H, long factor);
+heap* expandHeap(heap* H, int factor);
 
-long parent(long index);
-void swap(heap* H, unsigned long indexA, unsigned long indexB);
+int parent(int index);
+void swap(heap* H, int indexA, int indexB);
 
-void insertHeap(heap* H, long key, long priority);
-void minHeapify(heap* H, long index);
-long findMinimum(heap* H);
+void insertHeap(heap* H, unsigned key, int priority);
+void minHeapify(heap* H, int index);
+int findMinimum(heap* H);
 void removeMin(heap* H);
 
 #endif
