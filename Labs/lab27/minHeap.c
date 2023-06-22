@@ -183,6 +183,10 @@ int findMinimum(heap* H) {
 void removeMin(heap* H) {
     if(H->size == 0)
         return;
+    if(H->size == 1) {
+        H->size--;
+        return;
+    }
 
     int minIndex = findMinimum(H);
 
