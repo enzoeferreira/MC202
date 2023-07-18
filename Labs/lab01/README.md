@@ -57,5 +57,49 @@ A primeira linha da entrada contém um inteiro N que indica a pressão desejada 
 
 Seu programa deve imprimir uma única linha, contendo a diferença entre a pressão desejada e a pressão lida.
 
+### <b>Exemplos</b>
+
+<details><summary>Exemplo 1</summary><p>
+
+- Entrada
+```
+30
+18
+```
+- Saída
+```
+12
+```
+
+</p></details>
+
+<details><summary>Exemplo 2</summary><p>
+
+- Entrada
+```
+27
+27
+```
+- Saída
+```
+0
+```
+
+</p></details>
+
+<details><summary>Exemplo 3</summary><p>
+
+- Entrada
+```
+27
+30
+```
+- Saída
+```
+-3
+```
+
+</p></details>
+
 #### <b>Créditos</b>
 OBI2010, Modalidade Programação, Nível Jr., Fase 1

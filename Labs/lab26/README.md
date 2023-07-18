@@ -59,3 +59,63 @@ As cadeias são formadas por pelo menos 1 e até 250 caracteres do alfabeto ASCI
 ### <b>Saída</b>
 
 A saída do programa é formada pela saída dos comandos b.
+
+### <b>Exemplos</b>
+
+<details><summary>Exemplo 1</summary><p>
+
+- Entrada
+```
+c 32
+i It doesnt matter
+i the way that you take it,
+i It doesnt matter
+i the way that you make it,
+i Love only matters,
+i its never a crime,
+i And if you think you can choose,
+i you won't find.
+b it doesnt matter
+b It doesnt matter
+b the way that you make it,
+r the way that you make it,
+b the way that you make it,
+r the way that you make it,
+f
+```
+- Saída
+```
+[it doesnt matter] nao esta na tabela
+[It doesnt matter] esta na tabela, timestamp 0
+[the way that you make it,] esta na tabela, timestamp 2
+[the way that you make it,] nao esta na tabela
+```
+
+</p></details>
+
+<details><summary>Exemplo 2</summary><p>
+
+- Entrada
+```
+c 16
+i oi
+i Oi
+i oi
+i  oi
+i oi 
+b oi
+b  oi
+b   oi
+b oi 
+f
+```
+- Saída
+```
+[oi] esta na tabela, timestamp 0
+[ oi] esta na tabela, timestamp 2
+[  oi] nao esta na tabela
+[oi ] esta na tabela, timestamp 3
+
+```
+
+</p></details>

@@ -124,6 +124,55 @@ A entrada sempre começará com um comando create.
 
 A saída deve conter as linhas geradas pelos comandos get, is-empty e print.
 
+### <b>Exemplos</b>
+
+<details><summary>Exemplo 1</summary><p>
+
+- Entrada
+```
+create 16 2.0
+push 3.14159
+inject 2.71828
+inject 0
+push -1.732
+push -1.618034
+print
+is-empty?
+get 0
+get 1
+get 4
+get 3
+eject
+pop
+get 0
+get 1
+get 2
+is-empty?
+pop
+pop
+eject
+is-empty?
+print
+exit
+```
+- Saída
+```
+deque (5): 0.0 2.7 3.1 -1.7 -1.6 
+not empty
+D[0] == 0.0
+D[1] == 2.7
+D[4] == -1.6
+D[3] == -1.7
+D[0] == 2.7
+D[1] == 3.1
+D[2] == -1.7
+not empty
+empty
+deque (0): 
+```
+
+</p></details>
+
 #### <b>Requisitos Adicionais</b>
 
 Seu programa deve implementar a deque em um vetor dinâmico que começa com o tamanho indicado e aumenta e diminui.

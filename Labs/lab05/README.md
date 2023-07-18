@@ -71,6 +71,51 @@ Ao ler uma linha dessa forma seu programa deve terminar.
 
 A saída do seu programa deve conter a saída dos comandos a, r e p.
 
+### <b>Exemplos</b>
+
+<details><summary>Exemplo 1</summary><p>
+
+- Entrada
+```
+7 7
+9
+[0,4] 3
+[0,5] 7
+[1,0] 1
+[2,2] 2
+[2,3] 6
+[2,4] 5
+[4,1] 4
+[4,4] 6
+[4,5] 8
+p
+a [4,6] 9
+a [0,2] 9
+a [2,5] 9
+a [4,4] 9
+a [4,4] 0
+a [0,0] 9
+a [1,1] 9
+a [6,6] 9
+p
+a [5,5] 9
+p
+r [2,2]
+r [5,5]
+t
+```
+- Saída
+```
+VC: (0,4,3) (0,5,7) (1,0,1) (2,2,2) (2,3,6) (2,4,5) (4,1,4) (4,4,6) (4,5,8) 
+VC: (0,0,9) (0,2,9) (0,4,3) (0,5,7) (1,0,1) (1,1,9) (2,2,2) (2,3,6) (2,4,5) (2,5,9) (4,1,4) (4,5,8) (4,6,9) (6,6,9) 
+O VC esta' cheio.
+VC: (0,0,9) (0,2,9) (0,4,3) (0,5,7) (1,0,1) (1,1,9) (2,2,2) (2,3,6) (2,4,5) (2,5,9) (4,1,4) (4,5,8) (4,6,9) (6,6,9) 
+M[2][2] == 2
+M[5][5] == 0
+```
+
+</p></details>
+
 #### <b>Requisitos Adicionais</b>
 
 Seu programa deve usar um vetor de structs de tamanho máximo m+n. Não deve haver qualquer outra estrutura que use memória maior que uma constante em seu programa.

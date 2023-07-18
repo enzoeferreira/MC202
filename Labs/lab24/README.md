@@ -51,6 +51,51 @@ As cadeias são formadas por símbolos ASCII entre 33 e 126 inclusive, distintos
 
 A saída deve ter uma linha com os percursos pós-ordem e largura para cada caso-de-teste separados por um espaço.
 
+### <b>Exemplos</b>
+
+<details><summary>Exemplo 1</summary><p>
+
+- Entrada
+```
+ABCZEF CBAEZF
+ZADEK ZAEDK
+A A
+ab ba
+Yxz xYz
+fxy yxf
+abc bac
+weq qew
+abg bga
+acd adc
+abt bta
+poeq eopq
+qwte wtqe
+cdef fedc
+ACBD ABDC
+ABCDEF CBAEDF
+```
+- Saída
+```
+CBEFZA ABZCEF
+EKDAZ ZADEK
+A A
+ba ab
+xzY Yxz
+yxf fxy
+bca abc
+qew weq
+gba abg
+dca acd
+tba abt
+eoqp poqe
+tweq qwet
+fedc cdef
+DBCA ACBD
+CBEFDA ABDCEF
+```
+
+</p></details>
+
 #### <b>Requisitos Adicionais</b>
 
 Seu programa deve reconstruir a árvore em representação explícita.

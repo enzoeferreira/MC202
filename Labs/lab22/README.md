@@ -45,6 +45,45 @@ A execução do programa termina quando o número de operações de um caso de t
 
 Para cada caso de teste, seu programa deve imprimir, na ordem de execução, os nomes de cada música executada. Os nomes de música devem ser separados por uma quebra de linha. As saídas de cada caso devem ser separadas por duas quebras de linha.
 
+### <b>Exemplos</b>
+
+<details><summary>Exemplo 1</summary><p>
+
+- Entrada
+```
+11
+insere Speak to Me
+toca
+remove Speak to Me
+toca
+insere Breathe
+insere Time
+insere On the Run
+final
+remove On the Run
+volta
+toca
+4
+insere Como Nossos Pais
+insere Sujeito de Sorte
+inverte
+final
+0
+```
+- Saída
+```
+Speak to Me
+
+Breathe
+On the Run
+Time
+Breathe
+
+Como Nossos Pais
+```
+
+</p></details>
+
 #### <b>Requisitos Adicionais</b>
 
 Seu programa deve usar uma lista encadeada (com encadeamento simples ou duplo, à sua escolha).

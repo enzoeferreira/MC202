@@ -79,3 +79,48 @@ A primeira linha contém dois inteiros, C e N, separados por um espaço. C é o 
 ### <b>Saída</b>
 
 A saída deve ter apenas uma linha com o número de clientes que esperaram na fila por mais de 20 minutos.
+
+### <b>Exemplos</b>
+
+<details><summary>Exemplo 1</summary><p>
+
+- Entrada
+```
+1 30
+5 6
+6 5
+8 7
+20 8
+21 6
+23 8
+26 8
+28 8
+29 7
+30 7
+46 8
+46 9
+47 7
+58 9
+82 6
+82 8
+83 9
+87 6
+97 5
+103 8
+103 9
+110 9
+116 7
+120 8
+124 8
+127 9
+130 7
+138 6
+139 8
+140 6
+```
+- Saída
+```
+23
+```
+
+</p></details>

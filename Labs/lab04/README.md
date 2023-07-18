@@ -44,3 +44,48 @@ ou da forma
 ```
 nao ha' celebridade.
 ```
+
+### <b>Exemplos</b>
+
+<details><summary>Exemplo 1</summary><p>
+
+- Entrada
+```
+Joao conhece Teresa
+Teresa conhece Raimundo
+Raimundo conhece Maria
+Maria conhece Joaquim
+Joaquim conhece Lili
+Lili conhece J. Pinto Fernandes
+```
+- Saída
+```
+Nao ha' celebridade.
+```
+
+</p></details>
+
+<details><summary>Exemplo 2</summary><p>
+
+- Entrada
+```
+Joao conhece Teresa
+Teresa conhece Raimundo
+Raimundo conhece Maria
+Maria conhece Joaquim
+Joaquim conhece Lili
+Lili conhece J. Pinto Fernandes
+Joao conhece Nina
+Teresa conhece Nina
+Raimundo conhece Nina
+Maria conhece Nina
+Joaquim conhece Nina
+Lili conhece Nina
+J. Pinto Fernandes conhece Nina
+```
+- Saída
+```
+Nina e' celebridade.
+```
+
+</p></details>

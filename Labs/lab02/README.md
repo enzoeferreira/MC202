@@ -37,3 +37,129 @@ As linhas seguintes têm uma seqüência de golpes, um por linha. Um golpe é um
 Para cada golpe, seu programa deve imprimir três linhas, como ilustradas abaixo. A primeira linha deve informar quem aplicou o golpe e o valor absoluto dele. A segunda e terceira linha devem informar o hp dos lutadores Ryu e Ken, respectivamente.
 
 O hp de cada lutador nunca será negativo. No momento que o hp de um dos lutadores chega a zero ele é derrotado e a luta termina. Seu programa deve imprimir o nome do lutador que venceu a luta seguido do número de golpes aplicados por cada lutador como ilustrado abaixo.
+
+### <b>Exemplos</b>
+
+<details><summary>Exemplo 1</summary><p>
+
+- Entrada
+```
+80
+50
+15
+-15
+20
+-20
+15
+```
+- Saída
+```
+RYU APLICOU UM GOLPE: 15
+HP RYU = 80
+HP KEN = 35
+KEN APLICOU UM GOLPE: 15
+HP RYU = 65
+HP KEN = 35
+RYU APLICOU UM GOLPE: 20
+HP RYU = 65
+HP KEN = 15
+KEN APLICOU UM GOLPE: 20
+HP RYU = 45
+HP KEN = 15
+RYU APLICOU UM GOLPE: 15
+HP RYU = 45
+HP KEN = 0
+LUTADOR VENCEDOR: RYU
+GOLPES RYU = 3
+GOLPES KEN = 2
+```
+
+</p></details>
+
+<details><summary>Exemplo 2</summary><p>
+
+- Entrada
+```
+70
+80
+-20
+15
+-15
+-20
+20
+15
+10
+-20
+```
+- Saída
+```
+KEN APLICOU UM GOLPE: 20
+HP RYU = 50
+HP KEN = 80
+RYU APLICOU UM GOLPE: 15
+HP RYU = 50
+HP KEN = 65
+KEN APLICOU UM GOLPE: 15
+HP RYU = 35
+HP KEN = 65
+KEN APLICOU UM GOLPE: 20
+HP RYU = 15
+HP KEN = 65
+RYU APLICOU UM GOLPE: 20
+HP RYU = 15
+HP KEN = 45
+RYU APLICOU UM GOLPE: 15
+HP RYU = 15
+HP KEN = 30
+RYU APLICOU UM GOLPE: 10
+HP RYU = 15
+HP KEN = 20
+KEN APLICOU UM GOLPE: 20
+HP RYU = 0
+HP KEN = 20
+LUTADOR VENCEDOR: KEN
+GOLPES RYU = 4
+GOLPES KEN = 4
+```
+
+</p></details>
+
+<details><summary>Exemplo 3</summary><p>
+
+- Entrada
+```
+90
+60
+15
+15
+-10
+10
+10
+10
+```
+- Saída
+```
+RYU APLICOU UM GOLPE: 15
+HP RYU = 90
+HP KEN = 45
+RYU APLICOU UM GOLPE: 15
+HP RYU = 90
+HP KEN = 30
+KEN APLICOU UM GOLPE: 10
+HP RYU = 80
+HP KEN = 30
+RYU APLICOU UM GOLPE: 10
+HP RYU = 80
+HP KEN = 20
+RYU APLICOU UM GOLPE: 10
+HP RYU = 80
+HP KEN = 10
+RYU APLICOU UM GOLPE: 10
+HP RYU = 80
+HP KEN = 0
+LUTADOR VENCEDOR: RYU
+GOLPES RYU = 5
+GOLPES KEN = 1
+```
+
+</p></details>
