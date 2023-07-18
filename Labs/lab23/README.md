@@ -2,15 +2,15 @@
 
 <details><summary><b>Testes</b></summary><p>
 
-01:  saída correta.
-02:  saída correta.
-03:  saída correta.
-04:  saída correta.
-05:  saída correta.
-06:  saída correta.
+01:  saída correta.\
+02:  saída correta.\
+03:  saída correta.\
+04:  saída correta.\
+05:  saída correta.\
+06:  saída correta.\
 
-Número de casos-de-teste: 6.
-Casos-de-teste bem sucedidos: 6.
+Número de casos-de-teste: 6.\
+Casos-de-teste bem sucedidos: 6.\
 <b>Acerto: 100%</b>
 
 </p></details>
