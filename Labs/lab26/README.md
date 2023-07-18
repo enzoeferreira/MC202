@@ -2,13 +2,13 @@
 
 <details><summary><b>Testes</b></summary><p>
 
-01:  saída correta.
-02:  saída correta.
-03:  limite de tempo ou memória excedido.
-04:  saída incorreta.
+01:  saída correta.\
+02:  saída correta.\
+03:  limite de tempo ou memória excedido.\
+04:  saída incorreta.\
 
-Número de casos-de-teste: 4.
-Casos-de-teste bem sucedidos: 2.
+Número de casos-de-teste: 4.\
+Casos-de-teste bem sucedidos: 2.\
 <b>Acerto: 50%</b>
 
 </p></details>
