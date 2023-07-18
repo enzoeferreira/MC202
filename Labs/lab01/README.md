@@ -2,42 +2,42 @@
 
 <details><summary><b>Testes</b></summary><p>
 
-01:  saída correta.
-02:  saída correta.
-03:  saída correta.
-04:  saída correta.
-05:  saída correta.
-06:  saída correta.
-07:  saída correta.
-08:  saída correta.
-09:  saída correta.
-10:  saída correta.
-11:  saída correta.
-12:  saída correta.
-13:  saída correta.
-14:  saída correta.
-15:  saída correta.
-16:  saída correta.
-17:  saída correta.
-18:  saída correta.
-19:  saída correta.
-20:  saída correta.
-21:  saída correta.
-22:  saída correta.
-23:  saída correta.
-24:  saída correta.
-25:  saída correta.
-26:  saída correta.
-27:  saída correta.
-28:  saída correta.
-29:  saída correta.
-30:  saída correta.
-31:  saída correta.
-32:  saída correta.
-33:  saída correta.
+01:  saída correta.\
+02:  saída correta.\
+03:  saída correta.\
+04:  saída correta.\
+05:  saída correta.\
+06:  saída correta.\
+07:  saída correta.\
+08:  saída correta.\
+09:  saída correta.\
+10:  saída correta.\
+11:  saída correta.\
+12:  saída correta.\
+13:  saída correta.\
+14:  saída correta.\
+15:  saída correta.\
+16:  saída correta.\
+17:  saída correta.\
+18:  saída correta.\
+19:  saída correta.\
+20:  saída correta.\
+21:  saída correta.\
+22:  saída correta.\
+23:  saída correta.\
+24:  saída correta.\
+25:  saída correta.\
+26:  saída correta.\
+27:  saída correta.\
+28:  saída correta.\
+29:  saída correta.\
+30:  saída correta.\
+31:  saída correta.\
+32:  saída correta.\
+33:  saída correta.\
 
-Número de casos-de-teste: 33.
-Casos-de-teste bem sucedidos: 33.
+Número de casos-de-teste: 33.\
+Casos-de-teste bem sucedidos: 33.\
 <b>Acerto: 100%</b>
 
 </p></details>
